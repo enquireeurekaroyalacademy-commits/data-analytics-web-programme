@@ -1,0 +1,2517 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Data Analytics Training - Christiana Churchill</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary-blue: #0B5CFF;
+            --navy-dark: #0e1525;
+            --navy-medium: #1a2236;
+            --accent-purple: #6366f1;
+            --text-light: #ffffff;
+            --text-gray: #a0aec0;
+            --bg-light: #f7fafc;
+            --success-green: #10b981;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            overflow-x: hidden;
+        }
+
+        /* Progress Bar */
+        #progress-bar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            height: 4px;
+            background: linear-gradient(90deg, var(--primary-blue), var(--accent-purple));
+            width: 0%;
+            z-index: 9999;
+            transition: width 0.1s ease;
+        }
+
+        /* Vertical Progress Tracker */
+        .vertical-tracker {
+            position: fixed;
+            right: 3rem;
+            top: 50%;
+            transform: translateY(-50%);
+            z-index: 100;
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+        }
+
+        .tracker-item {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .tracker-dot {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            background: #d1d5db;
+            border: 2px solid var(--navy-dark);
+            transition: all 0.3s;
+            position: relative;
+        }
+
+        .tracker-dot::before {
+            content: '';
+            position: absolute;
+            width: 2px;
+            height: 24px;
+            background: #d1d5db;
+            top: 100%;
+            left: 50%;
+            transform: translateX(-50%);
+        }
+
+        .tracker-item:last-child .tracker-dot::before {
+            display: none;
+        }
+
+        .tracker-dot.active {
+            background: var(--primary-blue);
+            border-color: var(--primary-blue);
+            transform: scale(1.3);
+        }
+
+        .tracker-dot.active::before {
+            background: var(--primary-blue);
+        }
+
+        .tracker-label {
+            font-size: 0.85rem;
+            color: var(--navy-dark);
+            font-weight: 500;
+            opacity: 0;
+            transform: translateX(-10px);
+            transition: all 0.3s;
+            white-space: nowrap;
+        }
+
+        .tracker-item:hover .tracker-label,
+        .tracker-item.active .tracker-label {
+            opacity: 1;
+            transform: translateX(0);
+        }
+
+        /* Navigation */
+        nav {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            background: var(--navy-dark);
+            padding: 1rem 0;
+            z-index: 1000;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+
+        .nav-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: var(--text-light);
+            text-decoration: none;
+        }
+
+        .cta-nav {
+            background: var(--primary-blue);
+            padding: 0.7rem 1.5rem;
+            border-radius: 8px;
+            border: none;
+            color: white;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            text-decoration: none;
+        }
+
+        .cta-nav:hover {
+            background: #0948d4;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(11, 92, 255, 0.4);
+        }
+
+        /* Hero Section */
+        .hero {
+            background: linear-gradient(135deg, var(--navy-dark) 0%, var(--navy-medium) 100%);
+            padding: 140px 2rem 100px;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            right: -20%;
+            width: 800px;
+            height: 800px;
+            background: radial-gradient(circle, rgba(11, 92, 255, 0.15) 0%, transparent 70%);
+            border-radius: 50%;
+        }
+
+        .hero-content {
+            max-width: 900px;
+            margin: 0 auto;
+            position: relative;
+            z-index: 1;
+        }
+
+        .banner-tag {
+            display: inline-block;
+            background: linear-gradient(90deg, rgba(11, 92, 255, 0.2), rgba(99, 102, 241, 0.2));
+            border: 1px solid rgba(11, 92, 255, 0.3);
+            padding: 0.5rem 1.5rem;
+            border-radius: 50px;
+            color: var(--text-light);
+            font-size: 0.9rem;
+            margin-bottom: 2rem;
+            animation: fadeInUp 0.6s ease;
+        }
+
+        h1 {
+            font-size: 3.5rem;
+            color: var(--text-light);
+            margin-bottom: 1.5rem;
+            line-height: 1.2;
+            animation: fadeInUp 0.8s ease;
+        }
+
+        .hero p {
+            font-size: 1.3rem;
+            color: var(--text-gray);
+            margin-bottom: 2.5rem;
+            max-width: 700px;
+            margin-left: auto;
+            margin-right: auto;
+            animation: fadeInUp 1s ease;
+        }
+
+        .hero-buttons {
+            display: flex;
+            gap: 1.5rem;
+            justify-content: center;
+            flex-wrap: wrap;
+            animation: fadeInUp 1.2s ease;
+        }
+
+        .btn-primary {
+            background: var(--primary-blue);
+            color: white;
+            padding: 1rem 2.5rem;
+            border: none;
+            border-radius: 8px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            text-decoration: none;
+            display: inline-block;
+        }
+
+        .btn-primary:hover {
+            background: #0948d4;
+            transform: translateY(-3px);
+            box-shadow: 0 8px 20px rgba(11, 92, 255, 0.4);
+        }
+
+        .btn-secondary {
+            background: transparent;
+            color: white;
+            padding: 1rem 2.5rem;
+            border: 2px solid white;
+            border-radius: 8px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            text-decoration: none;
+            display: inline-block;
+        }
+
+        .btn-secondary:hover {
+            background: white;
+            color: var(--navy-dark);
+            transform: translateY(-3px);
+        }
+
+        /* Instructor Section */
+        .instructor-section {
+            padding: 80px 2rem;
+            background: white;
+        }
+
+        .instructor-container {
+            max-width: 1000px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: 1fr 2fr;
+            gap: 4rem;
+            align-items: center;
+        }
+
+        .instructor-image {
+            width: 100%;
+            aspect-ratio: 1;
+            background: linear-gradient(135deg, var(--primary-blue), var(--accent-purple));
+            border-radius: 20px;
+            box-shadow: 0 16px 40px rgba(0,0,0,0.1);
+        }
+
+        .instructor-content h2 {
+            font-size: 2.5rem;
+            margin-bottom: 1.5rem;
+            color: var(--navy-dark);
+        }
+
+        .instructor-content p {
+            font-size: 1.1rem;
+            line-height: 1.8;
+            color: #666;
+            margin-bottom: 2rem;
+        }
+
+        .credentials {
+            display: grid;
+            gap: 1rem;
+        }
+
+        .credential-item {
+            display: flex;
+            align-items: flex-start;
+            gap: 1rem;
+            padding: 1rem;
+            background: var(--bg-light);
+            border-radius: 10px;
+            transition: all 0.3s;
+        }
+
+        .credential-item:hover {
+            background: white;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+            transform: translateX(8px);
+        }
+ 
+        .credential-icon {
+            width: 40px;
+            height: 40px;
+            background: var(--primary-blue);
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.3rem;
+            flex-shrink: 0;
+        }
+
+        .credential-text {
+            flex: 1;
+        }
+
+        .credential-text strong {
+            display: block;
+            color: var(--navy-dark);
+            margin-bottom: 0.3rem;
+        }
+
+        .credential-text span {
+            color: #666;
+            font-size: 0.95rem;
+        }
+
+        /* Features Carousel */
+        .features-section {
+            padding: 80px 2rem;
+            background: var(--bg-light);
+        }
+
+        .section-title {
+            text-align: center;
+            font-size: 2.5rem;
+            margin-bottom: 3rem;
+            color: var(--navy-dark);
+        }
+
+        .carousel-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            position: relative;
+        }
+
+        .carousel-wrapper {
+            position: relative;
+            overflow: hidden;
+            padding: 2rem 0;
+        }
+
+        .carousel {
+            display: flex;
+            gap: 2rem;
+            transition: transform 0.5s ease;
+        }
+
+        .feature-card {
+            min-width: 350px;
+            background: white;
+            border-radius: 16px;
+            padding: 2rem;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+            transition: all 0.3s;
+            cursor: pointer;
+        }
+
+        .feature-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 12px 24px rgba(0,0,0,0.1);
+        }
+
+        .feature-icon {
+            width: 60px;
+            height: 60px;
+            background: linear-gradient(135deg, var(--primary-blue), var(--accent-purple));
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 1.5rem;
+            font-size: 1.8rem;
+        }
+
+        .feature-card h3 {
+            font-size: 1.5rem;
+            margin-bottom: 1rem;
+            color: var(--navy-dark);
+        }
+
+        .feature-card p {
+            color: #666;
+            line-height: 1.6;
+        }
+
+        .carousel-nav {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 50px;
+            height: 50px;
+            background: white;
+            border-radius: 50%;
+            border: none;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            color: var(--navy-dark);
+            transition: all 0.3s;
+            z-index: 10;
+        }
+
+        .carousel-nav:hover {
+            background: var(--primary-blue);
+            color: white;
+            transform: translateY(-50%) scale(1.1);
+        }
+
+        .carousel-nav.prev {
+            left: -25px;
+        }
+
+        .carousel-nav.next {
+            right: -25px;
+        }
+
+        /* Story Section */
+        .story-section {
+            padding: 100px 2rem;
+            background: linear-gradient(135deg, var(--navy-dark) 0%, var(--navy-medium) 100%);
+            color: white;
+        }
+
+        .story-container {
+            max-width: 900px;
+            margin: 0 auto;
+        }
+
+        .story-container h2 {
+            font-size: 3rem;
+            margin-bottom: 2rem;
+            text-align: center;
+        }
+
+        .story-container p {
+            font-size: 1.2rem;
+            line-height: 1.9;
+            margin-bottom: 1.5rem;
+            color: var(--text-gray);
+        }
+
+        .story-highlight {
+            background: rgba(11, 92, 255, 0.2);
+            padding: 2rem;
+            border-left: 4px solid var(--primary-blue);
+            margin: 2rem 0;
+            border-radius: 8px;
+        }
+
+        .story-highlight p {
+            color: white;
+            font-size: 1.3rem;
+            font-weight: 500;
+            margin: 0;
+        }
+
+        /* Trust Section */
+        .trust-section {
+            padding: 80px 2rem;
+            background: white;
+            text-align: center;
+        }
+
+        .trust-content h2 {
+            font-size: 2.5rem;
+            margin-bottom: 3rem;
+            color: var(--navy-dark);
+        }
+
+        .trust-grid {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+        }
+
+        .trust-card {
+            background: var(--bg-light);
+            padding: 2rem;
+            border-radius: 16px;
+            transition: all 0.3s;
+        }
+
+        .trust-card:hover {
+            background: white;
+            box-shadow: 0 8px 24px rgba(0,0,0,0.1);
+            transform: translateY(-8px);
+        }
+
+        .trust-icon {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+        }
+
+        .trust-card h3 {
+            font-size: 1.3rem;
+            margin-bottom: 0.5rem;
+            color: var(--navy-dark);
+        }
+
+        .trust-card p {
+            color: #666;
+            font-size: 0.95rem;
+        }
+
+        /* Testimonial Section */
+        .testimonial-section {
+            padding: 80px 2rem;
+            background: var(--bg-light);
+        }
+
+        .testimonial-container {
+            max-width: 900px;
+            margin: 3rem auto;
+            background: white;
+            padding: 3rem;
+            border-radius: 16px;
+            box-shadow: 0 8px 24px rgba(0,0,0,0.08);
+            position: relative;
+        }
+
+        .quote-icon {
+            position: absolute;
+            top: -20px;
+            left: 40px;
+            width: 60px;
+            height: 60px;
+            background: var(--primary-blue);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2rem;
+            color: white;
+        }
+
+        .testimonial-text {
+            font-size: 1.3rem;
+            line-height: 1.8;
+            color: #333;
+            margin-bottom: 2rem;
+            font-style: italic;
+        }
+
+        .testimonial-author {
+            display: flex;
+            align-items: center;
+            gap: 1.5rem;
+        }
+
+        .author-image {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--primary-blue), var(--accent-purple));
+        }
+
+        .author-info h4 {
+            font-size: 1.1rem;
+            color: var(--navy-dark);
+            margin-bottom: 0.3rem;
+        }
+
+        .author-info p {
+            color: #666;
+            font-size: 0.95rem;
+        }
+
+        /* Final CTA Section */
+        .cta-section {
+            background: linear-gradient(135deg, var(--primary-blue) 0%, var(--accent-purple) 100%);
+            padding: 100px 2rem;
+            text-align: center;
+            color: white;
+        }
+
+        .cta-section h2 {
+            font-size: 3rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .cta-section p {
+            font-size: 1.3rem;
+            margin-bottom: 2.5rem;
+            opacity: 0.95;
+        }
+
+        /* Footer */
+        footer {
+            background: var(--navy-dark);
+            color: white;
+            padding: 60px 2rem 30px;
+            text-align: center;
+        }
+
+        .footer-content {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .footer-content p {
+            color: var(--text-gray);
+            margin-bottom: 1rem;
+        }
+
+        .footer-bottom {
+            margin-top: 3rem;
+            padding-top: 2rem;
+            border-top: 1px solid rgba(255,255,255,0.1);
+            color: var(--text-gray);
+        }
+
+        /* Animations */
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            h1 {
+                font-size: 2.5rem;
+            }
+
+            .hero p {
+                font-size: 1.1rem;
+            }
+
+            .vertical-tracker {
+                display: none;
+            }
+
+            .hero-buttons {
+                flex-direction: column;
+            }
+
+            .section-title {
+                font-size: 2rem;
+            }
+
+            .feature-card {
+                min-width: 280px;
+            }
+
+            .instructor-container {
+                grid-template-columns: 1fr;
+                gap: 2rem;
+            }
+
+            .cta-section h2 {
+                font-size: 2rem;
+            }
+
+            .carousel-nav {
+                display: none;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Progress Bar -->
+    <div id="progress-bar"></div>
+
+    </div>
+
+   
+
+    <!-- Hero Section -->
+    <section class="hero" id="hero">
+        <div class="hero-content">
+            <div class="banner-tag">💸 Build the income streams that create lasting wealth</div>
+            <h1>Start building 3-5 income streams that work for you</h1>
+            <p>Become so valuable that companies fight to keep you—and finally earn what you're truly worth.</p>
+            <div class="hero-buttons">
+                <a href="https://paystack.com/pay/eurekaroyalacademy" class="btn-primary" target="_blank">Start Your Journey</a>
+<button style="
+    border: 2px solid #ffffff;
+    border-radius: 8px;
+    padding: 16px 48px;
+    background: transparent;
+    color: #ffffff;
+    font-size: 18px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.3s ease;
+">
+    Or Keep Reading
+</button>
+
+<style>
+button:hover {
+    box-shadow: 0 0 20px rgba(255, 255, 255, 0.6);
+    border-color: #ffffff;
+}
+</style>
+              
+
+
+            </div>
+        </div>
+    </section>
+
+    <!-- Instructor Section -->
+    <section class="instructor-section" id="instructor">
+        <div class="instructor-container">
+            <div class="instructor-image"></div>
+            <div class="instructor-content">
+                <h2>This is where you separate yourself from 90% of people claiming to want success.</h2>
+                <p>Everyone wants financial freedom. <strong>So do you.</strong>  But wanting it isn't enough. This programme gives you the skill that separates those who dream about it from those who actually achieve it: the ability to turn information into decisions that make money. For yourself and any business you work for. </p>
+                <p>But don't take my word for it. Let me show you.</p>
+                <div class="credentials">
+                    <div class="credential-item">
+                        <div class="credential-icon">💰</div>
+                        <div class="credential-text">
+                            <strong>Every promotion goes to someone who can prove their worth</strong>
+                            <span>Not the hardest worker—the one who shows results with evidence
+</span>
+                        </div>
+                    </div>
+                    <div class="credential-item">
+                        <div class="credential-icon">🎯</div>
+                        <div class="credential-text">
+                            <strong>Every high-paying consultant solves one problem </strong>
+                            <span>"Tell me what to do next"—and they answer with certainty, not opinions
+</span>
+                        </div>
+                    </div>
+                    <div class="credential-item">
+                        <div class="credential-icon">💼</div>
+                        <div class="credential-text">
+                            <strong>Every irreplaceable employee has this advantage </strong>
+                            <span>They walk in with answers while everyone else brings questions</span>
+                        </div>
+                    </div>
+                    <div class="credential-item">
+                        <div class="credential-icon">🔥</div>
+                        <div class="credential-text">
+                            <strong>Every industry is drowning in information right now</strong>
+                            <span>Businesses will pay anything for someone who can make sense of it</span>
+                        </div>
+                    </div>
+                    <div class="credential-item">
+                        <div class="credential-icon">🚀</div>
+                        <div class="credential-text">
+                            <strong>You're already doing this in small ways, you're just not doing it systematically</strong>
+                            <span>And you're definitely not getting paid for it
+</span>
+
+
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Features Section -->
+    <section class="features-section" id="features">
+        <h2 class="section-title">That's where data analytics comes in</h2>
+        <div class="carousel-container">
+            <button class="carousel-nav prev" onclick="moveCarousel(-1)">‹</button>
+            <div class="carousel-wrapper">
+                <div class="carousel" id="carousel">
+                    <div class="feature-card">
+                        <div class="feature-icon">📊</div>
+                        <h3>Excel for Data Analytics</h3>
+                        <p>You can't scale what you can't measure. Every income stream you build needs one thing: proof it's working. Learning to use Excel teaches you to track everything—revenue, expenses, time spent, profit margins. So when something works, you know exactly why, and you can do more of it.</p>
+                    </div>
+                    <div class="feature-card">
+                        <div class="feature-icon">🗄️</div>
+                        <h3>SQL for Data Analytics</h3>
+                        <p>Every company has a database full of answers they can't reach. SQL is your access pass to that database and to the data economy. Learn to pull it, read it, and tell them what it means—and they'll pay you for it. While other people see those job posts and think "I'm not qualified," you'll think "I can do that."</p>
+                    </div>
+                    <div class="feature-card">
+                        <div class="feature-icon">📈</div>
+                        <h3>Power BI for Data Analytics</h3>
+                        <p>Even when you find answers to business problems, you'll need to learn how to communicate it. Using PowerBI, you can learn to build dashboards so beautiful, so interactive, that executives will ask YOU to present at meetings. You'll turn boring numbers into visual stories that make people say "Wow, I finally understand what's happening."</p>
+                    </div>
+                    <div class="feature-card">
+                        <div class="feature-icon">🎯</div>
+                        <h3>PowerPoint for Data Analytics</h3>
+                        <p>You'll learn to use PowerPoint to structure presentations that tell a story and present your findings like a consultant. This makes you indispensable in meetings.</p>
+                    </div>
+                    <div class="feature-card">
+                        <div class="feature-icon">🤖</div>
+                        <h3>AI Tools to Work 10x Faster</h3>
+                        <p>While others spend 5 hours cleaning data, you'll do it in 30 minutes using AI. Learn to use several AI tools to automate work and even build tools that can help you move faster with AI.</p>
+                    </div>
+                    <div class="feature-card">
+                        <div class="feature-icon">💼</div>
+                        <h3>Build Your Portfolio</h3>
+                        <p>Create a live portfolio website showcasing your projects. When employers Google your name, they'll find professional work—it's the next step to building your presence online.</p>
+                    </div>
+                    <div class="feature-card">
+                        <div class="feature-icon">👥</div>
+                        <h3>Team Collaboration</h3>
+                        <p>Work with other students on group projects, reports and presentations that you can add live to your website, LinkedIn profile and share with others. </p>
+                    </div>
+                    <div class="feature-card">
+                        <div class="feature-icon">💡</div>
+                        <h3>LinkedIn Optimization & Build Your LinkedIn Presence</h3>
+                        <p>Your LinkedIn is your 24/7 salesperson. Learn to optimize it so recruiters find YOU and position yourself as someone worth hiring.</p>
+                    </div>
+                    <div class="feature-card">
+                        <div class="feature-icon">📋</div>
+                        <h3>Create Analytical Reports</h3>
+                        <p>Build actual reports that solve real business problems. Sales analysis, customer behavior reports—the kind of work companies pay for.</p>
+                    </div>
+                    <div class="feature-card">
+                        <div class="feature-icon">🎓</div>
+                        <h3>Get Certified</h3>
+                        <p>Receive a certificate proving you completed the training. It adds credibility when combined with your portfolio, projects, and skills.</p>
+                    </div>
+                    <div class="feature-card">
+                        <div class="feature-icon">🌐</div>
+                        <h3>Join Private Community</h3>
+                        <p>Get resume templates, AI tools, cover letter samples, job sites, and ongoing support. This is where the magic happens. You'll be supported to apply to 25 jobs in a week and stand a chance to gain a reward if you do with your peer.</p>
+                    </div>
+                    <div class="feature-card">
+                        <div class="feature-icon">🎯</div>
+                        <h3>25-Job Challenge</h3>
+                        <p>Apply to 25 data analytics roles and get rewarded with early access to exclusive opportunities. This accountability system works.</p>
+                    </div>
+                    <div class="feature-card">
+                        <div class="feature-icon">💼</div>
+                        <h3>Internship & Volunteer Opportunities</h3>
+                        <p>Break the "no experience" cycle. You'll be given opportunites to begin online internship and volunteer opportunities.</p>
+                    </div>
+                    <div class="feature-card">
+                        <div class="feature-icon">🚀</div>
+                        <h3>Data Storytelling & Presentation</h3>
+                        <p>Numbers don't convince people. Stories do. Learn to take your analysis and present it so clearly that stakeholders actually act on it.</p>
+                    </div>
+                    <div class="feature-card">
+                        <div class="feature-icon">🤖</div>
+                        <h3>Free AI Programme Waitlist</h3>
+                        <p>Join the waitlist for a free AI programme. Connect with professionals, learn to create AI agents, get certified.</p>
+                    </div>
+                </div>
+            </div>
+            <button class="carousel-nav next" onclick="moveCarousel(1)">›</button>
+        </div>
+    </section>
+
+    <!-- Story Section -->
+    <section class="story-section" id="story">
+        <div class="story-container">
+            <h2>Look, you already know this:
+</h2>
+            <p>You need a skill that pays. Not "eventually"—now. Something businesses actually hire for and could potentially open the doors of remote work for you.</p>
+            <p>And the price for that is less than what you spend for data a month. That's what this data analytics programme is.</p>
+            <p>Today, with AI, this programme becomes more valuable (It’s remarkable I’m still leaving it at the same price, right?). Every AI model, every automation, every "smart" decision a business makes—it all depends on clean, organized, analyzed data.
+</p>
+            <p>AI makes data analytics more valuable. Because someone still needs to prepare the data. </p>
+            <p>Someone needs to know if the AI's output makes sense. Someone needs to tell the business what the numbers actually mean.</p>
+            
+            <div class="story-highlight">
+                <p>That someone gets paid well. And that someone could be you.</p>
+            </div>
+
+            <p>The future isn't just tech. It's data. </p>
+            <p><strong>Every industry—healthcare, finance, retail, marketing, government—is moving toward data-driven decisions.</strong></p>
+
+            <h3 style="font-size: 2rem; margin-top: 3rem; margin-bottom: 1.5rem;">If you can work with data, you're not just getting a job.</h3>
+            <p>You're positioning yourself for the next 10-20 years.
+</p>
+            <p>And I'm offering it to you at the ridiculous price of ₦10,000 for three months or less. </p>
+            <ul style="list-style: none; padding-left: 2rem; margin: 2rem 0;">
+                <li style="margin-bottom: 1rem;">→ "But this isn't always how I've done it."</li>
+                <li style="margin-bottom: 1rem;">→ "The first time, I offered it free. The second, I added a price."</li>
+                <li style="margin-bottom: 1rem;">→ "Now, though still too cheap, I'm offering it at an unbelievable price of ₦10,000. The next time? It will cost more or may not even exist. I might be teaching new skills then. "</li>
+            </ul>
+            <p>And here's the beautiful part: <strong>I'm not calling statisticians.</strong> I'm calling everyone willing to increase their earning capacity.</p>
+            <p>I've done it with grandmas, people in Northern Nigeria. I can definitely do this programme with you.</p>
+
+            <div class="story-highlight">
+                <p>Would you pay thousands to stand in a line for a photograph with your favourite celebrity? Why not learn the skills that give you the capacity to live in the neighbourhoods they sleep. That's why I'm creating this programme: you get the ability to use it to mold whatever life you want.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Trust/Why This Works Section -->
+    <section class="trust-section" id="trust">
+        <div class="trust-content">
+            <h2>What You're Actually Getting</h2>
+            <p style="max-width: 800px; margin: 0 auto 3rem; font-size: 1.15rem; color: #666;">Most courses teach you tools and leave you hanging. We teach you tools + how to get hired + how to build a career + how to keep growing.</p>
+            
+            <div class="trust-grid">
+                <div class="trust-card">
+                    <div class="trust-icon">🛠️</div>
+                    <h3>Skills</h3>
+                    <p>Excel, SQL, Power BI, PowerPoint, AI tools—everything you need to be job-ready</p>
+                </div>
+                <div class="trust-card">
+                    <div class="trust-icon">✅</div>
+                    <h3>Proof</h3>
+                    <p>Portfolio, projects, presentations, certificate—tangible evidence of your abilities</p>
+                </div>
+                <div class="trust-card">
+                    <div class="trust-icon">👁️</div>
+                    <h3>Visibility</h3>
+                    <p>LinkedIn presence, personal brand—make recruiters find YOU</p>
+                </div>
+                <div class="trust-card">
+                    <div class="trust-icon">🤝</div>
+                    <h3>Support</h3>
+                    <p>Community, resources, accountability—you're never alone</p>
+                </div>
+                <div class="trust-card">
+                    <div class="trust-icon">🚪</div>
+                    <h3>Opportunities</h3>
+                    <p>Internships, volunteer roles, platform access, AI program</p>
+                </div>
+                <div class="trust-card">
+                    <div class="trust-icon">🎯</div>
+                    <h3>Clear Path Forward</h3>
+                    <p>Become the kind of professional you've always wanted to be.</p>
+                </div>
+            </div>
+
+            <div style="margin-top: 4rem; padding: 2rem; background: var(--bg-light); border-radius: 16px; max-width: 800px; margin-left: auto; margin-right: auto;">
+                <p style="font-size: 1.3rem; color: var(--navy-dark); font-weight: 600; margin-bottom: 1rem;">₦10,000 gets you all of this <i>today</i>.</p>
+                <p style="color: #666; font-size: 1.05rem;">Most people spend that on data and drinks in a month. This is an investment in your actual future.</p>
+                <p style="color: var(--primary-blue); font-weight: 600; margin-top: 1rem; font-size: 1.1rem;">The question isn't "Is this worth it?" The question is "Can you afford NOT to do this while everyone else is learning these skills and taking the jobs you want?"</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Testimonial Section -->
+    <section class="testimonial-section" id="testimonial">
+        <h2 class="section-title">Real Transformation. Real People.</h2>
+        <div class="testimonial-container">
+            <div class="quote-icon">"</div>
+            <p class="testimonial-text">I enjoyed the instructor's teaching, she simplified each session and always ready to answer our questions. she even provided guidance outside sessions always encouraged us.</p>
+            <div class="testimonial-author">
+                <div class="author-image"></div>
+                <div class="author-info">
+                    <h4>Blessing O.</h4>
+                    <p>Data Analyst Trainee• Baseerah Ayeni</p>
+                </div>
+            </div>
+        </div>
+
+  
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Data Analytics Training</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary-blue: #0B5CFF;
+            --navy-dark: #0e1525;
+            --navy-medium: #1a2236;
+            --accent-purple: #6366f1;
+            --text-light: #ffffff;
+            --text-gray: #a0aec0;
+            --bg-light: #f7fafc;
+            --success-green: #10b981;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            overflow-x: hidden;
+        }
+
+        /* Progress Bar */
+        #progress-bar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            height: 4px;
+            background: linear-gradient(90deg, var(--primary-blue), var(--accent-purple));
+            width: 0%;
+            z-index: 9999;
+            transition: width 0.1s ease;
+        }
+
+        /* Navigation */
+        nav {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            background: var(--navy-dark);
+            padding: 1rem 0;
+            z-index: 1000;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            left: 0; 
+        }
+
+        .nav-container {
+            max-width: 100%;
+            margin: 0 auto;
+            padding: 0 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            left: 0; 
+        }
+
+        .logo {
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: var(--text-light);
+            text-decoration: none;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 2rem;
+            align-items: center;
+            list-style: none;
+        }
+
+        .nav-links a {
+            color: var(--text-light);
+            text-decoration: none;
+            font-weight: 500;
+            transition: color 0.3s;
+        }
+
+        .nav-links a:hover {
+            color: var(--primary-blue);
+        }
+
+        .cta-nav {
+            background: var(--primary-blue);
+            padding: 0.7rem 1.5rem;
+            border-radius: 8px;
+            border: none;
+            color: white;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .cta-nav:hover {
+            background: #0948d4;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(11, 92, 255, 0.4);
+        }
+
+        /* Hero Section */
+        .hero {
+            background: linear-gradient(135deg, var(--navy-dark) 0%, var(--navy-medium) 100%);
+            padding: 140px 2rem 100px;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            right: -20%;
+            width: 800px;
+            height: 800px;
+            background: radial-gradient(circle, rgba(11, 92, 255, 0.15) 0%, transparent 70%);
+            border-radius: 50%;
+        }
+
+        .hero-content {
+            max-width: 900px;
+            margin: 0 auto;
+            position: relative;
+            z-index: 1;
+        }
+
+        .banner-tag {
+            display: inline-block;
+            background: linear-gradient(90deg, rgba(11, 92, 255, 0.2), rgba(99, 102, 241, 0.2));
+            border: 1px solid rgba(11, 92, 255, 0.3);
+            padding: 0.5rem 1.5rem;
+            border-radius: 50px;
+            color: var(--text-light);
+            font-size: 0.9rem;
+            margin-bottom: 2rem;
+            animation: fadeInUp 0.6s ease;
+        }
+
+        h1 {
+            font-size: 3.5rem;
+            color: var(--text-light);
+            margin-bottom: 1.5rem;
+            line-height: 1.2;
+            animation: fadeInUp 0.8s ease;
+        }
+
+        .hero p {
+            font-size: 1.3rem;
+            color: var(--text-gray);
+            margin-bottom: 2.5rem;
+            max-width: 700px;
+            margin-left: auto;
+            margin-right: auto;
+            animation: fadeInUp 1s ease;
+        }
+
+        .hero-buttons {
+            display: flex;
+            gap: 1.5rem;
+            justify-content: center;
+            flex-wrap: wrap;
+            animation: fadeInUp 1.2s ease;
+        }
+
+        .btn-primary {
+            background: var(--primary-blue);
+            color: white;
+            padding: 1rem 2.5rem;
+            border: none;
+            border-radius: 8px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            text-decoration: none;
+            display: inline-block;
+        }
+
+        .btn-primary:hover {
+            background: #0948d4;
+            transform: translateY(-3px);
+            box-shadow: 0 8px 20px rgba(11, 92, 255, 0.4);
+        }
+
+        .btn-secondary {
+            background: transparent;
+            color: white;
+            padding: 1rem 2.5rem;
+            border: 2px solid white;
+            border-radius: 8px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            text-decoration: none;
+            display: inline-block;
+        }
+
+        .btn-secondary:hover {
+            background: white;
+            color: var(--navy-dark);
+            transform: translateY(-3px);
+        }
+
+        /* Features Carousel */
+        .features-section {
+            padding: 80px 2rem;
+            background: var(--bg-light);
+        }
+
+        .section-title {
+            text-align: center;
+            font-size: 2.5rem;
+            margin-bottom: 3rem;
+            color: var(--navy-dark);
+        }
+
+        .carousel-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .carousel {
+            display: flex;
+            gap: 2rem;
+            overflow-x: auto;
+            scroll-behavior: smooth;
+            padding: 2rem 0;
+            scrollbar-width: none;
+        }
+
+        .carousel::-webkit-scrollbar {
+            display: none;
+        }
+
+        .feature-card {
+            min-width: 350px;
+            background: white;
+            border-radius: 16px;
+            padding: 2rem;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+            transition: all 0.3s;
+            cursor: pointer;
+        }
+
+        .feature-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 12px 24px rgba(0,0,0,0.1);
+        }
+
+        .feature-icon {
+            width: 60px;
+            height: 60px;
+            background: linear-gradient(135deg, var(--primary-blue), var(--accent-purple));
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 1.5rem;
+            font-size: 1.8rem;
+        }
+
+        .feature-card h3 {
+            font-size: 1.5rem;
+            margin-bottom: 1rem;
+            color: var(--navy-dark);
+        }
+
+        .feature-card p {
+            color: #666;
+            line-height: 1.6;
+        }
+
+        .carousel-dots {
+            display: flex;
+            justify-content: center;
+            gap: 0.5rem;
+            margin-top: 2rem;
+        }
+
+        .dot {
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            background: #d1d5db;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .dot.active {
+            background: var(--primary-blue);
+            width: 30px;
+            border-radius: 5px;
+        }
+
+        /* What You'll Learn Section */
+        .curriculum-section {
+            padding: 80px 2rem;
+            background: white;
+        }
+
+        .curriculum-grid {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            margin-top: 3rem;
+        }
+
+        .curriculum-card {
+            background: var(--bg-light);
+            padding: 2rem;
+            border-radius: 12px;
+            border-left: 4px solid var(--primary-blue);
+            transition: all 0.3s;
+        }
+
+        .curriculum-card:hover {
+            background: white;
+            box-shadow: 0 8px 16px rgba(0,0,0,0.1);
+            transform: translateX(8px);
+        }
+
+        .week-number {
+            display: inline-block;
+            background: var(--primary-blue);
+            color: white;
+            padding: 0.3rem 0.8rem;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            margin-bottom: 1rem;
+        }
+
+        .curriculum-card h4 {
+            font-size: 1.3rem;
+            margin-bottom: 1rem;
+            color: var(--navy-dark);
+        }
+
+        .curriculum-card ul {
+            list-style: none;
+            padding: 0;
+        }
+
+        .curriculum-card li {
+            padding: 0.5rem 0;
+            color: #666;
+            position: relative;
+            padding-left: 1.5rem;
+        }
+
+        .curriculum-card li::before {
+            content: '✓';
+            position: absolute;
+            left: 0;
+            color: var(--success-green);
+            font-weight: bold;
+        }
+
+        /* Stats Section */
+        .stats-section {
+            background: linear-gradient(135deg, var(--navy-dark) 0%, var(--navy-medium) 100%);
+            padding: 80px 2rem;
+            color: white;
+        }
+
+        .stats-grid {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 3rem;
+            text-align: center;
+        }
+
+        .stat-item {
+            animation: fadeInUp 0.6s ease;
+        }
+
+        .stat-number {
+            font-size: 3.5rem;
+            font-weight: 700;
+            color: var(--primary-blue);
+            margin-bottom: 0.5rem;
+        }
+
+        .stat-label {
+            font-size: 1.1rem;
+            color: var(--text-gray);
+        }
+
+        /* Testimonial Section */
+        .testimonial-section {
+            padding: 80px 2rem;
+            background: var(--bg-light);
+        }
+
+        .testimonial-container {
+            max-width: 900px;
+            margin: 3rem auto;
+            background: white;
+            padding: 3rem;
+            border-radius: 16px;
+            box-shadow: 0 8px 24px rgba(0,0,0,0.08);
+            position: relative;
+        }
+
+        .quote-icon {
+            position: absolute;
+            top: -20px;
+            left: 40px;
+            width: 60px;
+            height: 60px;
+            background: var(--primary-blue);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2rem;
+            color: white;
+        }
+
+        .testimonial-text {
+            font-size: 1.3rem;
+            line-height: 1.8;
+            color: #333;
+            margin-bottom: 2rem;
+            font-style: italic;
+        }
+
+        .testimonial-author {
+            display: flex;
+            align-items: center;
+            gap: 1.5rem;
+        }
+
+        .author-image {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--primary-blue), var(--accent-purple));
+        }
+
+        .author-info h4 {
+            font-size: 1.1rem;
+            color: var(--navy-dark);
+            margin-bottom: 0.3rem;
+        }
+
+        .author-info p {
+            color: #666;
+            font-size: 0.95rem;
+        }
+
+        /* Pricing Section */
+        .pricing-section {
+            padding: 80px 2rem;
+            background: white;
+        }
+
+        .pricing-card {
+            max-width: 600px;
+            margin: 3rem auto;
+            background: linear-gradient(135deg, var(--navy-dark) 0%, var(--navy-medium) 100%);
+            padding: 3rem;
+            border-radius: 20px;
+            text-align: center;
+            box-shadow: 0 16px 40px rgba(0,0,0,0.2);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .pricing-card::before {
+            content: '';
+            position: absolute;
+            top: -100px;
+            right: -100px;
+            width: 300px;
+            height: 300px;
+            background: radial-gradient(circle, rgba(11, 92, 255, 0.2) 0%, transparent 70%);
+            border-radius: 50%;
+        }
+
+        .popular-badge {
+            display: inline-block;
+            background: var(--success-green);
+            color: white;
+            padding: 0.5rem 1.5rem;
+            border-radius: 20px;
+            font-size: 0.9rem;
+            font-weight: 600;
+            margin-bottom: 1.5rem;
+        }
+
+        .price {
+            font-size: 4rem;
+            font-weight: 700;
+            color: white;
+            margin-bottom: 0.5rem;
+        }
+
+        .price-currency {
+            font-size: 2rem;
+        }
+
+        .price-label {
+            color: var(--text-gray);
+            font-size: 1.1rem;
+            margin-bottom: 2rem;
+        }
+
+        .features-list {
+            text-align: left;
+            margin: 2rem 0;
+            list-style: none;
+        }
+
+        .features-list li {
+            color: white;
+            padding: 0.8rem 0;
+            padding-left: 2rem;
+            position: relative;
+            font-size: 1.05rem;
+        }
+
+        .features-list li::before {
+            content: '✓';
+            position: absolute;
+            left: 0;
+            color: var(--success-green);
+            font-weight: bold;
+            font-size: 1.3rem;
+        }
+
+        .btn-enroll {
+            background: var(--primary-blue);
+            color: white;
+            padding: 1.2rem 3rem;
+            border: none;
+            border-radius: 10px;
+            font-size: 1.2rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            margin-top: 2rem;
+            text-decoration: none;
+            display: inline-block;
+            width: 100%;
+        }
+
+        .btn-enroll:hover {
+            background: #0948d4;
+            transform: translateY(-4px);
+            box-shadow: 0 12px 28px rgba(11, 92, 255, 0.5);
+        }
+
+        /* FAQ Section */
+        .faq-section {
+            padding: 80px 2rem;
+            background: var(--bg-light);
+        }
+
+        .faq-container {
+            max-width: 900px;
+            margin: 3rem auto;
+        }
+
+        .faq-item {
+            background: white;
+            margin-bottom: 1rem;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+            transition: all 0.3s;
+        }
+
+        .faq-item:hover {
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+        }
+
+        .faq-question {
+            padding: 1.5rem;
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: var(--navy-dark);
+            cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            user-select: none;
+        }
+
+        .faq-arrow {
+            transition: transform 0.3s;
+            font-size: 1.5rem;
+            color: var(--primary-blue);
+        }
+
+        .faq-answer {
+            padding: 0 1.5rem;
+            max-height: 0;
+            overflow: hidden;
+            transition: all 0.3s;
+            color: #666;
+            line-height: 1.8;
+        }
+
+        .faq-item.active .faq-answer {
+            padding: 0 1.5rem 1.5rem;
+            max-height: 500px;
+        }
+
+        .faq-item.active .faq-arrow {
+            transform: rotate(180deg);
+        }
+
+        /* CTA Section */
+        .cta-section {
+            background: linear-gradient(135deg, var(--primary-blue) 0%, var(--accent-purple) 100%);
+            padding: 100px 2rem;
+            text-align: center;
+            color: white;
+        }
+
+        .cta-section h2 {
+            font-size: 3rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .cta-section p {
+            font-size: 1.3rem;
+            margin-bottom: 2.5rem;
+            opacity: 0.95;
+        }
+
+        /* Footer */
+        footer {
+            background: var(--navy-dark);
+            color: white;
+            padding: 60px 2rem 30px;
+        }
+
+        .footer-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 3rem;
+            margin-bottom: 3rem;
+        }
+
+        .footer-column h3 {
+            margin-bottom: 1.5rem;
+            font-size: 1.2rem;
+        }
+
+        .footer-column ul {
+            list-style: none;
+        }
+
+        .footer-column ul li {
+            margin-bottom: 0.8rem;
+        }
+
+        .footer-column ul li a {
+            color: var(--text-gray);
+            text-decoration: none;
+            transition: color 0.3s;
+        }
+
+        .footer-column ul li a:hover {
+            color: var(--primary-blue);
+        }
+
+        .footer-bottom {
+            text-align: center;
+            padding-top: 2rem;
+            border-top: 1px solid rgba(255,255,255,0.1);
+            color: var(--text-gray);
+        }
+
+        /* Animations */
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Mobile Menu */
+        .mobile-menu-btn {
+            display: none;
+            background: none;
+            border: none;
+            color: white;
+            font-size: 1.5rem;
+            cursor: pointer;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            h1 {
+                font-size: 2.5rem;
+            }
+
+            .hero p {
+                font-size: 1.1rem;
+            }
+
+            .nav-links {
+                display: none;
+            }
+
+            .mobile-menu-btn {
+                display: block;
+            }
+
+            .hero-buttons {
+                flex-direction: column;
+            }
+
+            .section-title {
+                font-size: 2rem;
+            }
+
+            .feature-card {
+                min-width: 280px;
+            }
+
+            .stats-grid {
+                grid-template-columns: 1fr;
+                gap: 2rem;
+            }
+
+            .cta-section h2 {
+                font-size: 2rem;
+            }
+
+            .footer-container {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        /* Trust Badges */
+        .trust-section {
+            padding: 60px 2rem;
+            background: white;
+            text-align: center;
+        }
+
+        .trust-badges {
+            max-width: 1000px;
+            margin: 2rem auto;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 3rem;
+            flex-wrap: wrap;
+        }
+
+        .badge {
+            padding: 1rem 2rem;
+            background: var(--bg-light);
+            border-radius: 10px;
+            font-weight: 600;
+            color: var(--navy-dark);
+            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+        }
+
+        /* Learning Phases */
+        .phases-section {
+            padding: 80px 2rem;
+            background: white;
+        }
+
+        .phase-container {
+            max-width: 1200px;
+            margin: 3rem auto;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+        }
+
+        .phase-card {
+            background: linear-gradient(135deg, var(--bg-light) 0%, white 100%);
+            padding: 2.5rem;
+            border-radius: 16px;
+            border-top: 4px solid var(--primary-blue);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+            transition: all 0.3s;
+        }
+
+        .phase-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 12px 28px rgba(0,0,0,0.15);
+        }
+
+        .phase-number {
+            display: inline-block;
+            width: 50px;
+            height: 50px;
+            background: var(--primary-blue);
+            color: white;
+            border-radius: 50%;
+            font-size: 1.5rem;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 1.5rem;
+        }
+
+        .phase-card h3 {
+            font-size: 1.5rem;
+            margin-bottom: 1rem;
+            color: var(--navy-dark);
+        }
+
+        .phase-weeks {
+            color: var(--primary-blue);
+            font-weight: 600;
+            margin-bottom: 1rem;
+        }
+    </style>
+</head>
+<body>
+    <!-- Progress Bar -->
+    <div id="progress-bar"></div>
+
+    <!-- Navigation -->
+    <nav>
+        <div class="nav-container">
+            <a href="#" class="logo">Data Analytics Training For You</a>
+            <ul class="nav-links">
+                <li><a href="#features">What You'll Learn</a></li>
+                <li><a href="#curriculum">Curriculum</a></li>
+                <li><a href="#pricing">Pricing</a></li>
+                <li><a href="#faq">FAQ</a></li>
+                <button class="cta-nav" onclick="scrollToEnroll()">Enroll Now</button>
+            </ul>
+            <button class="mobile-menu-btn">☰</button>
+        </div>
+    </nav>
+
+ 
+    <!-- Trust Section -->
+    <section class="trust-section">
+        <h3 style="color: #666; margin-bottom: 2rem;">Join the system that past students used to become money-attractive and  transform their careers</h3>
+        <div class="trust-badges">
+            <div class="badge">✓ Live Classes Twice Weekly (With Bonus Classes Included)</div>
+            <div class="badge">✓ Real Portfolio Projects</div>
+            <div class="badge">✓ Job-Ready in 13 Weeks</div>
+            <div class="badge">✓ Lifetime Non-Depreciating Value</div>
+        </div>
+    </section>
+
+    <!-- Learning Phases -->
+    <section class="phases-section">
+        <h2 class="section-title">Your Learning Journey: Three Powerful Phases</h2>
+        <div class="phase-container">
+            <div class="phase-card">
+                <div class="phase-number">1</div>
+                <h3>Guided Learning</h3>
+                <p class="phase-weeks">Weeks 1-4</p>
+                <p>In the first phase, you'll build your foundation together. I'll walk you through everything—how to clean data in Excel, write SQL queries from scratch, build dashboards in Power BI. You'll watch my screen and follow along at your own pace.</p>
+            </div>
+            <div class="phase-card">
+                <div class="phase-number">2</div>
+                <h3>Independent Learning</h3>
+                <p class="phase-weeks">Weeks 5-8</p>
+                <p>In this phase, you'll get to explore and create the curriculum on your own terms. I'll give you interesting challenges, but how you approach them is up to you. Discover your own style and build real confidence.</p>
+            </div>
+            <div class="phase-card">
+                <div class="phase-number">3</div>
+                <h3>Team-Based Learning</h3>
+                <p class="phase-weeks">Weeks 10-13</p>
+                <p>In this phase, you'll get to Work with a small team on a challenging project. Each person brings different strengths. You'll practice explaining your work, giving feedback, and delivering polished projects together.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Curriculum Section -->
+    <section class="curriculum-section" id="curriculum">
+        <h2 class="section-title">Complete 13-Week Curriculum Breakdown</h2>
+        <div class="curriculum-grid">
+            <div class="curriculum-card">
+                <span class="week-number">Week 1</span>
+                <h4>Orientation & Excel Basics</h4>
+                <ul>
+                    <li>Program overview and expectations</li>
+                    <li>Excel interface & essential functions</li>
+                    <li>Foundational formulas used in Excel</li>
+                    <li>Data types, formatting & so much more</li>
+                    <li><strong>Project:</strong> Weekly mini projects and reports</li>
+                </ul>
+            </div>
+            <div class="curriculum-card">
+                <span class="week-number">Week 2</span>
+                <h4>Excel Intermediate</h4>
+                <ul>
+                    <li>Data cleaning techniques</li>
+                    <li>The complete data analytics process</li>
+                    <li>Advanced data analytics techniques</li>
+                    <li>Pivot tables & charts</li>
+                    <li><strong>Project:</strong> Your first Major Data Visualisation Project</li>
+                </ul>
+            </div>
+            <div class="curriculum-card">
+                <span class="week-number">Week 3</span>
+                <h4>SQL Fundamentals</h4>
+                <ul>
+                    <li>Database basics & SQL introduction</li>
+                    <li>SELECT statements & filtering</li>
+                    <li>Aggregate functions</li>
+                    <li>What databases are and how they work</li>
+                    <li><strong>Project:</strong> Business question queries</li>
+                </ul>
+            </div>
+            <div class="curriculum-card">
+                <span class="week-number">Week 4</span>
+                <h4>SQL Intermediate</h4>
+                <ul>
+                    <li>Foundational Data Manipulation Techniques</li>
+                    <li> Sorting and Limiting</li>
+                    <li>Filtering Data</li>
+                    <li>Aliases</li>
+                    <li><strong>Project:</strong> Customer analysis project</li>
+                </ul>
+            </div>
+            <div class="curriculum-card">
+                <span class="week-number">Week 5</span>
+                <h4>Power BI Basics</h4>
+                <ul>
+                    <li>Power BI interface introduction</li>
+                    <li>Importing & connecting data sources</li>
+                    <li>Power Query transformations</li>
+                    <li>Basic visualisations</li>
+                    <li><strong>Project:</strong> First Power BI dashboard</li>
+                </ul>
+            </div>
+            <div class="curriculum-card">
+                <span class="week-number">Week 6</span>
+                <h4>Power BI Advanced</h4>
+                <ul>
+                    <li>Data Cleaning Using PowerBI</li>
+                    <li>Interactive dashboards with slicers</li>
+                    <li>Data Visualisation and Dashboards</li>
+                    <li>Data Storytelling</li>
+                    <li><strong>Project:</strong> Business intelligence dashboard</li>
+                </ul>
+            </div>
+            <div class="curriculum-card">
+                <span class="week-number">Week 7</span>
+                <h4>PowerPoint & Data Storytelling</h4>
+                <ul>
+                    <li>Data visualisation principles</li>
+                    <li>Structuring compelling presentations</li>
+                    <li>Using Canva/Google Slides/PowerPoint</li>
+                    <li>Presenting insights effectively</li>
+                    <li><strong>Project:</strong> Data analysis presentation</li>
+                </ul>
+            </div>
+            <div class="curriculum-card">
+                <span class="week-number">Week 8</span>
+                <h4>AI Tools for Data Analytics</h4>
+                <ul>
+                    <li>AI in data analytics overview</li>
+                    <li>ChatGPT for data cleaning & analysis</li>
+                    <li>AI visualisation tools</li>
+                    <li>Automation workflows</li>
+                    <li><strong>Project:</strong> Learn to perform data analytics with AI</li>
+                </ul>
+            </div>
+            <div class="curriculum-card" style="background: linear-gradient(135deg, #10b981 0%, #059669 100%); color: white;">
+                <span class="week-number" style="background: white; color: #10b981;">Week 9</span>
+                <h4 style="color: white;">Break Week - Catch Up Time</h4>
+                <ul style="color: rgba(255,255,255,0.9);">
+                    <li>No live sessions scheduled</li>
+                    <li>Complete any pending projects</li>
+                    <li>Review recordings & materials</li>
+                    <li>Rest and recharge</li>
+                    <li><strong>Community access to increase your chances of success</strong></li>
+                </ul>
+            </div>
+
+                       <div class="curriculum-card">
+                <span class="week-number">Week 10</span>
+                <h4>Team Project Completion</h4>
+                <ul>
+                    <li>Final team project work sessions</li>
+                    <li>Presentation preparation</li>
+                    <li>Feedback & refinement</li>
+                    <li>Practice presentations</li>
+                    <li><strong>Project:</strong> Complete team project</li>
+                </ul>
+            </div>
+            <div class="curriculum-card">
+                <span class="week-number">Week 11</span>
+                <h4>Portfolio Creation and Publishing</h4>
+                <ul>
+                    <li>Creating your portfolio website</li>
+                    <li>Showcasing your best projects</li>
+                    <li>Writing project descriptions</li>
+                    <li>Portfolio review and optimisation</li>
+                    <li><strong>Project:</strong> Publish live portfolio</li>
+                </ul>
+            </div>
+            <div class="curriculum-card">
+                <span class="week-number">Week 12</span>
+                <h4>Graduation & Launch</h4>
+                <ul>
+                    <li>Final showcase presentations</li>
+                    <li>Certificate ceremony</li>
+                    <li>Sign Up to Career Point for early platform access</li>
+                    <li>AI program waitlist enrollment</li>
+                    <li><strong>You're now job-ready!</strong></li>
+                </ul>
+            </div>
+        </div>
+<br><br>
+
+ <div class="curriculum-card">
+                <span class="week-number">Week 13</span>
+                <h4>Extra "Job Application Strategy" Week Available For People Wanting More (At The Price Of ₦2,000‎ Only)</h4>
+                <ul>
+                    <li>Writing data analyst resumes and finding data analytics jobs</li>
+                    <li>Crafting compelling cover letters and application best practices</li>
+                    <li>LinkedIn optimisation and best practices</li>
+                    <li>Learn to build your personal brand on LinkedIn</li>
+                    <li><strong>Project:</strong> Apply to your first 25 jobs</li>
+                </ul>
+            </div>
+
+    </section>
+
+    <!-- Stats Section -->
+    <section class="stats-section">
+        <h2 class="section-title" style="color: white; margin-bottom: 3rem;">The Numbers Don't Lie</h2>
+        <div class="stats-grid">
+            <div class="stat-item">
+                <div class="stat-number">13</div>
+                <div class="stat-label">Weeks to Job-Ready</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-number">₦10K</div>
+                <div class="stat-label">One-Time Investment (Excluding the Private Job-Support Group)</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-number">Multiple</div>
+                <div class="stat-label">Job ready Projects</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-number">24/7</div>
+                <div class="stat-label">Community Support</div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Testimonial Section -->
+    <section class="testimonial-section">
+        <h2 class="section-title">What Our Students Say</h2>
+        <div class="testimonial-container">
+            <div class="quote-icon">"</div>
+            <p class="testimonial-text">Despite [her first programme and] the class being offered at no cost, I love how patient the coach was with everyone. She is accessible, responsive, and meticulous. I was not expecting the dynamics that sprout from the bootcamp. For instance, ensuring we complete our projects, so we can be awarded certificates. Despite not meeting up with the initial deadline, she still extended the date, giving me the opportunity to rewatch the videos, identify where I got stuck, solved the problem, and submitted 2/3 of my projects.</p>
+            <div class="testimonial-author">
+                <div class="author-image"></div>
+                <div class="author-info">
+                    <h4>Data Analyst Trainee</h4>
+                    <p>Data Analyst</p>
+                </div>
+            </div>
+        </div>
+        <div class="testimonial-container">
+            <div class="quote-icon">"</div>
+            <p class="testimonial-text">Our Coach had often made sure that she communicates to us very well in a way we understood. Most times after classes, she would request for feedback and if there is any of us slacking behind, she would go out of her way to postpone the next lectures until all 'Is' are dotted and all 'Ts' are crossed for the one who is slacking behind and after which, she would still cover up her curriculum.</p>
+            <div class="testimonial-author">
+                <div class="author-image"></div>
+                <div class="author-info">
+                    <h4>Data Analyst Trainee</h4>
+                    <p> Data Analyst</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Pricing Section -->
+    <section class="pricing-section" id="pricing">
+        <h2 class="section-title">Your Investment in Your Future</h2>
+        <div class="pricing-card">
+            <div class="popular-badge">🔥 Most Popular - Limited Spots</div>
+            <div class="price"><span class="price-currency">₦</span>10,000</div>
+            <p class="price-label">One-time payment • Full 13-week programme</p>
+            <ul class="features-list">
+                <li>Several live and recorded classes</li>
+                <li>From zero to job-ready in 13 weeks</li>
+                <li>Build your online presence</li>
+                <li>AI tools integration training</li>
+                <li> Join a supportive community
+</li>
+                <li>Live portfolio website published</li>
+                <li>LinkedIn profile optimisation</li>
+                <li>Certificate + Proof of Skills</li>
+                <li>Professional certificate upon completion</li>
+                <li>Private community access</li>
+                <li>Team collaboration project</li>
+                <li>Job application challenge (25 jobs) for ₦2000</li>
+                <li>Internship/volunteer opportunities</li>
+                <li>Remote-friendly skills
+</li>
+                <li>Free AI programme waitlist access</li>
+                <li>No prerequisites needed</li>
+            </ul>
+            <a href="https://paystack.com/pay/eurekaroyalacademy" class="btn-enroll" target="_blank">Enroll Now - Secure Your Spot</a>
+            <p style="color: var(--text-gray); margin-top: 1.5rem; font-size: 0.95rem;">⏰ Programme startssoon • Limited to 50 students</p>
+        </div>
+    </section>
+
+
+<div style="max-width: 900px; margin: 40px auto; padding: 40px 30px; background: linear-gradient(135deg, rgba(0, 0, 139, 0.03), rgba(255, 215, 0, 0.05)); border-radius: 16px; border-left: 4px solid #00008b;">
+  
+  <h3 style="color: #00008b; font-size: 28px; margin-bottom: 30px; text-align: center;">Extra Services Available For Trainees In Need</h3>
+  
+  <!-- Portfolio Assistance Section -->
+  <div style="background-color: white; padding: 25px; border-radius: 12px; margin-bottom: 25px; box-shadow: 0 2px 8px rgba(0,0,0,0.08);">
+    <h4 style="color: #00008b; font-size: 22px; margin-bottom: 15px;">Portfolio Assistance: ₦5,000</h4>
+    
+    <p style="line-height: 1.8; color: rgba(0, 0, 0, 0.8); margin-bottom: 15px;">
+      Here's the truth: we really want you to build your portfolio yourself. When you create it with your own hands, you understand every decision, every design choice. You'll walk into interviews confident, able to tell the story behind your work naturally.
+    </p>
+    
+    <p style="line-height: 1.8; color: rgba(0, 0, 0, 0.8); margin-bottom: 15px;">
+      Sadly, we've watched incredibly talented students struggle to complete their portfolios because life got in the way. We've seen how that incomplete portfolio became a barrier between them and opportunities they absolutely deserved.
+    </p>
+    
+    <p style="line-height: 1.8; color: rgba(0, 0, 0, 0.8); margin-bottom: 15px;">
+      If you're genuinely out of time and truly unable to finish—we'll help. A trained virtual assistant will handle the setup and design. You provide your project work, review everything carefully, and the portfolio goes live under your name.
+    </p>
+    
+    <p style="line-height: 1.8; color: rgba(0, 0, 0, 0.8);">
+      <strong style="color: #00008b;">Our honest recommendation?</strong> Do it yourself if you possibly can. But if you can't, we'd rather you have this option than watch another promising career get delayed over something we can help with. Available if you truly need it. We're rooting for you no matter what path you take.
+    </p>
+  </div>
+  
+  <!-- Job Support Group Section -->
+  <div style="background-color: white; padding: 25px; border-radius: 12px; box-shadow: 0 2px 8px rgba(0,0,0,0.08);">
+    <h4 style="color: #00008b; font-size: 22px; margin-bottom: 15px;">Job Support Group (For The Job Application Strategy Week): ₦2,000</h4>
+    
+    <p style="line-height: 1.8; color: rgba(0, 0, 0, 0.8); margin-bottom: 15px;">
+      Here's what we've learned: skills get you trained, but strategy gets you hired. We've seen many talented professionals with strong technical abilities struggle for months to land their first role. This is so visible, just check LinkedIn. Meanwhile, others don't even need to apply to jobs. Over the years, we've realised why: they treated job hunting like a system, not a hope. They built their LinkedIn presence consistently.
+    </p>
+    
+    <p style="line-height: 1.8; color: rgba(0, 0, 0, 0.8); margin-bottom: 15px;">
+      My first two job offers came from LinkedIn when I wasn't even actively job hunting—just showing up authentically and visibly. That's why we created this Job Support Group. The ₦10,000 covers your training and skills. This separate fee is intentionally small but purposeful—it filters for students who are serious about getting hired, not just trained.
+    </p>
+    
+    <p style="line-height: 1.8; color: rgba(0, 0, 0, 0.8); margin-bottom: 15px;">
+      You'll get the complete Job Application Strategy Week (resume writing, cover letters, where to find roles, application best practices), the 25-Job Application Challenge with daily accountability, LinkedIn profile optimization that makes recruiters find you and LinkedIn branding strategies that attract opportunities without applying.
+    </p>
+    
+    <p style="line-height: 1.8; color: rgba(0, 0, 0, 0.8); margin-bottom: 15px;">
+      If you're committed to getting hired quickly, this is where that happens. Available exclusively for programme participants. This doesn't guarantee you'll get a job—no one can promise that. But it creates the ripe environment where you can be your best and put in the effort needed to get closer to your goals.
+    </p>
+    
+    <p style="line-height: 1.8; color: rgba(0, 0, 0, 0.8);">
+      We give you the tools to overcome what usually stops people in this journey: <strong style="color: #00008b;">isolation, lack of guidance, lack of motivation, lack of community, imposter syndrome, and burnout.</strong> If you're committed to getting hired and need the structure and support to make it happen, this is where that begins. Available exclusively for programme participants.
+    </p>
+  </div>
+  
+</div>
+
+
+
+    <!-- FAQ Section -->
+    <section class="faq-section" id="faq">
+        <h2 class="section-title">Frequently Asked Questions</h2>
+        <div class="faq-container">
+            <div class="faq-item">
+                <div class="faq-question">
+                    What do I need to join this program?
+                    <span class="faq-arrow">▼</span>
+                </div>
+                <div class="faq-answer">
+                    You need three things: A laptop or desktop computer (doesn't need to be expensive), about 5GB of free storage space, and internet connection. If your connection is unstable, don't worry—all sessions are recorded and uploaded within 24 hours.
+                </div>
+            </div>
+            <div class="faq-item">
+                <div class="faq-question">
+                    What if I miss a live session?
+                    <span class="faq-arrow">▼</span>
+                </div>
+                <div class="faq-answer">
+                    Every single live session is recorded and uploaded within 24 hours. During the programme,you'll be able to access the recordings, so you can watch them when it's convenient for you.
+                </div>
+            </div>
+            <div class="faq-item">
+                <div class="faq-question">
+                    Do I need prior experience in data analytics?
+                    <span class="faq-arrow">▼</span>
+                </div>
+                <div class="faq-answer">
+                    Absolutely not. This programme is designed for complete beginners. We start from scratch and assume you know nothing about Excel, SQL, Power BI, or data analytics. If you've never written a formula in Excel, that's perfectly fine.
+                </div>
+            </div>
+            <div class="faq-item">
+                <div class="faq-question">
+                    Will I get a job immediately after finishing?
+                    <span class="faq-arrow">▼</span>
+                </div>
+                <div class="faq-answer">
+                    This doesn't guarantee you'll get a job—no one can promise that. But it gives you everything needed to succeed: technical skills, a portfolio, optimized LinkedIn, polished resume, and proven job application strategies. We help you overcome what usually stops people—isolation, lack of guidance, lack of motivation, imposter syndrome, and burnout. Students who complete the portfolio and apply consistently get opportunities. Some might land roles within weeks, others within a few months or even more. 
+                </div>
+            </div>
+            <div class="faq-item">
+                <div class="faq-question">
+                    Can I manage this with school or a full-time job?
+                    <span class="faq-arrow">▼</span>
+                </div>
+                <div class="faq-answer">
+                    Yes! Live sessions are in the evenings and weekends  specifically for students and working professionals. Most students spend about 10-12 hours per week.
+                </div>
+            </div>
+            <div class="faq-item">
+                <div class="faq-question">
+                    Are refunds available?
+                    <span class="faq-arrow">▼</span>
+                </div>
+                <div class="faq-answer">
+                    No, refunds are not available. The moment you join, you get access to everything your payment covers. This policy ensures only serious, committed students join.
+                </div>
+            </div>
+            <div class="faq-item">
+                <div class="faq-question">
+                    What if I fall behind during the programme?
+                    <span class="faq-arrow">▼</span>
+                </div>
+                <div class="faq-answer">
+                    We have a break week specifically for helping you catch up.
+                </div>
+            </div>
+  <div class="faq-item">
+                <div class="faq-question">
+                    I'm not in Nigeria. Can I still join?
+                    <span class="faq-arrow">▼</span>
+                </div>
+                <div class="faq-answer">
+                    Yes! As long as you have internet access, you're welcome. You can join live sessions or watch the recordings later, either works.
+                </div>
+            </div>
+            <div class="faq-item">
+                <div class="faq-question">
+                    Do I need to buy any software?
+                    <span class="faq-arrow">▼</span>
+                </div>
+                <div class="faq-answer">
+                    No. We use free tools: Excel, free SQL databases, Power BI Desktop (free), and PowerPoint.
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <script>
+        // Progress Bar
+        window.addEventListener('scroll', () => {
+            const windowHeight = window.innerHeight;
+            const documentHeight = document.documentElement.scrollHeight - windowHeight;
+            const scrolled = window.scrollY;
+            const progress = (scrolled / documentHeight) * 100;
+            document.getElementById('progress-bar').style.width = progress + '%';
+        });
+
+        // Smooth Scroll
+        function scrollToEnroll() {
+            document.getElementById('pricing').scrollIntoView({ behavior: 'smooth' });
+        }
+
+        // FAQ Accordion
+        document.querySelectorAll('.faq-item').forEach(item => {
+            item.querySelector('.faq-question').addEventListener('click', () => {
+                const isActive = item.classList.contains('active');
+                
+                document.querySelectorAll('.faq-item').forEach(i => i.classList.remove('active'));
+                
+                if (!isActive) {
+                    item.classList.add('active');
+                }
+            });
+        });
+
+        // Carousel Auto-scroll
+        const carousel = document.getElementById('carousel');
+        const dots = document.querySelectorAll('.dot');
+        let currentIndex = 0;
+
+        function updateCarousel() {
+            const cardWidth = carousel.querySelector('.feature-card').offsetWidth + 32; // 32px gap
+            carousel.scrollTo({
+                left: cardWidth * currentIndex,
+                behavior: 'smooth'
+            });
+            
+            dots.forEach((dot, index) => {
+                dot.classList.toggle('active', index === currentIndex);
+            });
+        }
+
+        dots.forEach((dot, index) => {
+            dot.addEventListener('click', () => {
+                currentIndex = index;
+                updateCarousel();
+            });
+        });
+
+        // Auto-advance carousel
+        setInterval(() => {
+            currentIndex = (currentIndex + 1) % dots.length;
+            updateCarousel();
+        }, 5000);
+
+        // Scroll animations
+        const observerOptions = {
+            threshold: 0.1,
+            rootMargin: '0px 0px -100px 0px'
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.style.opacity = '1';
+                    entry.target.style.transform = 'translateY(0)';
+                }
+            });
+        }, observerOptions);
+
+        document.querySelectorAll('.feature-card, .curriculum-card, .phase-card, .stat-item').forEach(el => {
+            el.style.opacity = '0';
+            el.style.transform = 'translateY(30px)';
+            el.style.transition = 'all 0.6s ease';
+            observer.observe(el);
+        });
+
+        // Mobile menu toggle
+        document.querySelector('.mobile-menu-btn').addEventListener('click', function() {
+            const navLinks = document.querySelector('.nav-links');
+            navLinks.style.display = navLinks.style.display === 'flex' ? 'none' : 'flex';
+        });
+    </script>
+</body>
+</html>
+
+
+     
+    </section>
+
+    <!-- Final CTA Section -->
+    <section class="cta-section" id="cta">
+        <h2>One of these choices changes your life. The other keeps it exactly the same </h2>
+        <p>You decide.</p>
+        
+        <a href="https://paystack.com/pay/eurekaroyalacademy" class="btn-primary" style="font-size: 1.3rem; padding: 1.3rem 3rem; margin-top: 1rem;" target="_blank">Start Your Transformation Now →</a>
+        <p style="margin-top: 2rem; opacity: 0.9; font-size: 1.1rem;">One-Time Payment • 13 Weeks • Job-Ready Skills</p>
+        <p style="margin-top: 1rem; font-size: 0.95rem; opacity: 0.8;">⏰ Program starts soon • Sign up and receive your first email • Limited spots available</p>
+
+<div class="footer-column">
+    <h3>Quick Links</h3>
+    <ul style="display: flex; justify-content: center; gap: 20px; list-style: none; padding: 0;">
+        <li><a href="#features">What You'll Learn</a></li>
+        <li><a href="#curriculum">Curriculum</a></li>
+        <li><a href="#pricing">Pricing</a></li>
+        <li><a href="#faq">FAQ</a></li>
+    </ul>
+</div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <div class="footer-content">
+            <h3 style="font-size: 1.8rem; margin-bottom: 1rem;">Christiana Churchill</h3>
+            <p style="line-height: 1.8; font-size: 1.05rem;">Empowering Nigerians with in-demand tech skills to build careers that pay in dollars. One student at a time.</p>
+            <p style="margin-top: 2rem;">Data Analytics Training Programme</p>
+            <p>Transforming careers across Africa</p>
+        </div>
+
+        <div class="footer-bottom">
+            <p>&copy; 2025 Christiana Churchill. All rights reserved.</p>
+            <p style="margin-top: 0.5rem;">Making tech accessible to everyone</p>
+        </div>
+    </footer>
+
+    <script>
+        // Progress Bar
+        window.addEventListener('scroll', () => {
+            const windowHeight = window.innerHeight;
+            const documentHeight = document.documentElement.scrollHeight - windowHeight;
+            const scrolled = window.scrollY;
+            const progress = (scrolled / documentHeight) * 100;
+            document.getElementById('progress-bar').style.width = progress + '%';
+        });
+
+        // Vertical Tracker
+        const sections = ['hero', 'instructor', 'features', 'story', 'trust', 'testimonial', 'cta'];
+        const trackerItems = document.querySelectorAll('.tracker-item');
+
+        function updateTracker() {
+            const scrollPosition = window.scrollY + window.innerHeight / 2;
+
+            sections.forEach((sectionId, index) => {
+                const section = document.getElementById(sectionId);
+                if (section) {
+                    const sectionTop = section.offsetTop;
+                    const sectionBottom = sectionTop + section.offsetHeight;
+
+                    if (scrollPosition >= sectionTop && scrollPosition < sectionBottom) {
+                        trackerItems.forEach(item => item.classList.remove('active'));
+                        trackerItems[index].classList.add('active');
+                        trackerItems[index].querySelector('.tracker-dot').classList.add('active');
+                    } else {
+                        trackerItems[index].querySelector('.tracker-dot').classList.remove('active');
+                    }
+                }
+            });
+        }
+
+        window.addEventListener('scroll', updateTracker);
+        updateTracker();
+
+        // Tracker click navigation
+        trackerItems.forEach(item => {
+            item.addEventListener('click', () => {
+                const sectionId = item.dataset.section;
+                const section = document.getElementById(sectionId);
+                if (section) {
+                    section.scrollIntoView({ behavior: 'smooth' });
+                }
+            });
+        });
+
+        // Carousel with Arrow Navigation
+        const carousel = document.getElementById('carousel');
+        let currentPosition = 0;
+        const cardWidth = 350 + 32; // card width + gap
+        const visibleCards = Math.floor(window.innerWidth / cardWidth);
+        const totalCards = carousel.children.length;
+        const maxPosition = -(totalCards - visibleCards) * cardWidth;
+
+        function moveCarousel(direction) {
+            currentPosition += direction * cardWidth * 2; // Move 2 cards at a time
+            
+            if (currentPosition > 0) {
+                currentPosition = 0;
+            }
+            if (currentPosition < maxPosition) {
+                currentPosition = maxPosition;
+            }
+            
+            carousel.style.transform = `translateX(${currentPosition}px)`;
+        }
+
+        // Auto-scroll carousel
+        let autoScrollInterval = setInterval(() => {
+            if (currentPosition <= maxPosition) {
+                currentPosition = 0;
+            } else {
+                currentPosition -= cardWidth;
+            }
+            carousel.style.transform = `translateX(${currentPosition}px)`;
+        }, 4000);
+
+        // Pause auto-scroll on hover
+        carousel.addEventListener('mouseenter', () => {
+            clearInterval(autoScrollInterval);
+        });
+
+        carousel.addEventListener('mouseleave', () => {
+            autoScrollInterval = setInterval(() => {
+                if (currentPosition <= maxPosition) {
+                    currentPosition = 0;
+                } else {
+                    currentPosition -= cardWidth;
+                }
+                carousel.style.transform = `translateX(${currentPosition}px)`;
+            }, 4000);
+        });
+
+        // Scroll animations
+        const observerOptions = {
+            threshold: 0.1,
+            rootMargin: '0px 0px -100px 0px'
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.style.opacity = '1';
+                    entry.target.style.transform = 'translateY(0)';
+                }
+            });
+        }, observerOptions);
+
+        document.querySelectorAll('.feature-card, .trust-card, .credential-item').forEach(el => {
+            el.style.opacity = '0';
+            el.style.transform = 'translateY(30px)';
+            el.style.transition = 'all 0.6s ease';
+            observer.observe(el);
+        });
+
+        // Responsive carousel updates
+        window.addEventListener('resize', () => {
+            currentPosition = 0;
+            carousel.style.transform = `translateX(0px)`;
+        });
+    </script>
+</body>
+</html>
