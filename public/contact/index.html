@@ -246,40 +246,7 @@
             transform: none;
         }
 
-        /* Success Message */
-        .success-message {
-            display: none;
-            background: rgba(16, 185, 129, 0.1);
-            border: 1px solid var(--success-green);
-            border-radius: 16px;
-            padding: 2rem;
-            text-align: center;
-            animation: fadeInUp 0.5s ease;
-        }
-
-        .success-message.show {
-            display: block;
-        }
-
-        .success-icon {
-            font-size: 4rem;
-            margin-bottom: 1rem;
-        }
-
-        .success-message h3 {
-            color: var(--text-light);
-            font-size: 1.8rem;
-            margin-bottom: 1rem;
-        }
-
-        .success-message p {
-            color: var(--text-gray);
-            font-size: 1.1rem;
-            line-height: 1.8;
-        }
-
-
-        /* Footer */
+      /* Footer */
         footer {
             background: var(--navy-dark);
             color: white;
@@ -315,6 +282,39 @@
             text-align: center; /* Add this line */
         }
 
+
+
+        /* Success Message */
+        .success-message {
+            display: none;
+            background: rgba(16, 185, 129, 0.1);
+            border: 1px solid var(--success-green);
+            border-radius: 16px;
+            padding: 2rem;
+            text-align: center;
+            animation: fadeInUp 0.5s ease;
+        }
+
+        .success-message.show {
+            display: block;
+        }
+
+        .success-icon {
+            font-size: 4rem;
+            margin-bottom: 1rem;
+        }
+
+        .success-message h3 {
+            color: var(--text-light);
+            font-size: 1.8rem;
+            margin-bottom: 1rem;
+        }
+
+        .success-message p {
+            color: var(--text-gray);
+            font-size: 1.1rem;
+            line-height: 1.8;
+        }
 
         /* Error Message */
         .error-message {
@@ -508,6 +508,7 @@
     </section>
 
 
+
     <!-- Footer -->
     <footer>
         <div class="footer-content">
@@ -521,6 +522,7 @@
             <p style="margin-top: 0.5rem;">Making tech accessible to everyone</p>
         </div>
     </footer>
+
 
 
 
@@ -556,7 +558,7 @@
         const successMessage = document.getElementById('successMessage');
         const errorMessage = document.getElementById('errorMessage');
 
-        contactForm.addEventListener('submit', async function(e) {
+        contactForm.addEventListener('submit', function(e) {
             e.preventDefault();
             
             // Hide previous messages
@@ -577,41 +579,43 @@
                 timestamp: new Date().toLocaleString('en-GB', { timeZone: 'Africa/Lagos' })
             };
 
-            try {
-                // REPLACE THIS URL WITH YOUR GOOGLE APPS SCRIPT WEB APP URL
-                const scriptURL = 'https://script.google.com/macros/s/AKfycbxoWnJ5FAIxMkKGiRqqxg96bAZCZAvIamKmXK_HO3TMMXvQhxX0tji6TF_NHUtJfqnbmw/exec';
+            // REPLACE THIS URL WITH YOUR GOOGLE APPS SCRIPT WEB APP URL
+            const scriptURL = 'https://script.google.com/macros/s/AKfycbxoWnJ5FAIxMkKGiRqqxg96bAZCZAvIamKmXK_HO3TMMXvQhxX0tji6TF_NHUtJfqnbmw/exec';
+            
+            fetch(scriptURL, {
+                method: 'POST',
+                mode: 'no-cors',
+                cache: 'no-cache',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                redirect: 'follow',
+                body: JSON.stringify(formData)
+            })
+            .then(response => {
+                // With no-cors mode, we assume success if no error is thrown
+                console.log('Form submitted successfully');
                 
-                const response = await fetch(scriptURL, {
-                    method: 'POST',
-                    body: JSON.stringify(formData),
-                    headers: {
-                        'Content-Type': 'application/json'
-                    }
-                });
-
-                if (response.ok) {
-                    // Hide form and show success message
-                    contactForm.style.display = 'none';
-                    successMessage.classList.add('show');
-                    
-                    // Optional: Reset form after delay
-                    setTimeout(() => {
-                        contactForm.reset();
-                        contactForm.style.display = 'block';
-                        successMessage.classList.remove('show');
-                        submitBtn.disabled = false;
-                        submitBtn.innerHTML = 'Send Message';
-                    }, 8000);
-                } else {
-                    throw new Error('Failed to send message');
-                }
+                // Hide form and show success message
+                contactForm.style.display = 'none';
+                successMessage.classList.add('show');
                 
-            } catch (error) {
-                errorMessage.textContent = '❌ Something went wrong. Please try again or email us directly.';
+                // Optional: Reset form after delay
+                setTimeout(() => {
+                    contactForm.reset();
+                    contactForm.style.display = 'block';
+                    successMessage.classList.remove('show');
+                    submitBtn.disabled = false;
+                    submitBtn.innerHTML = 'Send Message';
+                }, 8000);
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                errorMessage.textContent = '❌ Something went wrong. Please try again.';
                 errorMessage.classList.add('show');
                 submitBtn.disabled = false;
                 submitBtn.innerHTML = 'Send Message';
-            }
+            });
         });
     </script>
 </body>
