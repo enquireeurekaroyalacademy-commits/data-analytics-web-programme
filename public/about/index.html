@@ -109,6 +109,15 @@
             box-shadow: 0 8px 20px rgba(11, 92, 255, 0.4);
         }
 
+        .mobile-menu-btn {
+            display: none;
+            background: none;
+            border: none;
+            color: white;
+            font-size: 1.5rem;
+            cursor: pointer;
+        }
+
         /* Animated Gradient Background */
         .animated-bg {
             position: fixed;
@@ -483,12 +492,12 @@
 
         /* Mobile Responsive */
         @media (max-width: 768px) {
-            h1 {
-                font-size: 2.5rem;
+            .logo {
+                font-size: 1.3rem;
             }
 
-            .nav-links {
-                display: none;
+            h1 {
+                font-size: 2.5rem;
             }
 
             .comparison-grid {
@@ -498,20 +507,36 @@
             .benefits-grid {
                 grid-template-columns: 1fr;
             }
-        }
 
-        .mobile-menu-btn {
-            display: none;
-            background: none;
-            border: none;
-            color: white;
-            font-size: 1.5rem;
-            cursor: pointer;
-        }
-
-        @media (max-width: 768px) {
             .mobile-menu-btn {
                 display: block;
+            }
+
+            .nav-links {
+                display: none;
+                position: fixed;
+                top: 70px;
+                right: 0;
+                background: rgba(14, 21, 37, 0.98);
+                backdrop-filter: blur(20px);
+                width: 100%;
+                padding: 2rem;
+                flex-direction: column;
+                gap: 1.5rem;
+                box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+            }
+            
+            .nav-links.active {
+                display: flex;
+            }
+
+            .nav-links li {
+                width: 100%;
+                text-align: center;
+            }
+
+            .cta-nav {
+                width: 100%;
             }
         }
     </style>
@@ -532,7 +557,7 @@
                 <li><a href="https://data-analytics-by-christiana.web.app/about/">About</a></li>
                 <li><a href="https://data-analytics-by-christiana.web.app/contact/">Contact Us</a></li>
                 <li><a href="https://data-analytics-by-christiana.web.app/dashboard/">Dashboard</a></li>
-                <button class="cta-nav" onclick="window.location.href='https://paystack.com/pay/eurekaroyalacademy'">Enrol Now</button>
+                <li><button class="cta-nav" onclick="window.location.href='https://paystack.com/pay/eurekaroyalacademy'">Enrol Now</button></li>
             </ul>
             <button class="mobile-menu-btn">☰</button>
         </div>
@@ -670,6 +695,31 @@
             const scrolled = window.scrollY;
             const progress = (scrolled / documentHeight) * 100;
             document.getElementById('progress-bar').style.width = progress + '%';
+        });
+
+        // Mobile Menu Toggle
+        const mobileMenuBtn = document.querySelector('.mobile-menu-btn');
+        const navLinks = document.querySelector('.nav-links');
+
+        mobileMenuBtn.addEventListener('click', function() {
+            navLinks.classList.toggle('active');
+            this.textContent = navLinks.classList.contains('active') ? '✕' : '☰';
+        });
+
+        // Close menu when clicking outside
+        document.addEventListener('click', function(e) {
+            if (!e.target.closest('.nav-container')) {
+                navLinks.classList.remove('active');
+                mobileMenuBtn.textContent = '☰';
+            }
+        });
+
+        // Close menu when clicking a link
+        document.querySelectorAll('.nav-links a').forEach(link => {
+            link.addEventListener('click', () => {
+                navLinks.classList.remove('active');
+                mobileMenuBtn.textContent = '☰';
+            });
         });
 
         // Parallax Effect
