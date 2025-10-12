@@ -108,6 +108,15 @@
             box-shadow: 0 8px 20px rgba(11, 92, 255, 0.4);
         }
 
+        .mobile-menu-btn {
+            display: none;
+            background: none;
+            border: none;
+            color: white;
+            font-size: 1.5rem;
+            cursor: pointer;
+        }
+
         /* Animated Background */
         .animated-bg {
             position: fixed;
@@ -246,13 +255,13 @@
             transform: none;
         }
 
-      /* Footer */
+        /* Footer */
         footer {
             background: var(--navy-dark);
             color: white;
             padding: 60px 2rem 30px;
             margin-top: 100px;
-            text-align: center; /* Add this line */
+            text-align: center;
         }
 
         .footer-content {
@@ -264,14 +273,12 @@
         .footer-content h3 {
             font-size: 1.8rem;
             margin-bottom: 1rem;
-            text-align: center; /* Add this line */
         }
 
         .footer-content p {
             color: var(--text-gray);
             margin-bottom: 1rem;
             line-height: 1.8;
-            text-align: center; /* Add this line */
         }
 
         .footer-bottom {
@@ -279,10 +286,7 @@
             padding-top: 2rem;
             border-top: 1px solid rgba(255,255,255,0.1);
             color: var(--text-gray);
-            text-align: center; /* Add this line */
         }
-
-
 
         /* Success Message */
         .success-message {
@@ -386,31 +390,47 @@
 
         /* Mobile Responsive */
         @media (max-width: 768px) {
-            .hero h1 {
-                font-size: 2.5rem;
+            .logo {
+                font-size: 1.3rem;
             }
 
-            .nav-links {
-                display: none;
+            .hero h1 {
+                font-size: 2.5rem;
             }
 
             .form-card {
                 padding: 2rem 1.5rem;
             }
-        }
 
-        .mobile-menu-btn {
-            display: none;
-            background: none;
-            border: none;
-            color: white;
-            font-size: 1.5rem;
-            cursor: pointer;
-        }
-
-        @media (max-width: 768px) {
             .mobile-menu-btn {
                 display: block;
+            }
+
+            .nav-links {
+                display: none;
+                position: fixed;
+                top: 70px;
+                right: 0;
+                background: rgba(14, 21, 37, 0.98);
+                backdrop-filter: blur(20px);
+                width: 100%;
+                padding: 2rem;
+                flex-direction: column;
+                gap: 1.5rem;
+                box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+            }
+            
+            .nav-links.active {
+                display: flex;
+            }
+
+            .nav-links li {
+                width: 100%;
+                text-align: center;
+            }
+
+            .cta-nav {
+                width: 100%;
             }
         }
     </style>
@@ -431,7 +451,7 @@
                 <li><a href="https://data-analytics-by-christiana.web.app/about/">About</a></li>
                 <li><a href="https://data-analytics-by-christiana.web.app/contact/">Contact Us</a></li>
                 <li><a href="https://data-analytics-by-christiana.web.app/dashboard/">Dashboard</a></li>
-                <button class="cta-nav" onclick="window.location.href='https://paystack.com/pay/eurekaroyalacademy'">Enrol Now</button>
+                <li><button class="cta-nav" onclick="window.location.href='https://paystack.com/pay/eurekaroyalacademy'">Enrol Now</button></li>
             </ul>
             <button class="mobile-menu-btn">☰</button>
         </div>
@@ -507,8 +527,6 @@
         </div>
     </section>
 
-
-
     <!-- Footer -->
     <footer>
         <div class="footer-content">
@@ -523,9 +541,6 @@
         </div>
     </footer>
 
-
-
-
     <script>
         // Progress Bar
         window.addEventListener('scroll', () => {
@@ -534,6 +549,31 @@
             const scrolled = window.scrollY;
             const progress = (scrolled / documentHeight) * 100;
             document.getElementById('progress-bar').style.width = progress + '%';
+        });
+
+        // Mobile Menu Toggle
+        const mobileMenuBtn = document.querySelector('.mobile-menu-btn');
+        const navLinks = document.querySelector('.nav-links');
+
+        mobileMenuBtn.addEventListener('click', function() {
+            navLinks.classList.toggle('active');
+            this.textContent = navLinks.classList.contains('active') ? '✕' : '☰';
+        });
+
+        // Close menu when clicking outside
+        document.addEventListener('click', function(e) {
+            if (!e.target.closest('.nav-container')) {
+                navLinks.classList.remove('active');
+                mobileMenuBtn.textContent = '☰';
+            }
+        });
+
+        // Close menu when clicking a link
+        document.querySelectorAll('.nav-links a').forEach(link => {
+            link.addEventListener('click', () => {
+                navLinks.classList.remove('active');
+                mobileMenuBtn.textContent = '☰';
+            });
         });
 
         // Show/Hide "Other" issue field
@@ -561,15 +601,12 @@
         contactForm.addEventListener('submit', function(e) {
             e.preventDefault();
             
-            // Hide previous messages
             errorMessage.classList.remove('show');
             errorMessage.textContent = '';
             
-            // Disable button and show loading
             submitBtn.disabled = true;
             submitBtn.innerHTML = 'Sending... <span class="spinner"></span>';
             
-            // Get form data
             const formData = {
                 name: document.getElementById('name').value,
                 email: document.getElementById('email').value,
@@ -579,7 +616,6 @@
                 timestamp: new Date().toLocaleString('en-GB', { timeZone: 'Africa/Lagos' })
             };
 
-            // REPLACE THIS URL WITH YOUR GOOGLE APPS SCRIPT WEB APP URL
             const scriptURL = 'https://script.google.com/macros/s/AKfycbxigzIMWC_eiwZhYFf96QgvJcaZkJBSeqP30-UhmZq_xQSKHZ8KqKqXS5hOpjDXaLq3ag/exec';
             
             fetch(scriptURL, {
@@ -593,14 +629,11 @@
                 body: JSON.stringify(formData)
             })
             .then(response => {
-                // With no-cors mode, we assume success if no error is thrown
                 console.log('Form submitted successfully');
                 
-                // Hide form and show success message
                 contactForm.style.display = 'none';
                 successMessage.classList.add('show');
                 
-                // Optional: Reset form after delay
                 setTimeout(() => {
                     contactForm.reset();
                     contactForm.style.display = 'block';
