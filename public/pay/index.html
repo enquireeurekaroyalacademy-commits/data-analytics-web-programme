@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Enrol & Pay</title>
+  <link rel="icon" type="image/png" href="/global-education.png">
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet"/>
+  <style>
+    :root {
+      --gradient-bg: linear-gradient(135deg, #1E40AF 0%, #3B82F6 100%);
+      --gradient-btn: linear-gradient(90deg, #2563EB 0%, #1E40AF 100%);
+      --text-light: #F9FAFB;
+      --text-dark: #0F172A;
+      --card-bg: rgba(255, 255, 255, 0.08);
+      --glass-bg: rgba(255, 255, 255, 0.15);
+      --border-light: rgba(255, 255, 255, 0.2);
+      --radius: 20px;
+      --transition: all 0.3s ease;
+    }
+
+    body {
+      font-family: 'Inter', sans-serif;
+      background: var(--gradient-bg);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+      padding: 2rem;
+      margin: 0;
+      color: var(--text-light);
+    }
+
+    .payment-wrapper {
+      backdrop-filter: blur(18px);
+      background: var(--glass-bg);
+      padding: 3rem 2rem;
+      border-radius: var(--radius);
+      max-width: 520px;
+      width: 100%;
+      box-shadow: 0 25px 60px rgba(0, 0, 0, 0.35);
+      border: 1px solid var(--border-light);
+      animation: floatIn 0.6s ease;
+    }
+
+    @keyframes floatIn {
+      0% { transform: translateY(30px); opacity: 0; }
+      100% { transform: translateY(0); opacity: 1; }
+    }
+
+    h1 {
+      font-size: 2rem;
+      font-weight: 800;
+      text-align: center;
+      margin-bottom: 0.5rem;
+      background: linear-gradient(90deg, #FFFFFF, #E0E7FF);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    p.subtext {
+      text-align: center;
+      font-size: 1rem;
+      color: #E0E7FF;
+      margin-bottom: 2rem;
+      line-height: 1.6;
+    }
+
+    .input-field {
+      margin-bottom: 1.5rem;
+    }
+
+    input[type="email"] {
+      width: 93%;
+      padding: 1rem;
+      font-size: 1rem;
+      border: 1px solid rgba(255, 255, 255, 0.25);
+      background: rgba(255, 255, 255, 0.08);
+      color: white;
+      border-radius: var(--radius);
+      outline: none;
+      transition: var(--transition);
+    }
+
+    input[type="email"]:focus {
+      border-color: #60A5FA;
+      background: rgba(255, 255, 255, 0.15);
+    }
+
+    button {
+      background: var(--gradient-btn);
+      color: var(--text-light);
+      border: none;
+      width: 100%;
+      padding: 1rem;
+      font-size: 1.1rem;
+      font-weight: 600;
+      border-radius: var(--radius);
+      cursor: pointer;
+      transition: var(--transition);
+    }
+
+    button:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 10px 25px rgba(37, 99, 235, 0.35);
+    }
+
+    .notice-box {
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: var(--radius);
+      padding: 1rem;
+      margin-top: 1.5rem;
+      font-size: 0.9rem;
+      color: #E0E7FF;
+      line-height: 1.5;
+    }
+
+    .notice-box strong {
+      color: white;
+      display: block;
+      margin-bottom: 0.3rem;
+      font-weight: 600;
+    }
+
+    a.mail-link {
+      color: #93C5FD;
+      text-decoration: underline;
+      transition: color 0.2s ease;
+    }
+
+    a.mail-link:hover {
+      color: #BFDBFE;
+    }
+  </style>
+</head>
+<body>
+  <div class="payment-wrapper">
+    <h1>Enrol Now – ₦10,000</h1>
+    <p class="subtext">Gain full access to your programme dashboard instantly after payment. Your journey begins immediately.</p>
+    <div class="input-field">
+      <input type="email" id="email" placeholder="Enter your email address" required />
+    </div>
+    <button id="payBtn">Proceed to Secure Payment</button>
+
+    <div class="notice-box">
+      <strong>Important:</strong>
+      • You’ll receive your Course Access ID in your email after successful payment.<br/>
+      • Check your spam folder if you don’t see it in 5 minutes.<br/>
+      • Didn't receive an email? <a href="https://data-analytics-by-christiana.web.app/contact/" class="mail-link">Contact Support</a>.
+    </div>
+  </div>
+
+  <script src="https://checkout.flutterwave.com/v3.js"></script>
+  <script>
+    document.getElementById('payBtn').addEventListener('click', function () {
+      const email = document.getElementById('email').value;
+      if (!email) {
+        alert('Please enter your email before paying.');
+        return;
+      }
+
+      FlutterwaveCheckout({
+        public_key: "FLWPUBK-e687f241832020ee2cbd2e38d5845efd-X",  // Replace with your Flutterwave public key
+        tx_ref: "TX-" + Date.now(),
+        amount: 10000,
+        currency: "NGN",
+        payment_options: "card, banktransfer, ussd",
+        customer: { email },
+        callback: function (response) {
+          console.log("Payment completed. Response:", response);
+          window.location.href = `/thankyou?tx_ref=${response.tx_ref}`;
+        },
+        onclose: function() {
+          console.log("Payment window closed.");
+        }
+      });
+    });
+  </script>
+</body>
+</html>
