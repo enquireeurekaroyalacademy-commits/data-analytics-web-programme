@@ -2,11 +2,9 @@
 import { initializeApp } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-app.js";
 import { getFirestore, collection, addDoc, getDocs } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-firestore.js";
 
-// ✅ Import EmailJS (placed at the top, not inside a function)
-import emailjs from "https://cdn.jsdelivr.net/npm/emailjs-com@3/dist/email.min.js";
+// Initialize EmailJS
+window.emailjs.init("B6RAC2pe1ODQ1uR37");
 
-// ✅ Initialize EmailJS with your public key
-emailjs.init("B6RAC2pe1ODQ1uR37"); // Replace if you change your key later
 
 // ✅ Your Firebase config
 const firebaseConfig = {
