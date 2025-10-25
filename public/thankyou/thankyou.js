@@ -51,6 +51,41 @@ async function savePayment() {
 
     document.getElementById("message").innerText = 
       `✅ Thank you, ${data.name || "dear user"}! Your payment was successful. Your ID is ${customId}`;
+    // --- Send Thank-You Email via EmailJS ---
+import emailjs from "https://cdn.jsdelivr.net/npm/emailjs-com@3/dist/email.min.js";
+
+emailjs.init("B6RAC2pe1ODQ1uR37"); // Replace with your actual public key
+
+emailjs.send("service_rascnun", "template_ysdp0h5", {
+  name: data.name,
+  email: data.email,
+  course_id: customId,
+  amount: data.amount,
+})
+.then(() => {
+  console.log("Email sent successfully!");
+})
+.catch((error) => {
+  console.error("Error sending email:", error);
+});
+// --- Send Thank-You Email via EmailJS ---
+import emailjs from "https://cdn.jsdelivr.net/npm/emailjs-com@3/dist/email.min.js";
+
+emailjs.init("B6RAC2pe1ODQ1uR37"); // Replace with your actual public key
+
+emailjs.send("service_rascnun", "template_ysdp0h5", {
+  name: data.name,
+  email: data.email,
+  course_id: customId,
+  amount: data.amount,
+})
+.then(() => {
+  console.log("Email sent successfully!");
+})
+.catch((error) => {
+  console.error("Error sending email:", error);
+});
+
   } else {
     document.getElementById("message").innerText = 
       "❌ Payment not successful. Please try again.";
