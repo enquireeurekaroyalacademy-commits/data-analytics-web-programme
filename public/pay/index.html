@@ -981,7 +981,7 @@
                 customer: { email },
                 callback: function (response) {
                     console.log("Payment completed. Response:", response);
-                    window.location.href = `/thankyou?tx_ref=${response.tx_ref}`;
+                    window.location.href = `/thankyou/?status=${response.status}&amount=${response.amount}&name=${response.customer.name || "Guest"}&email=${response.customer.email}`;
                 },
                 onclose: function() {
                     console.log("Payment window closed.");
