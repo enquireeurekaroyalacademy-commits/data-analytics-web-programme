@@ -1,1145 +1,624 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Data Analytics Training - Christiana Churchill</title>
-    <link rel="icon" type="image/png" href="/global-education.png">
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
+<!DOCTYPE html> 
+<html lang="en"> 
+<head> 
+    <meta charset="UTF-8"> 
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"> 
+    <title>Data Analytics Training - Christiana Churchill</title> 
+    <link rel="icon" type="image/png" href="/global-education.png"> 
+    <link rel="preconnect" href="https://fonts.googleapis.com"> 
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin> 
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet"> 
+    <style> 
+        * { 
+            margin: 0; 
+            padding: 0; 
+            box-sizing: border-box; 
+        } 
+  
+        :root { 
+            --primary-blue: #0B5CFF; 
+            --navy-dark: #0e1525; 
+            --navy-medium: #1a2236; 
+            --accent-purple: #6366f1; 
+            --text-light: #ffffff; 
+            --text-gray: #a0aec0; 
+            --bg-light: #f7fafc; 
+            --success-green: #10b981; 
+        } 
  
-        :root {
-            --primary-blue: #0B5CFF;
-            --navy-dark: #0e1525;
-            --navy-medium: #1a2236;
-            --accent-purple: #6366f1;
-            --text-light: #ffffff;
-            --text-gray: #a0aec0;
-            --bg-light: #f7fafc;
-            --success-green: #10b981;
-        }
-
-        body {
-            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
-            line-height: 1.6;
-            color: #333;
-            overflow-x: hidden;
-        }
-
-        /* Progress Bar */
-        #progress-bar {
-            position: fixed;
-            top: 0;
-            left: 0;
-            height: 4px;
-            background: linear-gradient(90deg, var(--primary-blue), var(--accent-purple));
-            width: 0%;
-            z-index: 9999;
-            transition: width 0.1s ease;
-        }
-
-        /* Vertical Progress Tracker */
-        .vertical-tracker {
-            position: fixed;
-            right: 3rem;
-            top: 50%;
-            transform: translateY(-50%);
-            z-index: 100;
-            display: flex;
-            flex-direction: column;
-            gap: 1.5rem;
-        }
-
-        .tracker-item {
-            display: flex;
-            align-items: center;
-            gap: 1rem;
-            cursor: pointer;
-            transition: all 0.3s;
-        }
-
-        .tracker-dot {
-            width: 12px;
-            height: 12px;
-            border-radius: 50%;
-            background: #d1d5db;
-            border: 2px solid var(--navy-dark);
-            transition: all 0.3s;
-            position: relative;
-        }
-
-        .tracker-dot::before {
-            content: '';
-            position: absolute;
-            width: 2px;
-            height: 24px;
-            background: #d1d5db;
-            top: 100%;
-            left: 50%;
-            transform: translateX(-50%);
-        }
-
-        .tracker-item:last-child .tracker-dot::before {
-            display: none;
-        }
-
-        .tracker-dot.active {
-            background: var(--primary-blue);
-            border-color: var(--primary-blue);
-            transform: scale(1.3);
-        }
-
-        .tracker-dot.active::before {
-            background: var(--primary-blue);
-        }
-
-        .tracker-label {
-            font-size: 0.85rem;
-            color: var(--navy-dark);
-            font-weight: 500;
-            opacity: 0;
-            transform: translateX(-10px);
-            transition: all 0.3s;
-            white-space: nowrap;
-        }
-
-        .tracker-item:hover .tracker-label,
-        .tracker-item.active .tracker-label {
-            opacity: 1;
-            transform: translateX(0);
-        }
-
-        /* Navigation */
-        nav {
-            position: fixed;
-            top: 0;
-            width: 100%;
-            background: var(--navy-dark);
-            padding: 1rem 0;
-            z-index: 1000;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
-        }
-
-        .nav-container {
-            max-width: 1400px;
-            margin: 0 auto;
-            padding: 0 2rem;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-
-        .logo {
-            font-size: 1.8rem;
-            font-weight: 700;
-            color: var(--text-light);
-            text-decoration: none;
-        }
-
-        .nav-links {
-            display: flex;
-            gap: 2rem;
-            align-items: center;
-            list-style: none;
-        }
-
-        .nav-links a {
-            color: var(--text-light);
-            text-decoration: none;
-            font-weight: 500;
-            transition: color 0.3s;
-        }
-
-        .nav-links a:hover {
-            color: var(--primary-blue);
-        }
-
-        .cta-nav {
-            background: var(--primary-blue);
-            padding: 0.7rem 1.5rem;
-            border-radius: 8px;
-            border: none;
-            color: white;
-            font-weight: 600;
-            cursor: pointer;
-            transition: all 0.3s;
-            text-decoration: none;
-        }
-
-        .cta-nav:hover {
-            background: #0948d4;
-            transform: translateY(-2px);
-            box-shadow: 0 4px 12px rgba(11, 92, 255, 0.4);
-        }
-
-        .mobile-menu-btn {
-            display: none;
-            background: none;
-            border: none;
-            color: white;
-            font-size: 1.5rem;
-            cursor: pointer;
-        }
-
-        /* Hero Section */
-        .hero {
-            background: linear-gradient(135deg, var(--navy-dark) 0%, var(--navy-medium) 100%);
-            padding: 140px 2rem 100px;
-            text-align: center;
-            position: relative;
-            overflow: hidden;
-        }
-
-        .hero::before {
-            content: '';
-            position: absolute;
-            top: -50%;
-            right: -20%;
-            width: 800px;
-            height: 800px;
-            background: radial-gradient(circle, rgba(11, 92, 255, 0.15) 0%, transparent 70%);
-            border-radius: 50%;
-        }
-
-        .hero-content {
-            max-width: 900px;
-            margin: 0 auto;
-            position: relative;
-            z-index: 1;
-        }
-
-        .banner-tag {
-            display: inline-block;
-            background: linear-gradient(90deg, rgba(11, 92, 255, 0.2), rgba(99, 102, 241, 0.2));
-            border: 1px solid rgba(11, 92, 255, 0.3);
-            padding: 0.5rem 1.5rem;
-            border-radius: 50px;
-            color: var(--text-light);
-            font-size: 0.9rem;
-            margin-bottom: 2rem;
-            animation: fadeInUp 0.6s ease;
-        }
-
-        h1 {
-            font-size: 3.5rem;
-            color: var(--text-light);
-            margin-bottom: 1.5rem;
-            line-height: 1.2;
-            animation: fadeInUp 0.8s ease;
-        }
-
-        .hero p {
-            font-size: 1.3rem;
-            color: var(--text-gray);
-            margin-bottom: 2.5rem;
-            max-width: 700px;
-            margin-left: auto;
-            margin-right: auto;
-            animation: fadeInUp 1s ease;
-        }
-
-        .hero-buttons {
-            display: flex;
-            gap: 1.5rem;
-            justify-content: center;
-            flex-wrap: wrap;
-            animation: fadeInUp 1.2s ease;
-        }
-
-        .btn-primary {
-            background: var(--primary-blue);
-            color: white;
-            padding: 1rem 2.5rem;
-            border: none;
-            border-radius: 8px;
-            font-size: 1.1rem;
-            font-weight: 600;
-            cursor: pointer;
-            transition: all 0.3s;
-            text-decoration: none;
-            display: inline-block;
-        }
-
-        .btn-primary:hover {
-            background: #0948d4;
-            transform: translateY(-3px);
-            box-shadow: 0 8px 20px rgba(11, 92, 255, 0.4);
-        }
-
-        .btn-secondary {
-            background: transparent;
-            color: white;
-            padding: 1rem 2.5rem;
-            border: 2px solid white;
-            border-radius: 8px;
-            font-size: 1.1rem;
-            font-weight: 600;
-            cursor: pointer;
-            transition: all 0.3s;
-            text-decoration: none;
-            display: inline-block;
-        }
-
-        .btn-secondary:hover {
-            background: white;
-            color: var(--navy-dark);
-            transform: translateY(-3px);
-        }
-
-        /* Payment Section Styles */
-        .payment-section {
-            background: linear-gradient(135deg, #1E40AF 0%, #3B82F6 100%);
-            padding: 100px 2rem;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            min-height: 100vh;
-        }
-
-        .payment-wrapper {
-            backdrop-filter: blur(18px);
-            background: rgba(255, 255, 255, 0.15);
-            padding: 3rem 2rem;
-            border-radius: 20px;
-            max-width: 520px;
-            width: 100%;
-            box-shadow: 0 25px 60px rgba(0, 0, 0, 0.35);
-            border: 1px solid rgba(255, 255, 255, 0.2);
-            animation: floatIn 0.6s ease;
-        }
-
-        @keyframes floatIn {
-            0% { transform: translateY(30px); opacity: 0; }
-            100% { transform: translateY(0); opacity: 1; }
-        }
-
-        .payment-wrapper h1 {
-            font-size: 2rem;
-            font-weight: 800;
-            text-align: center;
-            margin-bottom: 0.5rem;
-            background: linear-gradient(90deg, #FFFFFF, #E0E7FF);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            color: white;
-        }
-
-        .payment-wrapper p.subtext {
-            text-align: center;
-            font-size: 1rem;
-            color: #E0E7FF;
-            margin-bottom: 2rem;
-            line-height: 1.6;
-        }
-
-        .input-field {
-            margin-bottom: 1.5rem;
-        }
-
-        .input-field input[type="email"] {
-            width: 100%;
-            padding: 1rem;
-            font-size: 1rem;
-            border: 1px solid rgba(255, 255, 255, 0.25);
-            background: rgba(255, 255, 255, 0.08);
-            color: white;
-            border-radius: 20px;
-            outline: none;
-            transition: all 0.3s ease;
-        }
-
-        .input-field input[type="email"]::placeholder {
-            color: rgba(255, 255, 255, 0.6);
-        }
-
-        .input-field input[type="email"]:focus {
-            border-color: #60A5FA;
-            background: rgba(255, 255, 255, 0.15);
-        }
-
-        .payment-wrapper button {
-            background: linear-gradient(90deg, #2563EB 0%, #1E40AF 100%);
-            color: white;
-            border: none;
-            width: 100%;
-            padding: 1rem;
-            font-size: 1.1rem;
-            font-weight: 600;
-            border-radius: 20px;
-            cursor: pointer;
-            transition: all 0.3s ease;
-        }
-
-        .payment-wrapper button:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 10px 25px rgba(37, 99, 235, 0.35);
-        }
-
-        .notice-box {
-            background: rgba(255, 255, 255, 0.05);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            border-radius: 20px;
-            padding: 1rem;
-            margin-top: 1.5rem;
-            font-size: 0.9rem;
-            color: #E0E7FF;
-            line-height: 1.5;
-        }
-
-        .notice-box strong {
-            color: white;
-            display: block;
-            margin-bottom: 0.3rem;
-            font-weight: 600;
-        }
-
-        .mail-link {
-            color: #93C5FD;
-            text-decoration: underline;
-            transition: color 0.2s ease;
-        }
-
-        .mail-link:hover {
-            color: #BFDBFE;
-        }
-
-        /* Instructor Section */
-        .instructor-section {
-            padding: 80px 2rem;
-            background: white;
-        }
-
-        .instructor-container {
-            max-width: 1000px;
-            margin: 0 auto;
-            display: grid;
-            grid-template-columns: 1fr 2fr;
-            gap: 4rem;
-            align-items: center;
-        }
-
-        .instructor-image {
-            width: 100%;
-            aspect-ratio: 1;
-            background: linear-gradient(135deg, var(--primary-blue), var(--accent-purple));
-            border-radius: 20px;
-            box-shadow: 0 16px 40px rgba(0,0,0,0.1);
-        }
-
-        .instructor-content h2 {
-            font-size: 2.5rem;
-            margin-bottom: 1.5rem;
-            color: var(--navy-dark);
-        }
-
-        .instructor-content p {
-            font-size: 1.1rem;
-            line-height: 1.8;
-            color: #666;
-            margin-bottom: 2rem;
-        }
-
-        .credentials {
-            display: grid;
-            gap: 1rem;
-        }
-
-        .credential-item {
-            display: flex;
-            align-items: flex-start;
-            gap: 1rem;
-            padding: 1rem;
-            background: var(--bg-light);
-            border-radius: 10px;
-            transition: all 0.3s;
-        }
-
-        .credential-item:hover {
-            background: white;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.08);
-            transform: translateX(8px);
-        }
+        body { 
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif; 
+            line-height: 1.6; 
+            color: #333; 
+            overflow-x: hidden; 
+        } 
  
-        .credential-icon {
-            width: 40px;
-            height: 40px;
-            background: var(--primary-blue);
-            border-radius: 8px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 1.3rem;
-            flex-shrink: 0;
-        }
-
-        .credential-text {
-            flex: 1;
-        }
-
-        .credential-text strong {
-            display: block;
-            color: var(--navy-dark);
-            margin-bottom: 0.3rem;
-        }
-
-        .credential-text span {
-            color: #666;
-            font-size: 0.95rem;
-        }
-
-        /* Features Carousel */
-        .features-section {
-            padding: 80px 2rem;
-            background: var(--bg-light);
-        }
-
-        .section-title {
-            text-align: center;
-            font-size: 2.5rem;
-            margin-bottom: 3rem;
-            color: var(--navy-dark);
-        }
-
-        .carousel-container {
-            max-width: 1400px;
-            margin: 0 auto;
-            position: relative;
-        }
-
-        .carousel-wrapper {
-            position: relative;
-            overflow: hidden;
-            padding: 2rem 0;
-        }
-
-        .carousel {
-            display: flex;
-            gap: 2rem;
-            transition: transform 0.5s ease;
-        }
-
-        .feature-card {
-            min-width: 350px;
-            background: white;
-            border-radius: 16px;
-            padding: 2rem;
-            box-shadow: 0 4px 6px rgba(0,0,0,0.05);
-            transition: all 0.3s;
-            cursor: pointer;
-        }
-
-        .feature-card:hover {
-            transform: translateY(-8px);
-            box-shadow: 0 12px 24px rgba(0,0,0,0.1);
-        }
-
-        .feature-icon {
-            width: 60px;
-            height: 60px;
-            background: linear-gradient(135deg, var(--primary-blue), var(--accent-purple));
-            border-radius: 12px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            margin-bottom: 1.5rem;
-            font-size: 1.8rem;
-        }
-
-        .feature-card h3 {
-            font-size: 1.5rem;
-            margin-bottom: 1rem;
-            color: var(--navy-dark);
-        }
-
-        .feature-card p {
-            color: #666;
-            line-height: 1.6;
-        }
-
-        .carousel-nav {
-            position: absolute;
-            top: 50%;
-            transform: translateY(-50%);
-            width: 50px;
-            height: 50px;
-            background: white;
-            border-radius: 50%;
-            border: none;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 1.5rem;
-            color: var(--navy-dark);
-            transition: all 0.3s;
-            z-index: 10;
-        }
-
-        .carousel-nav:hover {
-            background: var(--primary-blue);
-            color: white;
-            transform: translateY(-50%) scale(1.1);
-        }
-
-        .carousel-nav.prev {
-            left: -25px;
-        }
-
-        .carousel-nav.next {
-            right: -25px;
-        }
-
-        /* Story Section */
-        .story-section {
-            padding: 100px 2rem;
-            background: linear-gradient(135deg, var(--navy-dark) 0%, var(--navy-medium) 100%);
-            color: white;
-        }
-
-        .story-container {
-            max-width: 900px;
-            margin: 0 auto;
-        }
-
-        .story-container h2 {
-            font-size: 3rem;
-            margin-bottom: 2rem;
-            text-align: center;
-        }
-
-        .story-container p {
-            font-size: 1.2rem;
-            line-height: 1.9;
-            margin-bottom: 1.5rem;
-            color: var(--text-gray);
-        }
-
-        .story-highlight {
-            background: rgba(11, 92, 255, 0.2);
-            padding: 2rem;
-            border-left: 4px solid var(--primary-blue);
-            margin: 2rem 0;
-            border-radius: 8px;
-        }
-
-        .story-highlight p {
-            color: white;
-            font-size: 1.3rem;
-            font-weight: 500;
-            margin: 0;
-        }
-
-        /* Trust Section */
-        .trust-section {
-            padding: 80px 2rem;
-            background: white;
-            text-align: center;
-        }
-
-        .trust-content h2 {
-            font-size: 2.5rem;
-            margin-bottom: 3rem;
-            color: var(--navy-dark);
-        }
-
-        .trust-grid {
-            max-width: 1200px;
-            margin: 0 auto;
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 2rem;
-        }
-
-        .trust-card {
-            background: var(--bg-light);
-            padding: 2rem;
-            border-radius: 16px;
-            transition: all 0.3s;
-        }
-
-        .trust-card:hover {
-            background: white;
-            box-shadow: 0 8px 24px rgba(0,0,0,0.1);
-            transform: translateY(-8px);
-        }
-
-        .trust-icon {
-            font-size: 3rem;
-            margin-bottom: 1rem;
-        }
-
-        .trust-card h3 {
-            font-size: 1.3rem;
-            margin-bottom: 0.5rem;
-            color: var(--navy-dark);
-        }
-
-        .trust-card p {
-            color: #666;
-            font-size: 0.95rem;
-        }
-
-        /* Testimonial Section */
-        .testimonial-section {
-            padding: 80px 2rem;
-            background: var(--bg-light);
-        }
-
-        .testimonial-container {
-            max-width: 900px;
-            margin: 3rem auto;
-            background: white;
-            padding: 3rem;
-            border-radius: 16px;
-            box-shadow: 0 8px 24px rgba(0,0,0,0.08);
-            position: relative;
-        }
-
-        .quote-icon {
-            position: absolute;
-            top: -20px;
-            left: 40px;
-            width: 60px;
-            height: 60px;
-            background: var(--primary-blue);
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 2rem;
-            color: white;
-        }
-
-        .testimonial-text {
-            font-size: 1.3rem;
-            line-height: 1.8;
-            color: #333;
-            margin-bottom: 2rem;
-            font-style: italic;
-        }
-
-        .testimonial-author {
-            display: flex;
-            align-items: center;
-            gap: 1.5rem;
-        }
-
-        .author-image {
-            width: 60px;
-            height: 60px;
-            border-radius: 50%;
-            background: linear-gradient(135deg, var(--primary-blue), var(--accent-purple));
-        }
-
-        .author-info h4 {
-            font-size: 1.1rem;
-            color: var(--navy-dark);
-            margin-bottom: 0.3rem;
-        }
-
-        .author-info p {
-            color: #666;
-            font-size: 0.95rem;
-        }
-
-        /* Final CTA Section */
-        .cta-section {
-            background: linear-gradient(135deg, var(--primary-blue) 0%, var(--accent-purple) 100%);
-            padding: 100px 2rem;
-            text-align: center;
-            color: white;
-        }
-
-        .cta-section h2 {
-            font-size: 3rem;
-            margin-bottom: 1.5rem;
-        }
-
-        .cta-section p {
-            font-size: 1.3rem;
-            margin-bottom: 2.5rem;
-            opacity: 0.95;
-        }
-
-        /* Footer */
-        footer {
-            background: var(--navy-dark);
-            color: white;
-            padding: 60px 2rem 30px;
-            text-align: center;
-        }
-
-        .footer-content {
-            max-width: 800px;
-            margin: 0 auto;
-        }
-
-        .footer-content p {
-            color: var(--text-gray);
-            margin-bottom: 1rem;
-        }
-
-        .footer-bottom {
-            margin-top: 3rem;
-            padding-top: 2rem;
-            border-top: 1px solid rgba(255,255,255,0.1);
-            color: var(--text-gray);
-        }
-
-        /* Animations */
-        @keyframes fadeInUp {
-            from {
-                opacity: 0;
-                transform: translateY(30px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-
-        /* Responsive */
-        @media (max-width: 768px) {
-            .logo {
-                font-size: 1.3rem;
-            }
-
-            h1 {
-                font-size: 2.5rem;
-            }
-
-            .hero p {
-                font-size: 1.1rem;
-            }
-
-            .vertical-tracker {
-                display: none;
-            }
-
-            .hero-buttons {
-                flex-direction: column;
-            }
-
-            .section-title {
-                font-size: 2rem;
-            }
-
-            .feature-card {
-                min-width: 280px;
-            }
-
-            .instructor-container {
-                grid-template-columns: 1fr;
-                gap: 2rem;
-            }
-
-            .cta-section h2 {
-                font-size: 2rem;
-            }
-
-            .carousel-nav {
-                display: none;
-            }
-
-            .mobile-menu-btn {
-                display: block;
-            }
-
-            .nav-links {
-                display: none;
-                position: fixed;
-                top: 70px;
-                right: 0;
-                background: rgba(14, 21, 37, 0.98);
-                backdrop-filter: blur(20px);
-                width: 100%;
-                padding: 2rem;
-                flex-direction: column;
-                gap: 1.5rem;
-                box-shadow: 0 10px 30px rgba(0,0,0,0.3);
-            }
-            
-            .nav-links.active {
-                display: flex;
-            }
-
-            .nav-links li {
-                width: 100%;
-                text-align: center;
-            }
-
-            .cta-nav {
-                width: 100%;
-            }
-        }
-    </style>
-</head>
-<body>
-    <!-- Progress Bar -->
-    <div id="progress-bar"></div>
-
-    <!-- Navigation -->
-    <nav>
-        <div class="nav-container">
-            <a href="https://data-analytics-by-christiana.web.app/" class="logo">Learn Tech Skills That Pay</a>
-            <ul class="nav-links">
-                <li><a href="https://data-analytics-by-christiana.web.app/">Home</a></li>
-                <li><a href="https://data-analytics-by-christiana.web.app/about/">About</a></li>
-                <li><a href="https://data-analytics-by-christiana.web.app/contact/">Contact Us</a></li>
-                <li><a href="https://data-analytics-by-christiana.web.app/dashboard/">Dashboard</a></li>
-                <li><button class="cta-nav" onclick="scrollToEnroll()">Enrol Now</button></li>
-            </ul>
-            <button class="mobile-menu-btn">☰</button>
-        </div>
-    </nav>
-
-    <!-- Hero Section -->
-    <section class="hero" id="hero">
-        <div class="hero-content">
-            <div class="banner-tag">💸 Build the income streams that create lasting wealth</div>
-            <h1>Turn Data Into Income</h1>
-            <p>13-week programme that teaches you to analyse data, build dashboards, and land jobs that pay</p>
-            <div class="hero-buttons">
-                <a href="https://data-analytics-by-christiana.web.app/pay/" class="btn-primary">Enrol Now - ₦10,000</a>
-                <a href="https://data-analytics-by-christiana.web.app/about/" class="btn-secondary">Learn More</a>
-            </div>
-        </div>
-    </section>
-
-    <!-- Payment/Enrollment Section -->
-    <section class="payment-section" id="enroll">
-        <div class="payment-wrapper">
-            <h1>Enrol Now – ₦10,000</h1>
-            <p class="subtext">Gain full access to your programme dashboard instantly after payment. Your journey begins immediately.</p>
-            
-            <div class="input-field">
-                <input type="email" id="email" placeholder="Enter your email address" required />
+        #progress-bar { 
+            position: fixed; 
+            top: 0; 
+            left: 0; 
+            height: 4px; 
+            background: linear-gradient(90deg, var(--primary-blue), var(--accent-purple)); 
+            width: 0%; 
+            z-index: 9999; 
+            transition: width 0.1s ease; 
+        } 
+ 
+        nav { 
+            position: fixed; 
+            top: 0; 
+            width: 100%; 
+            background: var(--navy-dark); 
+            padding: 1rem 0; 
+            z-index: 1000; 
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1); 
+        } 
+ 
+        .nav-container { 
+            max-width: 1400px; 
+            margin: 0 auto; 
+            padding: 0 2rem; 
+            display: flex; 
+            justify-content: space-between; 
+            align-items: center; 
+        } 
+ 
+        .logo { 
+            font-size: 1.8rem; 
+            font-weight: 700; 
+            color: var(--text-light); 
+            text-decoration: none; 
+        } 
+ 
+        .nav-links { 
+            display: flex; 
+            gap: 2rem; 
+            align-items: center; 
+            list-style: none; 
+        } 
+ 
+        .nav-links a { 
+            color: var(--text-light); 
+            text-decoration: none; 
+            font-weight: 500; 
+            transition: color 0.3s; 
+        } 
+ 
+        .nav-links a:hover { 
+            color: var(--primary-blue); 
+        } 
+ 
+        .cta-nav { 
+            background: var(--primary-blue); 
+            padding: 0.7rem 1.5rem; 
+            border-radius: 8px; 
+            border: none; 
+            color: white; 
+            font-weight: 600; 
+            cursor: pointer; 
+            transition: all 0.3s; 
+            text-decoration: none; 
+        } 
+ 
+        .cta-nav:hover { 
+            background: #0948d4; 
+            transform: translateY(-2px); 
+            box-shadow: 0 4px 12px rgba(11, 92, 255, 0.4); 
+        } 
+ 
+        .mobile-menu-btn { 
+            display: none; 
+            background: none; 
+            border: none; 
+            color: white; 
+            font-size: 1.5rem; 
+            cursor: pointer; 
+        } 
+ 
+        .hero { 
+            background: linear-gradient(135deg, var(--navy-dark) 0%, var(--navy-medium) 100%); 
+            padding: 140px 2rem 100px; 
+            text-align: center; 
+            position: relative; 
+            overflow: hidden; 
+        } 
+ 
+        .hero::before { 
+            content: ''; 
+            position: absolute; 
+            top: -50%; 
+            right: -20%; 
+            width: 800px; 
+            height: 800px; 
+            background: radial-gradient(circle, rgba(11, 92, 255, 0.15) 0%, transparent 70%); 
+            border-radius: 50%; 
+        } 
+ 
+        .hero-content { 
+            max-width: 900px; 
+            margin: 0 auto; 
+            position: relative; 
+            z-index: 1; 
+        } 
+ 
+        .banner-tag { 
+            display: inline-block; 
+            background: linear-gradient(90deg, rgba(11, 92, 255, 0.2), rgba(99, 102, 241, 0.2)); 
+            border: 1px solid rgba(11, 92, 255, 0.3); 
+            padding: 0.5rem 1.5rem; 
+            border-radius: 50px; 
+            color: var(--text-light); 
+            font-size: 0.9rem; 
+            margin-bottom: 2rem; 
+            animation: fadeInUp 0.6s ease; 
+        } 
+ 
+        h1 { 
+            font-size: 3.5rem; 
+            color: var(--text-light); 
+            margin-bottom: 1.5rem; 
+            line-height: 1.2; 
+            animation: fadeInUp 0.8s ease; 
+        } 
+ 
+        .hero p { 
+            font-size: 1.3rem; 
+            color: var(--text-gray); 
+            margin-bottom: 2.5rem; 
+            max-width: 700px; 
+            margin-left: auto; 
+            margin-right: auto; 
+            animation: fadeInUp 1s ease; 
+        } 
+ 
+        .hero-buttons { 
+            display: flex; 
+            gap: 1.5rem; 
+            justify-content: center; 
+            flex-wrap: wrap; 
+            animation: fadeInUp 1.2s ease; 
+        } 
+ 
+        .btn-primary { 
+            background: var(--primary-blue); 
+            color: white; 
+            padding: 1rem 2.5rem; 
+            border: none; 
+            border-radius: 8px; 
+            font-size: 1.1rem; 
+            font-weight: 600; 
+            cursor: pointer; 
+            transition: all 0.3s; 
+            text-decoration: none; 
+            display: inline-block; 
+        } 
+ 
+        .btn-primary:hover { 
+            background: #0948d4; 
+            transform: translateY(-3px); 
+            box-shadow: 0 8px 20px rgba(11, 92, 255, 0.4); 
+        } 
+ 
+        .btn-secondary { 
+            background: transparent; 
+            color: white; 
+            padding: 1rem 2.5rem; 
+            border: 2px solid white; 
+            border-radius: 8px; 
+            font-size: 1.1rem; 
+            font-weight: 600; 
+            cursor: pointer; 
+            transition: all 0.3s; 
+            text-decoration: none; 
+            display: inline-block; 
+        } 
+ 
+        .btn-secondary:hover { 
+            background: white; 
+            color: var(--navy-dark); 
+            transform: translateY(-3px); 
+        } 
+ 
+        .payment-section { 
+            background: linear-gradient(135deg, #1E40AF 0%, #3B82F6 100%); 
+            padding: 100px 2rem; 
+            display: flex; 
+            justify-content: center; 
+            align-items: center; 
+            min-height: 100vh; 
+        } 
+ 
+        .payment-wrapper { 
+            backdrop-filter: blur(18px); 
+            background: rgba(255, 255, 255, 0.15); 
+            padding: 3rem 2rem; 
+            border-radius: 20px; 
+            max-width: 520px; 
+            width: 100%; 
+            box-shadow: 0 25px 60px rgba(0, 0, 0, 0.35); 
+            border: 1px solid rgba(255, 255, 255, 0.2); 
+            animation: floatIn 0.6s ease; 
+        } 
+ 
+        @keyframes floatIn { 
+            0% { transform: translateY(30px); opacity: 0; } 
+            100% { transform: translateY(0); opacity: 1; } 
+        } 
+ 
+        .payment-wrapper h1 { 
+            font-size: 2rem; 
+            font-weight: 800; 
+            text-align: center; 
+            margin-bottom: 0.5rem; 
+            background: linear-gradient(90deg, #FFFFFF, #E0E7FF); 
+            -webkit-background-clip: text; 
+            -webkit-text-fill-color: transparent; 
+            color: white; 
+        } 
+ 
+        .payment-wrapper p.subtext { 
+            text-align: center; 
+            font-size: 1rem; 
+            color: #E0E7FF; 
+            margin-bottom: 2rem; 
+            line-height: 1.6; 
+        } 
+ 
+        .input-field { 
+            margin-bottom: 1.5rem; 
+        } 
+ 
+        .input-field input[type="email"],
+        .input-field input[type="text"] { 
+            width: 100%; 
+            padding: 1rem; 
+            font-size: 1rem; 
+            border: 1px solid rgba(255, 255, 255, 0.25); 
+            background: rgba(255, 255, 255, 0.08); 
+            color: white; 
+            border-radius: 20px; 
+            outline: none; 
+            transition: all 0.3s ease; 
+        } 
+ 
+        .input-field input[type="email"]::placeholder,
+        .input-field input[type="text"]::placeholder { 
+            color: rgba(255, 255, 255, 0.6); 
+        } 
+ 
+        .input-field input[type="email"]:focus,
+        .input-field input[type="text"]:focus { 
+            border-color: #60A5FA; 
+            background: rgba(255, 255, 255, 0.15); 
+        } 
+ 
+        .payment-wrapper button { 
+            background: linear-gradient(90deg, #2563EB 0%, #1E40AF 100%); 
+            color: white; 
+            border: none; 
+            width: 100%; 
+            padding: 1rem; 
+            font-size: 1.1rem; 
+            font-weight: 600; 
+            border-radius: 20px; 
+            cursor: pointer; 
+            transition: all 0.3s ease; 
+        } 
+ 
+        .payment-wrapper button:hover { 
+            transform: translateY(-2px); 
+            box-shadow: 0 10px 25px rgba(37, 99, 235, 0.35); 
+        } 
+ 
+        .notice-box { 
+            background: rgba(255, 255, 255, 0.05); 
+            border: 1px solid rgba(255, 255, 255, 0.1); 
+            border-radius: 20px; 
+            padding: 1rem; 
+            margin-top: 1.5rem; 
+            font-size: 0.9rem; 
+            color: #E0E7FF; 
+            line-height: 1.5; 
+        } 
+ 
+        .notice-box strong { 
+            color: white; 
+            display: block; 
+            margin-bottom: 0.3rem; 
+            font-weight: 600; 
+        } 
+ 
+        .mail-link { 
+            color: #93C5FD; 
+            text-decoration: underline; 
+            transition: color 0.2s ease; 
+        } 
+ 
+        .mail-link:hover { 
+            color: #BFDBFE; 
+        } 
+ 
+        footer { 
+            background: var(--navy-dark); 
+            color: white; 
+            padding: 60px 2rem 30px; 
+            text-align: center; 
+        } 
+ 
+        .footer-content { 
+            max-width: 800px; 
+            margin: 0 auto; 
+        } 
+ 
+        .footer-content p { 
+            color: var(--text-gray); 
+            margin-bottom: 1rem; 
+        } 
+ 
+        .footer-bottom { 
+            margin-top: 3rem; 
+            padding-top: 2rem; 
+            border-top: 1px solid rgba(255,255,255,0.1); 
+            color: var(--text-gray); 
+        } 
+ 
+        @keyframes fadeInUp { 
+            from { 
+                opacity: 0; 
+                transform: translateY(30px); 
+            } 
+            to { 
+                opacity: 1; 
+                transform: translateY(0); 
+            } 
+        } 
+ 
+        @media (max-width: 768px) { 
+            .logo { 
+                font-size: 1.3rem; 
+            } 
+ 
+            h1 { 
+                font-size: 2.5rem; 
+            } 
+ 
+            .hero p { 
+                font-size: 1.1rem; 
+            } 
+ 
+            .hero-buttons { 
+                flex-direction: column; 
+            } 
+ 
+            .mobile-menu-btn { 
+                display: block; 
+            } 
+ 
+            .nav-links { 
+                display: none; 
+                position: fixed; 
+                top: 70px; 
+                right: 0; 
+                background: rgba(14, 21, 37, 0.98); 
+                backdrop-filter: blur(20px); 
+                width: 100%; 
+                padding: 2rem; 
+                flex-direction: column; 
+                gap: 1.5rem; 
+                box-shadow: 0 10px 30px rgba(0,0,0,0.3); 
+            } 
+             
+            .nav-links.active { 
+                display: flex; 
+            } 
+ 
+            .nav-links li { 
+                width: 100%; 
+                text-align: center; 
+            } 
+ 
+            .cta-nav { 
+                width: 100%; 
+            } 
+        } 
+    </style> 
+</head> 
+<body> 
+    <div id="progress-bar"></div> 
+ 
+    <nav> 
+        <div class="nav-container"> 
+            <a href="https://data-analytics-by-christiana.web.app/" class="logo">Learn Tech Skills That Pay</a> 
+            <ul class="nav-links"> 
+                <li><a href="https://data-analytics-by-christiana.web.app/">Home</a></li> 
+                <li><a href="https://data-analytics-by-christiana.web.app/about/">About</a></li> 
+                <li><a href="https://data-analytics-by-christiana.web.app/contact/">Contact Us</a></li> 
+                <li><a href="https://data-analytics-by-christiana.web.app/dashboard/">Dashboard</a></li> 
+                <li><button class="cta-nav" onclick="scrollToEnroll()">Enrol Now</button></li> 
+            </ul> 
+            <button class="mobile-menu-btn">☰</button> 
+        </div> 
+    </nav> 
+ 
+    <section class="hero" id="hero"> 
+        <div class="hero-content"> 
+            <div class="banner-tag">💸 Build the income streams that create lasting wealth</div> 
+            <h1>Turn Data Into Income</h1> 
+            <p>13-week programme that teaches you to analyse data, build dashboards, and land jobs that pay</p> 
+            <div class="hero-buttons"> 
+                <a href="https://data-analytics-by-christiana.web.app/pay/" class="btn-primary">Enrol Now - ₦10,000</a> 
+                <a href="https://data-analytics-by-christiana.web.app/about/" class="btn-secondary">Learn More</a> 
+            </div> 
+        </div> 
+    </section> 
+ 
+    <!-- ✅ UPDATED PAYMENT SECTION WITH NAME FIELD -->
+    <section class="payment-section" id="enroll"> 
+        <div class="payment-wrapper"> 
+            <h1>Enrol Now – ₦10,000</h1> 
+            <p class="subtext">Gain full access to your programme dashboard instantly after payment. Your journey begins immediately.</p> 
+             
+            <!-- ✅ NEW: Name Input Field -->
+            <div class="input-field"> 
+                <input type="text" id="customerName" placeholder="Enter your full name" required /> 
             </div>
             
-            <button id="payBtn">Proceed to Secure Payment</button>
-
-            <div class="notice-box">
-                <strong>Important:</strong>
-                • You'll receive your Course Access ID in your email after successful payment.<br/>
-                • Check your spam folder if you don't see it in 5 minutes.<br/>
-                • Didn't receive an email? <a href="https://data-analytics-by-christiana.web.app/contact/" class="mail-link">Contact Support</a>.
-            </div>
-        </div>
-    </section>
-
-    <!-- Footer -->
-    <footer>
-        <div class="footer-content">
-            <h3 style="font-size: 1.8rem; margin-bottom: 1rem;">Christiana Churchill</h3>
-            <p style="line-height: 1.8; font-size: 1.05rem;">Empowering Nigerians with in-demand tech skills to build careers that pay in dollars. One student at a time.</p>
-            <p style="margin-top: 2rem;">Data Analytics Training Programme</p>
-            <p>Transforming careers across Africa</p>
-        </div>
-
-        <div class="footer-bottom">
-            <p>&copy; 2025 Christiana Churchill. All rights reserved.</p>
-            <p style="margin-top: 0.5rem;">Making tech accessible to everyone</p>
-        </div>
-    </footer>
-
-    <!-- Flutterwave Script -->
-    <script src="https://checkout.flutterwave.com/v3.js"></script>
-    
-    <!-- All JavaScript -->
-    <script>
-        // Progress Bar
-        window.addEventListener('scroll', () => {
-            const windowHeight = window.innerHeight;
-            const documentHeight = document.documentElement.scrollHeight - windowHeight;
-            const scrolled = window.scrollY;
-            const progress = (scrolled / documentHeight) * 100;
-            document.getElementById('progress-bar').style.width = progress + '%';
-        });
-
-        // Payment Button Handler
+            <!-- ✅ EXISTING: Email Input Field -->
+            <div class="input-field"> 
+                <input type="email" id="email" placeholder="Enter your email address" required /> 
+            </div> 
+             
+            <button id="payBtn">Proceed to Secure Payment</button> 
+ 
+            <div class="notice-box"> 
+                <strong>Important:</strong> 
+                • You'll receive your Course Access ID in your email after successful payment.<br/> 
+                • Check your spam folder if you don't see it in 5 minutes.<br/> 
+                • Didn't receive an email? <a href="https://data-analytics-by-christiana.web.app/contact/" class="mail-link">Contact Support</a>. 
+            </div> 
+        </div> 
+    </section> 
+ 
+    <footer> 
+        <div class="footer-content"> 
+            <h3 style="font-size: 1.8rem; margin-bottom: 1rem;">Christiana Churchill</h3> 
+            <p style="line-height: 1.8; font-size: 1.05rem;">Empowering Nigerians with in-demand tech skills to build careers that pay in dollars. One student at a time.</p> 
+            <p style="margin-top: 2rem;">Data Analytics Training Programme</p> 
+            <p>Transforming careers across Africa</p> 
+        </div> 
+ 
+        <div class="footer-bottom"> 
+            <p>&copy; 2025 Christiana Churchill. All rights reserved.</p> 
+            <p style="margin-top: 0.5rem;">Making tech accessible to everyone</p> 
+        </div> 
+    </footer> 
+ 
+    <script src="https://checkout.flutterwave.com/v3.js"></script> 
+     
+    <script> 
+        // Progress Bar 
+        window.addEventListener('scroll', () => { 
+            const windowHeight = window.innerHeight; 
+            const documentHeight = document.documentElement.scrollHeight - windowHeight; 
+            const scrolled = window.scrollY; 
+            const progress = (scrolled / documentHeight) * 100; 
+            document.getElementById('progress-bar').style.width = progress + '%'; 
+        }); 
+ 
+        // ✅ UPDATED: Payment Button Handler with Name Field
         document.getElementById('payBtn').addEventListener('click', function () {
-            const email = document.getElementById('email').value;
+            // Get and clean input values
+            const email = document.getElementById('email').value.trim();
+            const customerName = document.getElementById('customerName').value.trim();
+            
+            // Validate name
+            if (!customerName) {
+                alert('Please enter your full name before paying.');
+                return;
+            }
+            
+            // Validate email exists
             if (!email) {
                 alert('Please enter your email before paying.');
                 return;
             }
-
+            
+            // Validate email format
+            const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            if (!emailRegex.test(email)) {
+                alert('Please enter a valid email address (e.g., example@email.com)');
+                return;
+            }
+            
+            // Log for debugging
+            console.log('Starting payment with:', { 
+                name: customerName, 
+                email: email 
+            });
+            
+            // Initialize Flutterwave payment
             FlutterwaveCheckout({
-                public_key: "FLWPUBK_TEST-80a71f4c7716744619d5205cf2ea19f2-X",
+                public_key: "FLWPUBK-e687f241832020ee2cbd2e38d5845efd-X",
                 tx_ref: "TX-" + Date.now(),
                 amount: 10000,
                 currency: "NGN",
                 payment_options: "card, banktransfer, ussd",
-                customer: { email },
+                customer: {
+                    email: email,
+                    name: customerName
+                },
+                customizations: {
+                    title: "Data Analytics Training Programme",
+                    description: "13-Week Intensive Programme",
+                    logo: "https://data-analytics-by-christiana.web.app/global-education.png"
+                },
                 callback: function (response) {
-                    console.log("Payment completed. Response:", response);
-                    window.location.href = `/thankyou/?status=${response.status}&amount=${response.amount}&name=${response.customer.name || "Guest"}&email=${response.customer.email}`;
+                    console.log("Payment completed. Full Response:", response);
+                    
+                    // Extract data from response
+                    const status = response.status || 'unknown';
+                    const amount = response.amount || 10000;
+                    const txRef = response.tx_ref || '';
+                    const transactionId = response.transaction_id || '';
+                    
+                    // Use OUR collected data (not Flutterwave's test data)
+                    const finalEmail = email;
+                    const finalName = customerName;
+                    
+                    console.log('Redirecting with:', {
+                        status: status,
+                        amount: amount,
+                        name: finalName,
+                        email: finalEmail,
+                        tx_ref: txRef,
+                        transaction_id: transactionId
+                    });
+                    
+                    // Build thank you URL with all parameters
+                    const thankYouUrl = `/thankyou/?` +
+                        `status=${encodeURIComponent(status)}` +
+                        `&amount=${encodeURIComponent(amount)}` +
+                        `&name=${encodeURIComponent(finalName)}` +
+                        `&email=${encodeURIComponent(finalEmail)}` +
+                        `&tx_ref=${encodeURIComponent(txRef)}` +
+                        `&transaction_id=${encodeURIComponent(transactionId)}`;
+                    
+                    window.location.href = thankYouUrl;
                 },
                 onclose: function() {
-                    console.log("Payment window closed.");
+                    console.log("Payment window closed by user.");
                 }
             });
         });
-
-        // Scroll to Enroll function
-        function scrollToEnroll() {
-            const enrollSection = document.getElementById('enroll');
-            if (enrollSection) {
-                enrollSection.scrollIntoView({ behavior: 'smooth' });
-            }
-        }
-
-        // Mobile Menu Toggle
-        const mobileMenuBtn = document.querySelector('.mobile-menu-btn');
-        const navLinks = document.querySelector('.nav-links');
-
-        mobileMenuBtn.addEventListener('click', function() {
-            navLinks.classList.toggle('active');
-            this.textContent = navLinks.classList.contains('active') ? '✕' : '☰';
-        });
-
-        // Close menu when clicking outside
-        document.addEventListener('click', function(e) {
-            if (!e.target.closest('.nav-container')) {
-                navLinks.classList.remove('active');
-                mobileMenuBtn.textContent = '☰';
-            }
-        });
-
-        // Close menu when clicking a link
-        document.querySelectorAll('.nav-links a').forEach(link => {
-            link.addEventListener('click', () => {
-                navLinks.classList.remove('active');
-                mobileMenuBtn.textContent = '☰';
-            });
-        });
-
-        // Vertical Tracker
-        const sections = ['hero', 'enroll', 'instructor', 'features', 'story', 'trust', 'testimonial', 'cta'];
-        const trackerItems = document.querySelectorAll('.tracker-item');
-
-        function updateTracker() {
-            const scrollPosition = window.scrollY + window.innerHeight / 2;
-
-            sections.forEach((sectionId, index) => {
-                const section = document.getElementById(sectionId);
-                if (section) {
-                    const sectionTop = section.offsetTop;
-                    const sectionBottom = sectionTop + section.offsetHeight;
-
-                    if (scrollPosition >= sectionTop && scrollPosition < sectionBottom) {
-                        trackerItems.forEach(item => item.classList.remove('active'));
-                        if (trackerItems[index]) {
-                            trackerItems[index].classList.add('active');
-                            trackerItems[index].querySelector('.tracker-dot').classList.add('active');
-                        }
-                    } else {
-                        if (trackerItems[index]) {
-                            trackerItems[index].querySelector('.tracker-dot').classList.remove('active');
-                        }
-                    }
-                }
-            });
-        }
-
-        window.addEventListener('scroll', updateTracker);
-        updateTracker();
-
-        // Tracker click navigation
-        trackerItems.forEach(item => {
-            item.addEventListener('click', () => {
-                const sectionId = item.dataset.section;
-                const section = document.getElementById(sectionId);
-                if (section) {
-                    section.scrollIntoView({ behavior: 'smooth' });
-                }
-            });
-        });
-
-        // Carousel with Arrow Navigation
-        const carousel = document.getElementById('carousel');
-        if (carousel) {
-            let currentPosition = 0;
-            const cardWidth = 350 + 32; // card width + gap
-            const visibleCards = Math.floor(window.innerWidth / cardWidth);
-            const totalCards = carousel.children.length;
-            const maxPosition = -(totalCards - visibleCards) * cardWidth;
-
-            function moveCarousel(direction) {
-                currentPosition += direction * cardWidth * 2; // Move 2 cards at a time
-                
-                if (currentPosition > 0) {
-                    currentPosition = 0;
-                }
-                if (currentPosition < maxPosition) {
-                    currentPosition = maxPosition;
-                }
-                
-                carousel.style.transform = `translateX(${currentPosition}px)`;
-            }
-
-            // Auto-scroll carousel
-            let autoScrollInterval = setInterval(() => {
-                if (currentPosition <= maxPosition) {
-                    currentPosition = 0;
-                } else {
-                    currentPosition -= cardWidth;
-                }
-                carousel.style.transform = `translateX(${currentPosition}px)`;
-            }, 4000);
-
-            // Pause auto-scroll on hover
-            carousel.addEventListener('mouseenter', () => {
-                clearInterval(autoScrollInterval);
-            });
-
-            carousel.addEventListener('mouseleave', () => {
-                autoScrollInterval = setInterval(() => {
-                    if (currentPosition <= maxPosition) {
-                        currentPosition = 0;
-                    } else {
-                        currentPosition -= cardWidth;
-                    }
-                    carousel.style.transform = `translateX(${currentPosition}px)`;
-                }, 4000);
-            });
-
-            // Responsive carousel updates
-            window.addEventListener('resize', () => {
-                currentPosition = 0;
-                carousel.style.transform = `translateX(0px)`;
-            });
-        }
-
-        // Scroll animations
-        const observerOptions = {
-            threshold: 0.1,
-            rootMargin: '0px 0px -100px 0px'
-        };
-
-        const observer = new IntersectionObserver((entries) => {
-            entries.forEach(entry => {
-                if (entry.isIntersecting) {
-                    entry.target.style.opacity = '1';
-                    entry.target.style.transform = 'translateY(0)';
-                }
-            });
-        }, observerOptions);
-
-        document.querySelectorAll('.feature-card, .trust-card, .credential-item').forEach(el => {
-            el.style.opacity = '0';
-            el.style.transform = 'translateY(30px)';
-            el.style.transition = 'all 0.6s ease';
-            observer.observe(el);
-        });
-    </script>
-</body>
+ 
+        function scrollToEnroll() { 
+            const enrollSection = document.getElementById('enroll'); 
+            if (enrollSection) { 
+                enrollSection.scrollIntoView({ behavior: 'smooth' }); 
+            } 
+        } 
+ 
+        const mobileMenuBtn = document.querySelector('.mobile-menu-btn'); 
+        const navLinks = document.querySelector('.nav-links'); 
+ 
+        mobileMenuBtn.addEventListener('click', function() { 
+            navLinks.classList.toggle('active'); 
+            this.textContent = navLinks.classList.contains('active') ? '✕' : '☰'; 
+        }); 
+ 
+        document.addEventListener('click', function(e) { 
+            if (!e.target.closest('.nav-container')) { 
+                navLinks.classList.remove('active'); 
+                mobileMenuBtn.textContent = '☰'; 
+            } 
+        }); 
+ 
+        document.querySelectorAll('.nav-links a').forEach(link => { 
+            link.addEventListener('click', () => { 
+                navLinks.classList.remove('active'); 
+                mobileMenuBtn.textContent = '☰'; 
+            }); 
+        }); 
+    </script> 
+</body> 
 </html>
