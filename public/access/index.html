@@ -618,37 +618,8 @@
             });
         });
 
-        // Form submission will be handled by your access.js file
-        // This is just for UI feedback
-        const accessForm = document.getElementById('accessForm');
-        const accessBtn = document.getElementById('accessBtn');
-        const errorMessage = document.getElementById('error');
-        const successMessage = document.getElementById('success');
-        const courseContent = document.getElementById('course-content');
-
-        // Your access.js will override this, but here's a placeholder
-        accessForm.addEventListener('submit', function(e) {
-            e.preventDefault();
-            
-            const accessId = document.getElementById('accessId').value.trim();
-            
-            if (!accessId) {
-                errorMessage.textContent = '⚠️ Please enter your Course ID';
-                errorMessage.classList.add('show');
-                return;
-            }
-
-            // Clear previous messages
-            errorMessage.classList.remove('show');
-            successMessage.classList.remove('show');
-            
-            // Show loading state
-            accessBtn.disabled = true;
-            accessBtn.innerHTML = 'Verifying... <span class="spinner"></span>';
-            
-            // Your access.js will handle the actual verification
-            // This is just UI placeholder
-        });
+        // ALL FORM HANDLING IS NOW DONE BY access.js MODULE
+        // No placeholder event listener needed here
     </script>
 </body>
 </html>
