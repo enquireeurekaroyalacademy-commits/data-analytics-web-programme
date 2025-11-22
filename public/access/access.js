@@ -1,4 +1,4 @@
-// access.js - Improved version with full integration
+// access.js - Complete & Robust Fixed Version
 import { initializeApp } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-app.js";
 import {
   getFirestore,
@@ -19,16 +19,10 @@ const firebaseConfig = {
 };
 
 // Initialize Firebase
+console.log("🔥 Initializing Firebase...");
 const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
-
-// Get DOM elements
-const accessForm = document.getElementById("accessForm");
-const accessBtn = document.getElementById("accessBtn");
-const accessIdInput = document.getElementById("accessId");
-const errorEl = document.getElementById("error");
-const successEl = document.getElementById("success");
-const courseContentEl = document.getElementById("course-content");
+console.log("✅ Firebase initialized successfully");
 
 // Store original button text
 const originalButtonText = "Access Course";
@@ -45,7 +39,8 @@ function isValidCourseIdFormat(id) {
 /**
  * Shows error message with animation
  */
-function showError(message) {
+function showError(message, errorEl, successEl) {
+  console.log("❌ Error:", message);
   errorEl.textContent = `⚠️ ${message}`;
   errorEl.classList.add('show');
   successEl.classList.remove('show');
@@ -59,7 +54,8 @@ function showError(message) {
 /**
  * Shows success message with animation
  */
-function showSuccess(message) {
+function showSuccess(message, successEl, errorEl) {
+  console.log("✅ Success:", message);
   successEl.textContent = `✓ ${message}`;
   successEl.classList.add('show');
   errorEl.classList.remove('show');
@@ -73,7 +69,7 @@ function showSuccess(message) {
 /**
  * Clears all messages
  */
-function clearMessages() {
+function clearMessages(errorEl, successEl) {
   errorEl.classList.remove('show');
   successEl.classList.remove('show');
 }
@@ -81,20 +77,22 @@ function clearMessages() {
 /**
  * Sets button loading state
  */
-function setButtonLoading(isLoading) {
+function setButtonLoading(isLoading, accessBtn) {
   if (isLoading) {
     accessBtn.disabled = true;
     accessBtn.innerHTML = 'Verifying... <span class="spinner"></span>';
+    console.log("🔄 Button state: Loading");
   } else {
     accessBtn.disabled = false;
     accessBtn.innerHTML = originalButtonText;
+    console.log("🔄 Button state: Ready");
   }
 }
 
 /**
  * Hides course content
  */
-function hideCourseContent() {
+function hideCourseContent(courseContentEl) {
   courseContentEl.classList.remove('show');
   // Wait for animation to complete before hiding
   setTimeout(() => {
@@ -105,7 +103,7 @@ function hideCourseContent() {
 /**
  * Shows course content with animation
  */
-function showCourseContent() {
+function showCourseContent(courseContentEl) {
   courseContentEl.style.display = 'block';
   // Trigger animation after display is set
   setTimeout(() => {
@@ -124,9 +122,12 @@ function showCourseContent() {
 /**
  * Main access verification function
  */
-async function verifyAccess(accessId) {
+async function verifyAccess(accessId, errorEl, successEl, courseContentEl) {
+  console.log("🔍 Starting verification for:", accessId);
+  
   try {
     // Query Firestore for matching custom_id
+    console.log("📡 Querying Firestore database...");
     const q = query(
       collection(db, "payments"),
       where("custom_id", "==", accessId)
@@ -134,39 +135,54 @@ async function verifyAccess(accessId) {
     
     const snapshot = await getDocs(q);
     
+    console.log("📊 Query completed. Documents found:", snapshot.size);
+    
     if (snapshot.empty) {
-      showError("Invalid Course ID. Please check your email and try again.");
-      hideCourseContent();
+      console.log("⚠️ No matching course ID found in database");
+      showError("Invalid Course ID. Please check your email and try again.", errorEl, successEl);
+      hideCourseContent(courseContentEl);
       return false;
     }
     
     // Access granted - get user data
     const userData = snapshot.docs[0].data();
-    console.log("Access granted for:", userData.email);
+    console.log("🎉 Access granted for user:", userData.email);
+    console.log("📄 User data:", {
+      email: userData.email,
+      name: userData.name || 'N/A',
+      custom_id: userData.custom_id
+    });
     
     // Show success message
-    showSuccess("Access granted! Loading your course...");
+    showSuccess("Access granted! Loading your course...", successEl, errorEl);
     
     // Show course content after brief delay
     setTimeout(() => {
-      showCourseContent();
+      showCourseContent(courseContentEl);
     }, 1000);
     
     return true;
     
   } catch (err) {
-    console.error("Access verification error:", err);
+    console.error("💥 Access verification error:", err);
+    console.error("Error code:", err.code);
+    console.error("Error message:", err.message);
+    console.error("Full error:", err);
     
     // Provide user-friendly error messages based on error type
     if (err.code === 'permission-denied') {
-      showError("Database access denied. Please contact support.");
+      showError("Database access denied. Please contact support.", errorEl, successEl);
     } else if (err.code === 'unavailable') {
-      showError("Service temporarily unavailable. Please try again in a moment.");
+      showError("Service temporarily unavailable. Please try again in a moment.", errorEl, successEl);
+    } else if (err.code === 'failed-precondition') {
+      showError("Database configuration issue. Please contact support.", errorEl, successEl);
+    } else if (err.message && err.message.includes('index')) {
+      showError("Database index not ready. Please try again in a moment.", errorEl, successEl);
     } else {
-      showError("Something went wrong. Please try again or contact support.");
+      showError("Something went wrong. Please try again or contact support.", errorEl, successEl);
     }
     
-    hideCourseContent();
+    hideCourseContent(courseContentEl);
     return false;
   }
 }
@@ -174,99 +190,56 @@ async function verifyAccess(accessId) {
 /**
  * Form submission handler
  */
-async function handleFormSubmit(e) {
+async function handleFormSubmit(e, accessIdInput, accessBtn, errorEl, successEl, courseContentEl) {
   e.preventDefault();
+  console.log("📝 Form submitted");
   
   // Get and clean input
   const accessId = accessIdInput.value.trim().toLowerCase();
+  console.log("🔑 Access ID entered:", accessId);
   
   // Clear previous messages
-  clearMessages();
+  clearMessages(errorEl, successEl);
   
   // Validate input exists
   if (!accessId) {
-    showError("Please enter your Course ID.");
+    console.log("⚠️ Validation failed: Empty input");
+    showError("Please enter your Course ID.", errorEl, successEl);
     accessIdInput.focus();
     return;
   }
   
   // Validate format
   if (!isValidCourseIdFormat(accessId)) {
-    showError("Invalid format. Course ID should look like: ch_da_07");
+    console.log("⚠️ Validation failed: Invalid format");
+    showError("Invalid format. Course ID should look like: ch_da_07", errorEl, successEl);
     accessIdInput.focus();
     return;
   }
   
+  console.log("✅ Validation passed");
+  
   // Set loading state
-  setButtonLoading(true);
+  setButtonLoading(true, accessBtn);
   
-  // Verify access
-  const isValid = await verifyAccess(accessId);
-  
-  // Reset button state
-  setButtonLoading(false);
-  
-  // Clear input if access was granted
-  if (isValid) {
-    accessIdInput.value = '';
-  }
-}
-
-/**
- * Input field real-time validation
- */
-function handleInputChange() {
-  const value = accessIdInput.value.trim();
-  
-  // Clear error message as user types
-  if (value.length > 0) {
-    errorEl.classList.remove('show');
-  }
-}
-
-/**
- * Initialize event listeners
- */
-function initializeEventListeners() {
-  // Form submission
-  accessForm.addEventListener("submit", handleFormSubmit);
-  
-  // Input field changes
-  accessIdInput.addEventListener("input", handleInputChange);
-  
-  // Format input to lowercase as user types
-  accessIdInput.addEventListener("input", (e) => {
-    e.target.value = e.target.value.toLowerCase();
-  });
-  
-  // Clear messages when input gains focus
-  accessIdInput.addEventListener("focus", () => {
-    clearMessages();
-  });
-  
-  // Handle Enter key in input field
-  accessIdInput.addEventListener("keypress", (e) => {
-    if (e.key === 'Enter') {
-      e.preventDefault();
-      accessForm.dispatchEvent(new Event('submit'));
+  try {
+    // Verify access
+    const isValid = await verifyAccess(accessId, errorEl, successEl, courseContentEl);
+    
+    // Clear input if access was granted
+    if (isValid) {
+      accessIdInput.value = '';
+      console.log("🎊 Access verification complete - Success!");
+    } else {
+      console.log("❌ Access verification complete - Failed");
     }
-  });
-}
-
-/**
- * Check if user is already accessing course (from URL parameter)
- * Useful if you want to share direct links
- */
-function checkUrlParameters() {
-  const urlParams = new URLSearchParams(window.location.search);
-  const courseId = urlParams.get('id');
-  
-  if (courseId) {
-    accessIdInput.value = courseId;
-    // Auto-verify after short delay
-    setTimeout(() => {
-      accessForm.dispatchEvent(new Event('submit'));
-    }, 500);
+  } catch (error) {
+    console.error("💥 Unexpected error in form submission:", error);
+    showError("An unexpected error occurred. Please try again.", errorEl, successEl);
+  } finally {
+    // Always reset button state
+    setButtonLoading(false, accessBtn);
+    console.log("🔄 Form processing complete");
   }
 }
 
@@ -274,22 +247,94 @@ function checkUrlParameters() {
  * Initialize the application
  */
 function init() {
-  console.log("Course Access System initialized");
+  console.log("🚀 Course Access System initializing...");
+  console.log("📅 Current time:", new Date().toLocaleString());
   
-  // Set up event listeners
-  initializeEventListeners();
+  // Get DOM elements - WAIT for them to exist
+  const accessForm = document.getElementById("accessForm");
+  const accessBtn = document.getElementById("accessBtn");
+  const accessIdInput = document.getElementById("accessId");
+  const errorEl = document.getElementById("error");
+  const successEl = document.getElementById("success");
+  const courseContentEl = document.getElementById("course-content");
   
-  // Check URL parameters
-  checkUrlParameters();
+  // Verify all elements exist
+  const elementsCheck = {
+    accessForm: !!accessForm,
+    accessBtn: !!accessBtn,
+    accessIdInput: !!accessIdInput,
+    errorEl: !!errorEl,
+    successEl: !!successEl,
+    courseContentEl: !!courseContentEl
+  };
+  
+  console.log("🔍 DOM Elements check:", elementsCheck);
+  
+  if (!accessForm || !accessBtn || !accessIdInput || !errorEl || !successEl || !courseContentEl) {
+    console.error("❌ ERROR: Required DOM elements not found!");
+    console.error("Missing elements:", 
+      Object.entries(elementsCheck)
+        .filter(([key, value]) => !value)
+        .map(([key]) => key)
+    );
+    return;
+  }
+  
+  console.log("✅ All DOM elements found successfully");
+  
+  // Form submission event listener
+  accessForm.addEventListener("submit", (e) => {
+    console.log("📨 Submit event triggered");
+    handleFormSubmit(e, accessIdInput, accessBtn, errorEl, successEl, courseContentEl);
+  });
+  console.log("✅ Form submit listener attached");
+  
+  // Input field changes - clear error message as user types
+  accessIdInput.addEventListener("input", (e) => {
+    // Format to lowercase
+    e.target.value = e.target.value.toLowerCase();
+    
+    // Clear messages if user is typing
+    if (e.target.value.trim().length > 0) {
+      errorEl.classList.remove('show');
+    }
+  });
+  console.log("✅ Input change listener attached");
+  
+  // Clear messages when input gains focus
+  accessIdInput.addEventListener("focus", () => {
+    clearMessages(errorEl, successEl);
+  });
+  console.log("✅ Input focus listener attached");
+  
+  // Check URL parameters for direct access
+  const urlParams = new URLSearchParams(window.location.search);
+  const courseId = urlParams.get('id');
+  
+  if (courseId) {
+    console.log("🔗 Course ID found in URL:", courseId);
+    accessIdInput.value = courseId;
+    // Auto-verify after short delay
+    setTimeout(() => {
+      console.log("⏱️ Auto-submitting form from URL parameter");
+      accessForm.dispatchEvent(new Event('submit', { bubbles: true, cancelable: true }));
+    }, 500);
+  }
   
   // Focus input field on page load
   accessIdInput.focus();
+  console.log("✅ Input field focused");
+  
+  console.log("🎉 Course Access System initialization complete!");
+  console.log("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━");
 }
 
 // Wait for DOM to be fully loaded
 if (document.readyState === 'loading') {
+  console.log("⏳ Waiting for DOM to load...");
   document.addEventListener('DOMContentLoaded', init);
 } else {
+  console.log("✅ DOM already loaded");
   init();
 }
 
