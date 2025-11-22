@@ -212,7 +212,7 @@ async function handleFormSubmit(e, accessIdInput, accessBtn, errorEl, successEl,
   // Validate format
   if (!isValidCourseIdFormat(accessId)) {
     console.log("⚠️ Validation failed: Invalid format");
-    showError("Invalid format. Course ID should look like: ch_da_07", errorEl, successEl);
+    showError("Invalid format. Invalid Course ID. Please check the email you received after successful payment.", errorEl, successEl);
     accessIdInput.focus();
     return;
   }
