@@ -1,4 +1,4 @@
-// access.js - Complete & Robust Fixed Version
+// access.js - Secure Version with Email + Course ID Verification
 import { initializeApp } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-app.js";
 import {
   getFirestore,
@@ -34,6 +34,14 @@ const originalButtonText = "Access Course";
 function isValidCourseIdFormat(id) {
   const regex = /^ch_da_\d{2}$/;
   return regex.test(id);
+}
+
+/**
+ * Validates Email format
+ */
+function isValidEmailFormat(email) {
+  const regex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+  return regex.test(email);
 }
 
 /**
@@ -120,16 +128,19 @@ function showCourseContent(courseContentEl) {
 }
 
 /**
- * Main access verification function
+ * Main access verification function - Now checks BOTH email AND course ID
  */
-async function verifyAccess(accessId, errorEl, successEl, courseContentEl) {
-  console.log("🔍 Starting verification for:", accessId);
+async function verifyAccess(email, accessId, errorEl, successEl, courseContentEl) {
+  console.log("🔍 Starting verification for:");
+  console.log("   Email:", email);
+  console.log("   Course ID:", accessId);
   
   try {
-    // Query Firestore for matching custom_id
+    // Query Firestore for matching BOTH email AND custom_id
     console.log("📡 Querying Firestore database...");
     const q = query(
       collection(db, "payments"),
+      where("email", "==", email),
       where("custom_id", "==", accessId)
     );
     
@@ -138,8 +149,8 @@ async function verifyAccess(accessId, errorEl, successEl, courseContentEl) {
     console.log("📊 Query completed. Documents found:", snapshot.size);
     
     if (snapshot.empty) {
-      console.log("⚠️ No matching course ID found in database");
-      showError("Invalid Course ID. Please check your email and try again.", errorEl, successEl);
+      console.log("⚠️ No matching record found - email and course ID don't match");
+      showError("Invalid credentials. Please ensure your email and course ID match the details sent to you.", errorEl, successEl);
       hideCourseContent(courseContentEl);
       return false;
     }
@@ -188,46 +199,66 @@ async function verifyAccess(accessId, errorEl, successEl, courseContentEl) {
 }
 
 /**
- * Form submission handler
+ * Form submission handler - Now handles both email and course ID
  */
-async function handleFormSubmit(e, accessIdInput, accessBtn, errorEl, successEl, courseContentEl) {
+async function handleFormSubmit(e, accessEmailInput, accessIdInput, accessBtn, errorEl, successEl, courseContentEl) {
   e.preventDefault();
   console.log("📝 Form submitted");
   
-  // Get and clean input
+  // Get and clean inputs
+  const email = accessEmailInput.value.trim().toLowerCase();
   const accessId = accessIdInput.value.trim().toLowerCase();
-  console.log("🔑 Access ID entered:", accessId);
+  
+  console.log("📧 Email entered:", email);
+  console.log("🔑 Course ID entered:", accessId);
   
   // Clear previous messages
   clearMessages(errorEl, successEl);
   
-  // Validate input exists
+  // Validate email exists
+  if (!email) {
+    console.log("⚠️ Validation failed: Empty email");
+    showError("Please enter your email address.", errorEl, successEl);
+    accessEmailInput.focus();
+    return;
+  }
+  
+  // Validate email format
+  if (!isValidEmailFormat(email)) {
+    console.log("⚠️ Validation failed: Invalid email format");
+    showError("Please enter a valid email address.", errorEl, successEl);
+    accessEmailInput.focus();
+    return;
+  }
+  
+  // Validate course ID exists
   if (!accessId) {
-    console.log("⚠️ Validation failed: Empty input");
+    console.log("⚠️ Validation failed: Empty course ID");
     showError("Please enter your Course ID.", errorEl, successEl);
     accessIdInput.focus();
     return;
   }
   
-  // Validate format
+  // Validate course ID format
   if (!isValidCourseIdFormat(accessId)) {
-    console.log("⚠️ Validation failed: Invalid format");
-    showError("Invalid format. Invalid Course ID. Please check the email you received after successful payment.", errorEl, successEl);
+    console.log("⚠️ Validation failed: Invalid course ID format");
+    showError("Invalid Course ID format. Please check the email you received after payment.", errorEl, successEl);
     accessIdInput.focus();
     return;
   }
   
-  console.log("✅ Validation passed");
+  console.log("✅ Validation passed for both email and course ID");
   
   // Set loading state
   setButtonLoading(true, accessBtn);
   
   try {
-    // Verify access
-    const isValid = await verifyAccess(accessId, errorEl, successEl, courseContentEl);
+    // Verify access with both email and course ID
+    const isValid = await verifyAccess(email, accessId, errorEl, successEl, courseContentEl);
     
-    // Clear input if access was granted
+    // Clear inputs if access was granted
     if (isValid) {
+      accessEmailInput.value = '';
       accessIdInput.value = '';
       console.log("🎊 Access verification complete - Success!");
     } else {
@@ -248,11 +279,13 @@ async function handleFormSubmit(e, accessIdInput, accessBtn, errorEl, successEl,
  */
 function init() {
   console.log("🚀 Course Access System initializing...");
+  console.log("🔒 Security: Email + Course ID verification enabled");
   console.log("📅 Current time:", new Date().toLocaleString());
   
   // Get DOM elements - WAIT for them to exist
   const accessForm = document.getElementById("accessForm");
   const accessBtn = document.getElementById("accessBtn");
+  const accessEmailInput = document.getElementById("accessEmail");
   const accessIdInput = document.getElementById("accessId");
   const errorEl = document.getElementById("error");
   const successEl = document.getElementById("success");
@@ -262,6 +295,7 @@ function init() {
   const elementsCheck = {
     accessForm: !!accessForm,
     accessBtn: !!accessBtn,
+    accessEmailInput: !!accessEmailInput,
     accessIdInput: !!accessIdInput,
     errorEl: !!errorEl,
     successEl: !!successEl,
@@ -270,7 +304,7 @@ function init() {
   
   console.log("🔍 DOM Elements check:", elementsCheck);
   
-  if (!accessForm || !accessBtn || !accessIdInput || !errorEl || !successEl || !courseContentEl) {
+  if (!accessForm || !accessBtn || !accessEmailInput || !accessIdInput || !errorEl || !successEl || !courseContentEl) {
     console.error("❌ ERROR: Required DOM elements not found!");
     console.error("Missing elements:", 
       Object.entries(elementsCheck)
@@ -285,11 +319,23 @@ function init() {
   // Form submission event listener
   accessForm.addEventListener("submit", (e) => {
     console.log("📨 Submit event triggered");
-    handleFormSubmit(e, accessIdInput, accessBtn, errorEl, successEl, courseContentEl);
+    handleFormSubmit(e, accessEmailInput, accessIdInput, accessBtn, errorEl, successEl, courseContentEl);
   });
   console.log("✅ Form submit listener attached");
   
-  // Input field changes - clear error message as user types
+  // Email input changes - clear error message as user types
+  accessEmailInput.addEventListener("input", (e) => {
+    // Format to lowercase
+    e.target.value = e.target.value.toLowerCase();
+    
+    // Clear messages if user is typing
+    if (e.target.value.trim().length > 0) {
+      errorEl.classList.remove('show');
+    }
+  });
+  console.log("✅ Email input change listener attached");
+  
+  // Course ID input changes - clear error message as user types
   accessIdInput.addEventListener("input", (e) => {
     // Format to lowercase
     e.target.value = e.target.value.toLowerCase();
@@ -299,31 +345,41 @@ function init() {
       errorEl.classList.remove('show');
     }
   });
-  console.log("✅ Input change listener attached");
+  console.log("✅ Course ID input change listener attached");
   
-  // Clear messages when input gains focus
+  // Clear messages when inputs gain focus
+  accessEmailInput.addEventListener("focus", () => {
+    clearMessages(errorEl, successEl);
+  });
+  
   accessIdInput.addEventListener("focus", () => {
     clearMessages(errorEl, successEl);
   });
-  console.log("✅ Input focus listener attached");
+  console.log("✅ Input focus listeners attached");
   
-  // Check URL parameters for direct access
+  // Check URL parameters for direct access (now supports both email and id)
   const urlParams = new URLSearchParams(window.location.search);
   const courseId = urlParams.get('id');
+  const email = urlParams.get('email');
   
-  if (courseId) {
-    console.log("🔗 Course ID found in URL:", courseId);
+  if (courseId && email) {
+    console.log("🔗 Email and Course ID found in URL");
+    console.log("   Email:", email);
+    console.log("   Course ID:", courseId);
+    accessEmailInput.value = email;
     accessIdInput.value = courseId;
     // Auto-verify after short delay
     setTimeout(() => {
-      console.log("⏱️ Auto-submitting form from URL parameter");
+      console.log("⏱️ Auto-submitting form from URL parameters");
       accessForm.dispatchEvent(new Event('submit', { bubbles: true, cancelable: true }));
     }, 500);
+  } else if (courseId || email) {
+    console.log("⚠️ Incomplete URL parameters - need both email and course ID");
   }
   
-  // Focus input field on page load
-  accessIdInput.focus();
-  console.log("✅ Input field focused");
+  // Focus email input field on page load
+  accessEmailInput.focus();
+  console.log("✅ Email input field focused");
   
   console.log("🎉 Course Access System initialization complete!");
   console.log("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━");
@@ -339,4 +395,4 @@ if (document.readyState === 'loading') {
 }
 
 // Export functions for testing (optional)
-export { verifyAccess, isValidCourseIdFormat };
+export { verifyAccess, isValidCourseIdFormat, isValidEmailFormat };
