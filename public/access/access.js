@@ -150,7 +150,7 @@ async function verifyAccess(email, accessId, errorEl, successEl, courseContentEl
     
     if (snapshot.empty) {
       console.log("⚠️ No matching record found - email and course ID don't match");
-      showError("Invalid credentials. Please ensure the email you entered matches the course ID sent to you.", errorEl, successEl);
+      showError("Invalid credentials. Please check if the email you entered is the one you used to make your payment.", errorEl, successEl);
       hideCourseContent(courseContentEl);
       return false;
     }
