@@ -150,7 +150,7 @@ async function verifyAccess(email, accessId, errorEl, successEl, courseContentEl
     
     if (snapshot.empty) {
       console.log("⚠️ No matching record found - email and course ID don't match");
-      showError("Invalid credentials. Please ensure your email and course ID match the details sent to you.", errorEl, successEl);
+      showError("Invalid credentials. Please ensure the email you entered matches the course ID sent to you.", errorEl, successEl);
       hideCourseContent(courseContentEl);
       return false;
     }
@@ -242,7 +242,7 @@ async function handleFormSubmit(e, accessEmailInput, accessIdInput, accessBtn, e
   // Validate course ID format
   if (!isValidCourseIdFormat(accessId)) {
     console.log("⚠️ Validation failed: Invalid course ID format");
-    showError("Invalid Course ID format. Please check the email you received after payment.", errorEl, successEl);
+    showError("Invalid Course ID format. Please check if the email you entered is the one you used to make your payment.", errorEl, successEl);
     accessIdInput.focus();
     return;
   }
