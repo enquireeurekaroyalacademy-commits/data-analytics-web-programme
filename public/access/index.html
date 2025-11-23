@@ -237,8 +237,21 @@
             font-family: 'Courier New', monospace;
         }
 
+        .security-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            background: rgba(16, 185, 129, 0.1);
+            border: 1px solid var(--success-green);
+            padding: 0.5rem 1rem;
+            border-radius: 50px;
+            color: var(--success-green);
+            font-size: 0.85rem;
+            margin-bottom: 1.5rem;
+        }
+
         .form-group {
-            margin-bottom: 2rem;
+            margin-bottom: 1.5rem;
         }
 
         .form-group label {
@@ -258,6 +271,14 @@
             color: var(--text-light);
             font-size: 1rem;
             transition: all 0.3s;
+        }
+
+        .form-group input[type="email"] {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            letter-spacing: normal;
+        }
+
+        .form-group input[type="text"] {
             font-family: 'Courier New', monospace;
             letter-spacing: 1px;
         }
@@ -285,6 +306,7 @@
             cursor: pointer;
             transition: all 0.3s ease;
             box-shadow: 0 10px 30px rgba(11, 92, 255, 0.3);
+            margin-top: 0.5rem;
         }
 
         .access-btn:hover {
@@ -517,26 +539,42 @@
         <div class="parallax-bg parallax-bg-2"></div>
         <div class="hero-content">
             <h1>Access Your Course</h1>
-            <p>Enter your Course ID to unlock your learning journey</p>
+            <p>Enter your credentials to unlock your learning journey</p>
         </div>
     </section>
 
     <!-- Access Form Section -->
     <section class="access-section">
         <div class="access-card">
+            <span class="security-badge">
+                🔒 Secure Access - Email & Course ID Required
+            </span>
+
             <div class="info-box">
-                <p><strong>📧 Course ID Location:</strong> Your Course ID was sent to your email after successful payment.</p>
-                <p style="margin-top: 1rem;"><strong>💡 Can't find it?</strong> Check your spam folder or <a href="https://data-analytics-by-christiana.web.app/contact/" style="color: var(--primary-blue); text-decoration: underline;">contact support</a>.</p>
+                <p><strong>📧 Your Credentials:</strong> Both your email address and Course ID were sent to you after successful payment.</p>
+                <p style="margin-top: 1rem;"><strong>💡 Can't find them?</strong> Check your spam folder or <a href="https://data-analytics-by-christiana.web.app/contact/" style="color: var(--primary-blue); text-decoration: underline;">contact support</a>.</p>
             </div>
  
             <form id="accessForm">
+                <div class="form-group">
+                    <label for="accessEmail">Your Email Address *</label>
+                    <input 
+                        type="email" 
+                        id="accessEmail" 
+                        placeholder="Enter your email address" 
+                        required
+                        autocomplete="email"
+                    />
+                </div>
+
                 <div class="form-group">
                     <label for="accessId">Your Course ID *</label>
                     <input 
                         type="text" 
                         id="accessId" 
-                        placeholder="Enter your course id please" 
+                        placeholder="Enter your course id (e.g., ch_da_01)" 
                         required
+                        autocomplete="off"
                     />
                 </div>
 
@@ -564,26 +602,28 @@
                     <li>Community support</li>
                     <li>Certificate upon completion</li>
                 </ul>
-                <p style="margin-top: 1.5rem;"> <div style="text-align: center; margin: 24px 0;">
-  <button onclick="window.location.href='https://data-analytics-by-christiana.web.app/dashboard/'" style="
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-    color: white;
-    font-size: 18px;
-    font-weight: 600;
-    padding: 16px 48px;
-    border: none;
-    border-radius: 12px;
-    cursor: pointer;
-    box-shadow: 0 8px 24px rgba(102, 126, 234, 0.4);
-    transition: all 0.3s ease;
-    letter-spacing: 0.5px;
-    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-  "
-  onmouseover="this.style.transform='translateY(-2px)'; this.style.boxShadow='0 12px 32px rgba(102, 126, 234, 0.5)'"
-  onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='0 8px 24px rgba(102, 126, 234, 0.4)'">
-    Continue to Course 
-  </button>
-</div></p>
+                <p style="margin-top: 1.5rem;">
+                    <div style="text-align: center; margin: 24px 0;">
+                        <button onclick="window.location.href='https://data-analytics-by-christiana.web.app/dashboard/'" style="
+                            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+                            color: white;
+                            font-size: 18px;
+                            font-weight: 600;
+                            padding: 16px 48px;
+                            border: none;
+                            border-radius: 12px;
+                            cursor: pointer;
+                            box-shadow: 0 8px 24px rgba(102, 126, 234, 0.4);
+                            transition: all 0.3s ease;
+                            letter-spacing: 0.5px;
+                            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+                        "
+                        onmouseover="this.style.transform='translateY(-2px)'; this.style.boxShadow='0 12px 32px rgba(102, 126, 234, 0.5)'"
+                        onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='0 8px 24px rgba(102, 126, 234, 0.4)'">
+                            Continue to Course →
+                        </button>
+                    </div>
+                </p>
             </div>
         </div>
     </section>
