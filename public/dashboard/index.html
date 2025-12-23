@@ -1,971 +1,109 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en-GB">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Data Analytics Training - Christiana Churchill</title>
-    <link rel="icon" type="image/png" href="/global-education.png"> 
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
- 
-        :root {
-            --primary-blue: #0B5CFF;
-            --navy-dark: #0e1525;
-            --navy-medium: #1a2236;
-            --accent-purple: #6366f1;
-            --text-light: #ffffff;
-            --text-gray: #a0aec0;
-            --bg-light: #f7fafc;
-            --success-green: #10b981;
-        }
-
-        body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
-            line-height: 1.6;
-            color: #333;
-            overflow-x: hidden;
-        }
-
-        /* Progress Bar */
-        #progress-bar {
-            position: fixed;
-            top: 0;
-            left: 0;
-            height: 4px;
-            background: linear-gradient(90deg, var(--primary-blue), var(--accent-purple));
-            width: 0%;
-            z-index: 9999;
-            transition: width 0.1s ease;
-        }
-
-        /* Vertical Progress Tracker */
-        .vertical-tracker {
-            position: fixed;
-            right: 3rem;
-            top: 50%;
-            transform: translateY(-50%);
-            z-index: 100;
-            display: flex;
-            flex-direction: column;
-            gap: 1.5rem;
-        }
-
-        .tracker-item {
-            display: flex;
-            align-items: center;
-            gap: 1rem;
-            cursor: pointer;
-            transition: all 0.3s;
-        }
-
-        .tracker-dot {
-            width: 12px;
-            height: 12px;
-            border-radius: 50%;
-            background: #d1d5db;
-            border: 2px solid var(--navy-dark);
-            transition: all 0.3s;
-            position: relative;
-        }
-
-        .tracker-dot::before {
-            content: '';
-            position: absolute;
-            width: 2px;
-            height: 24px;
-            background: #d1d5db;
-            top: 100%;
-            left: 50%;
-            transform: translateX(-50%);
-        }
-
-        .tracker-item:last-child .tracker-dot::before {
-            display: none;
-        }
-
-        .tracker-dot.active {
-            background: var(--primary-blue);
-            border-color: var(--primary-blue);
-            transform: scale(1.3);
-        }
-
-        .tracker-dot.active::before {
-            background: var(--primary-blue);
-        }
-
-        .tracker-label {
-            font-size: 0.85rem;
-            color: var(--navy-dark);
-            font-weight: 500;
-            opacity: 0;
-            transform: translateX(-10px);
-            transition: all 0.3s;
-            white-space: nowrap;
-        }
-
-        .tracker-item:hover .tracker-label,
-        .tracker-item.active .tracker-label {
-            opacity: 1;
-            transform: translateX(0);
-        }
-
-        /* Navigation */
-        nav {
-            position: fixed;
-            top: 0;
-            width: 100%;
-            background: var(--navy-dark);
-            padding: 1rem 0;
-            z-index: 1000;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
-        }
-
-        .nav-container {
-            max-width: 1400px;
-            margin: 0 auto;
-            padding: 0 2rem;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-
-        .logo {
-            font-size: 1.8rem;
-            font-weight: 700;
-            color: var(--text-light);
-            text-decoration: none;
-        }
-
-        .nav-links {
-            display: flex;
-            gap: 2rem;
-            align-items: center;
-            list-style: none;
-        }
-
-        .nav-links a {
-            color: var(--text-light);
-            text-decoration: none;
-            font-weight: 500;
-            transition: color 0.3s;
-        }
-
-        .nav-links a:hover {
-            color: var(--primary-blue);
-        }
-
-        .cta-nav {
-            background: var(--primary-blue);
-            padding: 0.7rem 1.5rem;
-            border-radius: 8px;
-            border: none;
-            color: white;
-            font-weight: 600;
-            cursor: pointer;
-            transition: all 0.3s;
-            text-decoration: none;
-        }
-
-        .cta-nav:hover {
-            background: #0948d4;
-            transform: translateY(-2px);
-            box-shadow: 0 4px 12px rgba(11, 92, 255, 0.4);
-        }
-
-        .mobile-menu-btn {
-            display: none;
-            background: none;
-            border: none;
-            color: white;
-            font-size: 1.5rem;
-            cursor: pointer;
-        }
-
-        /* Hero Section */
-        .hero {
-            background: linear-gradient(135deg, var(--navy-dark) 0%, var(--navy-medium) 100%);
-            padding: 140px 2rem 100px;
-            text-align: center;
-            position: relative;
-            overflow: hidden;
-        }
-
-        .hero::before {
-            content: '';
-            position: absolute;
-            top: -50%;
-            right: -20%;
-            width: 800px;
-            height: 800px;
-            background: radial-gradient(circle, rgba(11, 92, 255, 0.15) 0%, transparent 70%);
-            border-radius: 50%;
-        }
-
-        .hero-content {
-            max-width: 900px;
-            margin: 0 auto;
-            position: relative;
-            z-index: 1;
-        }
-
-        .banner-tag {
-            display: inline-block;
-            background: linear-gradient(90deg, rgba(11, 92, 255, 0.2), rgba(99, 102, 241, 0.2));
-            border: 1px solid rgba(11, 92, 255, 0.3);
-            padding: 0.5rem 1.5rem;
-            border-radius: 50px;
-            color: var(--text-light);
-            font-size: 0.9rem;
-            margin-bottom: 2rem;
-            animation: fadeInUp 0.6s ease;
-        }
-
-        h1 {
-            font-size: 3.5rem;
-            color: var(--text-light);
-            margin-bottom: 1.5rem;
-            line-height: 1.2;
-            animation: fadeInUp 0.8s ease;
-        }
-
-        .hero p {
-            font-size: 1.3rem;
-            color: var(--text-gray);
-            margin-bottom: 2.5rem;
-            max-width: 700px;
-            margin-left: auto;
-            margin-right: auto;
-            animation: fadeInUp 1s ease;
-        }
-
-        .hero-buttons {
-            display: flex;
-            gap: 1.5rem;
-            justify-content: center;
-            flex-wrap: wrap;
-            animation: fadeInUp 1.2s ease;
-        }
-
-        .btn-primary {
-            background: var(--primary-blue);
-            color: white;
-            padding: 1rem 2.5rem;
-            border: none;
-            border-radius: 8px;
-            font-size: 1.1rem;
-            font-weight: 600;
-            cursor: pointer;
-            transition: all 0.3s;
-            text-decoration: none;
-            display: inline-block;
-        }
-
-        .btn-primary:hover {
-            background: #0948d4;
-            transform: translateY(-3px);
-            box-shadow: 0 8px 20px rgba(11, 92, 255, 0.4);
-        }
-
-        .btn-secondary {
-            background: transparent;
-            color: white;
-            padding: 1rem 2.5rem;
-            border: 2px solid white;
-            border-radius: 8px;
-            font-size: 1.1rem;
-            font-weight: 600;
-            cursor: pointer;
-            transition: all 0.3s;
-            text-decoration: none;
-            display: inline-block;
-        }
-
-        .btn-secondary:hover {
-            background: white;
-            color: var(--navy-dark);
-            transform: translateY(-3px);
-        }
-
-        /* Instructor Section */
-        .instructor-section {
-            padding: 80px 2rem;
-            background: white;
-        }
-
-        .instructor-container {
-            max-width: 1000px;
-            margin: 0 auto;
-            display: grid;
-            grid-template-columns: 1fr 2fr;
-            gap: 4rem;
-            align-items: center;
-        }
-
-        .instructor-image {
-            width: 100%;
-            aspect-ratio: 1;
-            background: linear-gradient(135deg, var(--primary-blue), var(--accent-purple));
-            border-radius: 20px;
-            box-shadow: 0 16px 40px rgba(0,0,0,0.1);
-        }
-
-        .instructor-content h2 {
-            font-size: 2.5rem;
-            margin-bottom: 1.5rem;
-            color: var(--navy-dark);
-        }
-
-        .instructor-content p {
-            font-size: 1.1rem;
-            line-height: 1.8;
-            color: #666;
-            margin-bottom: 2rem;
-        }
-
-        .credentials {
-            display: grid;
-            gap: 1rem;
-        }
-
-        .credential-item {
-            display: flex;
-            align-items: flex-start;
-            gap: 1rem;
-            padding: 1rem;
-            background: var(--bg-light);
-            border-radius: 10px;
-            transition: all 0.3s;
-        }
-
-        .credential-item:hover {
-            background: white;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.08);
-            transform: translateX(8px);
-        }
- 
-        .credential-icon {
-            width: 40px;
-            height: 40px;
-            background: var(--primary-blue);
-            border-radius: 8px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 1.3rem;
-            flex-shrink: 0;
-        }
-
-        .credential-text {
-            flex: 1;
-        }
-
-        .credential-text strong {
-            display: block;
-            color: var(--navy-dark);
-            margin-bottom: 0.3rem;
-        }
-
-        .credential-text span {
-            color: #666;
-            font-size: 0.95rem;
-        }
-
-        /* Features Carousel */
-        .features-section {
-            padding: 80px 2rem;
-            background: var(--bg-light);
-        }
-
-        .section-title {
-            text-align: center;
-            font-size: 2.5rem;
-            margin-bottom: 3rem;
-            color: var(--navy-dark);
-        }
-
-        .carousel-container {
-            max-width: 1400px;
-            margin: 0 auto;
-            position: relative;
-        }
-
-        .carousel-wrapper {
-            position: relative;
-            overflow: hidden;
-            padding: 2rem 0;
-        }
-
-        .carousel {
-            display: flex;
-            gap: 2rem;
-            transition: transform 0.5s ease;
-        }
-
-        .feature-card {
-            min-width: 350px;
-            background: white;
-            border-radius: 16px;
-            padding: 2rem;
-            box-shadow: 0 4px 6px rgba(0,0,0,0.05);
-            transition: all 0.3s;
-            cursor: pointer;
-        }
-
-        .feature-card:hover {
-            transform: translateY(-8px);
-            box-shadow: 0 12px 24px rgba(0,0,0,0.1);
-        }
-
-        .feature-icon {
-            width: 60px;
-            height: 60px;
-            background: linear-gradient(135deg, var(--primary-blue), var(--accent-purple));
-            border-radius: 12px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            margin-bottom: 1.5rem;
-            font-size: 1.8rem;
-        }
-
-        .feature-card h3 {
-            font-size: 1.5rem;
-            margin-bottom: 1rem;
-            color: var(--navy-dark);
-        }
-
-        .feature-card p {
-            color: #666;
-            line-height: 1.6;
-        }
-
-        .carousel-nav {
-            position: absolute;
-            top: 50%;
-            transform: translateY(-50%);
-            width: 50px;
-            height: 50px;
-            background: white;
-            border-radius: 50%;
-            border: none;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 1.5rem;
-            color: var(--navy-dark);
-            transition: all 0.3s;
-            z-index: 10;
-        }
-
-        .carousel-nav:hover {
-            background: var(--primary-blue);
-            color: white;
-            transform: translateY(-50%) scale(1.1);
-        }
-
-        .carousel-nav.prev {
-            left: -25px;
-        }
-
-        .carousel-nav.next {
-            right: -25px;
-        }
-
-        /* Story Section */
-        .story-section {
-            padding: 100px 2rem;
-            background: linear-gradient(135deg, var(--navy-dark) 0%, var(--navy-medium) 100%);
-            color: white;
-        }
-
-        .story-container {
-            max-width: 900px;
-            margin: 0 auto;
-        }
-
-        .story-container h2 {
-            font-size: 3rem;
-            margin-bottom: 2rem;
-            text-align: center;
-        }
-
-        .story-container p {
-            font-size: 1.2rem;
-            line-height: 1.9;
-            margin-bottom: 1.5rem;
-            color: var(--text-gray);
-        }
-
-        .story-highlight {
-            background: rgba(11, 92, 255, 0.2);
-            padding: 2rem;
-            border-left: 4px solid var(--primary-blue);
-            margin: 2rem 0;
-            border-radius: 8px;
-        }
-
-        .story-highlight p {
-            color: white;
-            font-size: 1.3rem;
-            font-weight: 500;
-            margin: 0;
-        }
-
-        /* Trust Section */
-        .trust-section {
-            padding: 80px 2rem;
-            background: white;
-            text-align: center;
-        }
-
-        .trust-content h2 {
-            font-size: 2.5rem;
-            margin-bottom: 3rem;
-            color: var(--navy-dark);
-        }
-
-        .trust-grid {
-            max-width: 1200px;
-            margin: 0 auto;
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 2rem;
-        }
-
-        .trust-card {
-            background: var(--bg-light);
-            padding: 2rem;
-            border-radius: 16px;
-            transition: all 0.3s;
-        }
-
-        .trust-card:hover {
-            background: white;
-            box-shadow: 0 8px 24px rgba(0,0,0,0.1);
-            transform: translateY(-8px);
-        }
-
-        .trust-icon {
-            font-size: 3rem;
-            margin-bottom: 1rem;
-        }
-
-        .trust-card h3 {
-            font-size: 1.3rem;
-            margin-bottom: 0.5rem;
-            color: var(--navy-dark);
-        }
-
-        .trust-card p {
-            color: #666;
-            font-size: 0.95rem;
-        }
-
-        /* Testimonial Section */
-        .testimonial-section {
-            padding: 80px 2rem;
-            background: var(--bg-light);
-        }
-
-        .testimonial-container {
-            max-width: 900px;
-            margin: 3rem auto;
-            background: white;
-            padding: 3rem;
-            border-radius: 16px;
-            box-shadow: 0 8px 24px rgba(0,0,0,0.08);
-            position: relative;
-        }
-
-        .quote-icon {
-            position: absolute;
-            top: -20px;
-            left: 40px;
-            width: 60px;
-            height: 60px;
-            background: var(--primary-blue);
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 2rem;
-            color: white;
-        }
-
-        .testimonial-text {
-            font-size: 1.3rem;
-            line-height: 1.8;
-            color: #333;
-            margin-bottom: 2rem;
-            font-style: italic;
-        }
-
-        .testimonial-author {
-            display: flex;
-            align-items: center;
-            gap: 1.5rem;
-        }
-
-        .author-image {
-            width: 60px;
-            height: 60px;
-            border-radius: 50%;
-            background: linear-gradient(135deg, var(--primary-blue), var(--accent-purple));
-        }
-
-        .author-info h4 {
-            font-size: 1.1rem;
-            color: var(--navy-dark);
-            margin-bottom: 0.3rem;
-        }
-
-        .author-info p {
-            color: #666;
-            font-size: 0.95rem;
-        }
-
-        /* Final CTA Section */
-        .cta-section {
-            background: linear-gradient(135deg, var(--primary-blue) 0%, var(--accent-purple) 100%);
-            padding: 100px 2rem;
-            text-align: center;
-            color: white;
-        }
-
-        .cta-section h2 {
-            font-size: 3rem;
-            margin-bottom: 1.5rem;
-        }
-
-        .cta-section p {
-            font-size: 1.3rem;
-            margin-bottom: 2.5rem;
-            opacity: 0.95;
-        }
-
-        /* Footer */
-        footer {
-            background: var(--navy-dark);
-            color: white;
-            padding: 60px 2rem 30px;
-            text-align: center;
-        }
-
-        .footer-content {
-            max-width: 800px;
-            margin: 0 auto;
-        }
-
-        .footer-content p {
-            color: var(--text-gray);
-            margin-bottom: 1rem;
-        }
-
-        .footer-bottom {
-            margin-top: 3rem;
-            padding-top: 2rem;
-            border-top: 1px solid rgba(255,255,255,0.1);
-            color: var(--text-gray);
-        }
-
-        /* Animations */
-        @keyframes fadeInUp {
-            from {
-                opacity: 0;
-                transform: translateY(30px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-
-        /* Responsive */
-        @media (max-width: 768px) {
-            .logo {
-                font-size: 1.3rem;
-            }
-
-            h1 {
-                font-size: 2.5rem;
-            }
-
-            .hero p {
-                font-size: 1.1rem;
-            }
-
-            .vertical-tracker {
-                display: none;
-            }
-
-            .hero-buttons {
-                flex-direction: column;
-            }
-
-            .section-title {
-                font-size: 2rem;
-            }
-
-            .feature-card {
-                min-width: 280px;
-            }
-
-            .instructor-container {
-                grid-template-columns: 1fr;
-                gap: 2rem;
-            }
-
-            .cta-section h2 {
-                font-size: 2rem;
-            }
-
-            .carousel-nav {
-                display: none;
-            }
-
-            .mobile-menu-btn {
-                display: block;
-            }
-
-            .nav-links {
-                display: none;
-                position: fixed;
-                top: 70px;
-                right: 0;
-                background: rgba(14, 21, 37, 0.98);
-                backdrop-filter: blur(20px);
-                width: 100%;
-                padding: 2rem;
-                flex-direction: column;
-                gap: 1.5rem;
-                box-shadow: 0 10px 30px rgba(0,0,0,0.3);
-            }
-            
-            .nav-links.active {
-                display: flex;
-            }
-
-            .nav-links li {
-                width: 100%;
-                text-align: center;
-            }
-
-            .cta-nav {
-                width: 100%;
-            }
-        }
-    </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Course Dashboard - Data Analytics Training</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}:root{--primary:#0B5CFF;--dark:#0e1525;--medium:#1a2236;--accent:#6366f1;--light:#fff;--gray:#e2e8f0;--success:#10b981;--error:#ef4444}body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;line-height:1.6;background:var(--dark);color:#333;overflow-x:hidden}#progress-bar{position:fixed;top:0;left:0;height:4px;background:linear-gradient(90deg,var(--primary),var(--accent));width:0;z-index:9999;transition:width .1s}nav{position:fixed;top:0;width:100%;background:rgba(14,21,37,.95);backdrop-filter:blur(20px);padding:1rem 0;z-index:1000;box-shadow:0 2px 10px rgba(0,0,0,.1)}.nav-container{max-width:100%;margin:0 auto;padding:0 2rem;display:flex;justify-content:space-between;align-items:center}.logo{font-size:1.8rem;font-weight:700;color:var(--light);text-decoration:none}.nav-links{display:flex;gap:2rem;align-items:center;list-style:none}.nav-links a{color:var(--light);text-decoration:none;font-weight:500;transition:color .3s}.nav-links a:hover{color:var(--primary)}.cta-nav{background:var(--primary);padding:.7rem 1.5rem;border-radius:8px;border:none;color:#fff;font-weight:600;cursor:pointer;transition:all .3s}.cta-nav:hover{background:#0948d4;transform:translateY(-2px)}.mobile-menu-btn{display:none;background:none;border:none;color:#fff;font-size:1.5rem;cursor:pointer}.animated-bg{position:fixed;top:0;left:0;width:100%;height:100%;z-index:-1;background:linear-gradient(-45deg,#0e1525,#1a2236,#0B5CFF,#6366f1);background-size:400% 400%;animation:gradientShift 15s ease infinite}@keyframes gradientShift{0%{background-position:0 50%}50%{background-position:100% 50%}100%{background-position:0 50%}}.hero{min-height:30vh;display:flex;align-items:center;justify-content:center;padding:120px 2rem 40px;text-align:center}.hero h1{font-size:3rem;color:var(--light);margin-bottom:1rem;animation:fadeInUp .8s}.hero p{font-size:1.2rem;color:var(--gray);animation:fadeInUp 1s .2s both}.main-content{max-width:1400px;margin:0 auto;padding:2rem;min-height:60vh}.loading{position:fixed;top:50%;left:50%;transform:translate(-50%,-50%);width:50px;height:50px;border:4px solid rgba(255,255,255,.2);border-top-color:var(--primary);border-radius:50%;animation:spin .8s linear infinite;display:none}.loading.active{display:block}.week-section{background:rgba(255,255,255,.05);backdrop-filter:blur(20px);border-radius:24px;border:1px solid rgba(255,255,255,.1);padding:2.5rem;margin-bottom:3rem;box-shadow:0 8px 32px rgba(0,0,0,.2);transition:all .4s}.week-section:hover{transform:translateY(-5px);box-shadow:0 16px 48px rgba(11,92,255,.3)}.week-tag{display:inline-block;background:linear-gradient(135deg,var(--primary),var(--accent));padding:.5rem 1.5rem;border-radius:50px;color:#fff;font-weight:600;font-size:.9rem;margin-bottom:1rem}.week-title{font-size:2rem;color:var(--light);margin-bottom:.5rem}.week-description{font-size:1.1rem;color:var(--gray);line-height:1.8;margin-top:1rem}.video-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(320px,1fr));gap:2rem;margin-top:2rem}.video-card{background:rgba(255,255,255,.03);border-radius:16px;overflow:hidden;transition:all .3s;cursor:pointer;border:1px solid rgba(255,255,255,.1)}.video-card:hover{transform:translateY(-8px);box-shadow:0 12px 32px rgba(11,92,255,.3)}.video-thumbnail{position:relative;width:100%;padding-top:56.25%;background:linear-gradient(135deg,var(--medium),var(--dark));overflow:hidden}.video-thumbnail img{position:absolute;top:0;left:0;width:100%;height:100%;object-fit:cover}.video-duration{position:absolute;bottom:10px;right:10px;background:rgba(0,0,0,.8);color:#fff;padding:.3rem .6rem;border-radius:4px;font-size:.85rem;font-weight:600}.play-icon{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:60px;height:60px;background:rgba(11,92,255,.9);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:1.5rem;color:#fff;transition:all .3s}.video-card:hover .play-icon{background:var(--primary);transform:translate(-50%,-50%) scale(1.1)}.video-info{padding:1.5rem}.video-title{font-size:1.1rem;color:var(--light);font-weight:600;margin-bottom:.5rem}.video-meta{display:flex;align-items:center;gap:1rem;color:var(--gray);font-size:.9rem}.video-modal{display:none;position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,.95);z-index:10000;animation:fadeIn .3s}.video-modal.active{display:flex;align-items:center;justify-content:center}.video-modal-content{width:90%;max-width:1200px;background:var(--medium);border-radius:16px;overflow:hidden;max-height:90vh;overflow-y:auto}.video-player-wrapper{position:relative;width:100%;padding-top:56.25%;background:#000}.video-player-wrapper iframe,.video-player-wrapper video{position:absolute;top:0;left:0;width:100%;height:100%;border:none}.close-modal{position:absolute;top:20px;right:20px;width:40px;height:40px;background:rgba(255,255,255,.1);border:none;border-radius:50%;color:#fff;font-size:1.5rem;cursor:pointer;transition:all .3s;z-index:10001}.close-modal:hover{background:var(--error);transform:rotate(90deg)}.video-details{padding:2rem}.video-details-title{font-size:1.8rem;color:var(--light);margin-bottom:1rem}.video-stats{display:flex;gap:2rem;color:var(--gray);margin-bottom:1.5rem}.engagement-section{display:flex;gap:1rem;padding:1.5rem 0;border-top:1px solid rgba(255,255,255,.1);border-bottom:1px solid rgba(255,255,255,.1)}.engagement-btn{display:flex;align-items:center;gap:.5rem;background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.1);padding:.7rem 1.5rem;border-radius:50px;color:var(--light);font-weight:500;cursor:pointer;transition:all .3s}.engagement-btn:hover{background:rgba(255,255,255,.1)}.engagement-btn.active{background:var(--primary)}.engagement-btn:disabled{opacity:.5;cursor:not-allowed}.comments-section{margin-top:2rem}.comments-header{font-size:1.3rem;color:var(--light);margin-bottom:1.5rem}.comment-form{display:flex;gap:1rem;margin-bottom:2rem}.comment-input{flex:1;background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.1);border-radius:12px;padding:1rem;color:var(--light);font-size:1rem;resize:vertical;min-height:80px;font-family:inherit}.comment-input:focus{outline:none;border-color:var(--primary);background:rgba(255,255,255,.08)}.comment-submit{align-self:flex-end;background:var(--primary);border:none;padding:1rem 2rem;border-radius:12px;color:#fff;font-weight:600;cursor:pointer;transition:all .3s}.comment-submit:hover:not(:disabled){background:#0948d4;transform:translateY(-2px)}.comment-submit:disabled{opacity:.5;cursor:not-allowed}.comments-list{display:flex;flex-direction:column;gap:1.5rem}.comment{background:rgba(255,255,255,.03);border-radius:12px;padding:1.5rem;border:1px solid rgba(255,255,255,.05)}.comment-header{display:flex;justify-content:space-between;margin-bottom:.8rem}.comment-author{font-weight:600;color:var(--light)}.comment-date{font-size:.85rem;color:var(--gray)}.comment-text{color:var(--gray);line-height:1.6;word-wrap:break-word}.no-comments{text-align:center;color:var(--gray);padding:2rem;font-style:italic}.toast{position:fixed;bottom:2rem;right:2rem;background:var(--medium);color:var(--light);padding:1rem 1.5rem;border-radius:8px;box-shadow:0 8px 24px rgba(0,0,0,.3);z-index:10002;display:none;animation:slideIn .3s}.toast.active{display:block}.toast.success{border-left:4px solid var(--success)}.toast.error{border-left:4px solid var(--error)}footer{background:var(--dark);color:#fff;padding:60px 2rem 30px;margin-top:100px;text-align:center}.footer-content h3{font-size:1.8rem;margin-bottom:1rem}.footer-content p{color:var(--gray);margin-bottom:1rem;line-height:1.8}.footer-bottom{margin-top:3rem;padding-top:2rem;border-top:1px solid rgba(255,255,255,.1);color:var(--gray)}@keyframes fadeIn{from{opacity:0}to{opacity:1}}@keyframes fadeInUp{from{opacity:0;transform:translateY(30px)}to{opacity:1;transform:translateY(0)}}@keyframes slideIn{from{transform:translateX(100%)}to{transform:translateX(0)}}@keyframes spin{to{transform:rotate(360deg)}}@media(max-width:768px){.logo{font-size:1.3rem}.hero h1{font-size:2rem}.week-section{padding:1.5rem}.video-grid{grid-template-columns:1fr}.video-details{padding:1.5rem}.comment-form{flex-direction:column}.mobile-menu-btn{display:block}.nav-links{display:none;position:fixed;top:70px;right:0;background:rgba(14,21,37,.98);width:100%;padding:2rem;flex-direction:column;gap:1.5rem}.nav-links.active{display:flex}.nav-links li{width:100%;text-align:center}.cta-nav{width:100%}.toast{bottom:1rem;right:1rem;left:1rem}}
+</style>
 </head>
 <body>
-    <!-- Progress Bar -->
-    <div id="progress-bar"></div>
+<div id="progress-bar"></div>
+<div class="animated-bg"></div>
+<div class="loading" id="loading"></div>
 
-    <!-- Navigation -->
-    <nav>
-        <div class="nav-container">
-            <a href="https://data-analytics-by-christiana.web.app/" class="logo">Learn Tech Skills That Pay</a>
-            <ul class="nav-links">
-                <li><a href="https://data-analytics-by-christiana.web.app/">Home</a></li>
-                <li><a href="https://data-analytics-by-christiana.web.app/about/">About</a></li>
-                <li><a href="https://data-analytics-by-christiana.web.app/contact/">Contact Us</a></li>
-                <li><a href="https://data-analytics-by-christiana.web.app/access/">Dashboard</a></li>
-                <li><button class="cta-nav" onclick="scrollToEnroll()">Extra Services</button></li>
-            </ul>
-            <button class="mobile-menu-btn">☰</button>
-        </div>
-    </nav>
+<nav>
+<div class="nav-container">
+<a href="https://data-analytics-by-christiana.web.app/" class="logo">Learn Tech Skills That Pay</a>
+<ul class="nav-links" id="navLinks">
+<li><a href="https://data-analytics-by-christiana.web.app/">Home</a></li>
+<li><a href="https://data-analytics-by-christiana.web.app/about/">About</a></li>
+<li><a href="https://data-analytics-by-christiana.web.app/contact/">Contact Us</a></li>
+<li><a href="https://data-analytics-by-christiana.web.app/access/">Dashboard</a></li>
+<li><button class="cta-nav" onclick="window.location.href='https://data-analytics-web-programme.vercel.app/pay'">Enrol Now</button></li>
+</ul>
+<button class="mobile-menu-btn" id="mobileMenuBtn">☰</button>
+</div>
+</nav>
 
-    <!-- Hero Section -->
-    <section class="hero" id="hero">
-        <div class="hero-content">
-            <div class="banner-tag">💸 Build the income streams that create lasting wealth</div>
-            <h1>Give claude your full code so that it uses the styling you creating to just redesign and add what you want dear</h1>
-            <p>Edit this page now</p>
-        </div>
-    </section>
+<section class="hero">
+<div><h1>Course Dashboard</h1><p>Welcome to your Data Analytics Training Programme</p></div>
+</section>
 
-    <!-- Footer -->
-    <footer>
-        <div class="footer-content">
-            <h3 style="font-size: 1.8rem; margin-bottom: 1rem;">Christiana Churchill</h3>
-            <p style="line-height: 1.8; font-size: 1.05rem;">Empowering Nigerians with in-demand tech skills to build careers that pay in dollars. One student at a time.</p>
-            <p style="margin-top: 2rem;">Data Analytics Training Programme</p>
-            <p>Transforming careers across Africa</p>
-        </div>
+<main class="main-content" id="courseContent"></main>
 
-        <div class="footer-bottom">
-            <p>&copy; 2025 Christiana Churchill. All rights reserved.</p>
-            <p style="margin-top: 0.5rem;">Making tech accessible to everyone</p>
-        </div>
-    </footer>
+<div class="video-modal" id="videoModal">
+<button class="close-modal" id="closeModal">×</button>
+<div class="video-modal-content">
+<div class="video-player-wrapper" id="videoPlayerWrapper"></div>
+<div class="video-details" id="videoDetails"></div>
+</div>
+</div>
 
-    <script>
-        // Progress Bar
-        window.addEventListener('scroll', () => {
-            const windowHeight = window.innerHeight;
-            const documentHeight = document.documentElement.scrollHeight - windowHeight;
-            const scrolled = window.scrollY;
-            const progress = (scrolled / documentHeight) * 100;
-            document.getElementById('progress-bar').style.width = progress + '%';
-        });
+<div class="toast" id="toast"></div>
 
-        // Mobile Menu Toggle
-        const mobileMenuBtn = document.querySelector('.mobile-menu-btn');
-        const navLinks = document.querySelector('.nav-links');
+<footer>
+<div class="footer-content">
+<h3>Christiana Churchill</h3>
+<p>Empowering Nigerians with in-demand tech skills to build careers that pay in dollars.</p>
+<p style="margin-top:2rem">Data Analytics Training Programme</p>
+</div>
+<div class="footer-bottom">
+<p>&copy; 2025 Christiana Churchill. All rights reserved.</p>
+</div>
+</footer>
 
-        mobileMenuBtn.addEventListener('click', function() {
-            navLinks.classList.toggle('active');
-            this.textContent = navLinks.classList.contains('active') ? '✕' : '☰';
-        });
+<script>
+const COURSE_DATA={weeks:[{id:'week-1',weekNumber:1,title:'Introduction to Data Analytics',description:'Get started with the fundamentals of data analytics.',videos:[{id:'video-1-1',title:'Welcome to Data Analytics',url:'https://www.youtube.com/watch?v=dQw4w9WgXcQ',duration:'12:45',views:1250,uploadDate:'2024-01-15'},{id:'video-1-2',title:'Understanding Data Types',url:'https://www.youtube.com/watch?v=dQw4w9WgXcQ',duration:'15:30',views:980,uploadDate:'2024-01-16'}]},{id:'week-2',weekNumber:2,title:'Excel Fundamentals',description:'Master Excel basics including formulas and functions.',videos:[{id:'video-2-1',title:'Excel Interface',url:'https://www.youtube.com/watch?v=dQw4w9WgXcQ',duration:'14:25',views:742,uploadDate:'2024-01-22'}]}]};
 
-        // Close menu when clicking outside
-        document.addEventListener('click', function(e) {
-            if (!e.target.closest('.nav-container')) {
-                navLinks.classList.remove('active');
-                mobileMenuBtn.textContent = '☰';
-            }
-        });
+class Storage{constructor(){this.prefix='course_';this.userId=this.getUserId()}getUserId(){let id=localStorage.getItem('user_id');if(!id){id='u_'+Date.now();localStorage.setItem('user_id',id)}return id}async save(key,data,shared=false){const fullKey=this.prefix+(shared?'':this.userId+'_')+key;try{if(window.storage){await window.storage.set(fullKey,JSON.stringify(data),shared)}else{sessionStorage.setItem(fullKey,JSON.stringify(data))}return true}catch(e){console.error('Storage error:',e);return false}}async load(key,shared=false){const fullKey=this.prefix+(shared?'':this.userId+'_')+key;try{if(window.storage){const r=await window.storage.get(fullKey,shared);return r?JSON.parse(r.value):null}else{const d=sessionStorage.getItem(fullKey);return d?JSON.parse(d):null}}catch(e){return null}}}
 
-        // Close menu when clicking a link
-        document.querySelectorAll('.nav-links a').forEach(link => {
-            link.addEventListener('click', () => {
-                navLinks.classList.remove('active');
-                mobileMenuBtn.textContent = '☰';
-            });
-        });
+const storage=new Storage();
 
-        // Vertical Tracker
-        const sections = ['hero', 'instructor', 'features', 'story', 'trust', 'testimonial', 'cta'];
-        const trackerItems = document.querySelectorAll('.tracker-item');
+class Engagement{constructor(){this.data={}}async load(id){const d=await storage.load('e_'+id,true);this.data[id]=d||{likes:0,dislikes:0,views:0,userLiked:false,userDisliked:false};return this.data[id]}async save(id){await storage.save('e_'+id,this.data[id],true)}async toggleLike(id){const d=this.data[id];if(d.userLiked){d.likes--;d.userLiked=false}else{d.likes++;d.userLiked=true;if(d.userDisliked){d.dislikes--;d.userDisliked=false}}await this.save(id);return d}async toggleDislike(id){const d=this.data[id];if(d.userDisliked){d.dislikes--;d.userDisliked=false}else{d.dislikes++;d.userDisliked=true;if(d.userLiked){d.likes--;d.userLiked=false}}await this.save(id);return d}async addView(id){this.data[id].views++;await this.save(id)}}
 
-        function updateTracker() {
-            const scrollPosition = window.scrollY + window.innerHeight / 2;
+class Comments{constructor(){this.data={}}async load(id){const d=await storage.load('c_'+id,true);this.data[id]=d||[];return this.data[id]}async save(id){await storage.save('c_'+id,this.data[id],true)}async add(id,text){if(!this.data[id])this.data[id]=[];const c={id:Date.now(),author:'User',text:text,date:new Date().toISOString()};this.data[id].unshift(c);await this.save(id);return c}get(id){return this.data[id]||[]}}
 
-            sections.forEach((sectionId, index) => {
-                const section = document.getElementById(sectionId);
-                if (section) {
-                    const sectionTop = section.offsetTop;
-                    const sectionBottom = sectionTop + section.offsetHeight;
+const engagement=new Engagement();
+const comments=new Comments(); 
 
-                    if (scrollPosition >= sectionTop && scrollPosition < sectionBottom) {
-                        trackerItems.forEach(item => item.classList.remove('active'));
-                        if (trackerItems[index]) {
-                            trackerItems[index].classList.add('active');
-                            trackerItems[index].querySelector('.tracker-dot').classList.add('active');
-                        }
-                    } else {
-                        if (trackerItems[index]) {
-                            trackerItems[index].querySelector('.tracker-dot').classList.remove('active');
-                        }
-                    }
-                }
-            });
-        }
+const utils={esc(t){const d=document.createElement('div');d.textContent=t;return d.innerHTML},date(d){const diff=Math.ceil((Date.now()-new Date(d))/(1000*60*60*24));if(diff===0)return'Today';if(diff===1)return'Yesterday';if(diff<7)return diff+' days ago';if(diff<30)return Math.floor(diff/7)+' weeks ago';return Math.floor(diff/30)+' months ago'},views(v){if(v>=1e6)return(v/1e6).toFixed(1)+'M';if(v>=1e3)return(v/1e3).toFixed(1)+'K';return v},toast(m,t='success'){const el=document.getElementById('toast');el.textContent=m;el.className='toast active '+t;setTimeout(()=>el.classList.remove('active'),3000)},loading(show){document.getElementById('loading').classList.toggle('active',show)}};
 
-        window.addEventListener('scroll', updateTracker);
-        updateTracker();
+function parseVideo(url){const yt=url.match(/(?:youtube\.com\/watch\?v=|youtu\.be\/)([a-zA-Z0-9_-]{11})/);if(yt)return{type:'youtube',id:yt[1],embed:'https://www.youtube.com/embed/'+yt[1]+'?rel=0'};const vm=url.match(/vimeo\.com\/(\d+)/);if(vm)return{type:'vimeo',id:vm[1],embed:'https://player.vimeo.com/video/'+vm[1]};return{type:'iframe',embed:url}}
 
-        // Tracker click navigation
-        trackerItems.forEach(item => {
-            item.addEventListener('click', () => {
-                const sectionId = item.dataset.section;
-                const section = document.getElementById(sectionId);
-                if (section) {
-                    section.scrollIntoView({ behavior: 'smooth' });
-                }
-            });
-        });
+function getThumbnail(url){const p=parseVideo(url);return p.type==='youtube'?'https://img.youtube.com/vi/'+p.id+'/maxresdefault.jpg':'data:image/svg+xml,%3Csvg xmlns="http://www.w3.org/2000/svg" width="320" height="180"%3E%3Crect fill="%231a2236" width="320" height="180"/%3E%3C/svg%3E'}
 
-        // Carousel with Arrow Navigation
-        const carousel = document.getElementById('carousel');
-        if (carousel) {
-            let currentPosition = 0;
-            const cardWidth = 350 + 32; // card width + gap
-            const visibleCards = Math.floor(window.innerWidth / cardWidth);
-            const totalCards = carousel.children.length;
-            const maxPosition = -(totalCards - visibleCards) * cardWidth;
+async function render(){utils.loading(true);const c=document.getElementById('courseContent');let html='';for(const w of COURSE_DATA.weeks){html+=`<section class="week-section"><div><span class="week-tag">Week ${w.weekNumber}</span><h2 class="week-title">${w.title}</h2><p class="week-description">${w.description}</p></div><div class="video-grid">`;for(const v of w.videos){await engagement.load(v.id);const e=engagement.data[v.id];const total=v.views+e.views;html+=`<div class="video-card" onclick="openVideo('${v.id}')"><div class="video-thumbnail"><img src="${getThumbnail(v.url)}" alt="${v.title}"><div class="video-duration">${v.duration}</div><div class="play-icon">▶</div></div><div class="video-info"><h3 class="video-title">${v.title}</h3><div class="video-meta"><span>👁 ${utils.views(total)}</span><span>📅 ${utils.date(v.uploadDate)}</span></div></div></div>`}html+='</div></section>'}c.innerHTML=html;utils.loading(false)}
 
-            function moveCarousel(direction) {
-                currentPosition += direction * cardWidth * 2; // Move 2 cards at a time
-                
-                if (currentPosition > 0) {
-                    currentPosition = 0;
-                }
-                if (currentPosition < maxPosition) {
-                    currentPosition = maxPosition;
-                }
-                
-                carousel.style.transform = `translateX(${currentPosition}px)`;
-            }
+async function openVideo(id){let video=null;for(const w of COURSE_DATA.weeks){const f=w.videos.find(v=>v.id===id);if(f){video=f;break}}if(!video)return;await engagement.load(id);await engagement.addView(id);const p=parseVideo(video.url);document.getElementById('videoPlayerWrapper').innerHTML=p.type==='direct'?`<video controls style="width:100%;height:100%"><source src="${p.embed}"></video>`:`<iframe src="${p.embed}" allowfullscreen></iframe>`;await renderDetails(id,video);document.getElementById('videoModal').classList.add('active');document.body.style.overflow='hidden'}
 
-            // Auto-scroll carousel
-            let autoScrollInterval = setInterval(() => {
-                if (currentPosition <= maxPosition) {
-                    currentPosition = 0;
-                } else {
-                    currentPosition -= cardWidth;
-                }
-                carousel.style.transform = `translateX(${currentPosition}px)`;
-            }, 4000);
+async function renderDetails(id,v){const e=engagement.data[id];const c=await comments.load(id);const total=v.views+e.views;document.getElementById('videoDetails').innerHTML=`<h2 class="video-details-title">${v.title}</h2><div class="video-stats"><span>👁 ${utils.views(total)}</span><span>📅 ${utils.date(v.uploadDate)}</span></div><div class="engagement-section"><button class="engagement-btn ${e.userLiked?'active':''}" onclick="like('${id}')"><span>👍</span><span id="l${id}">${e.likes}</span></button><button class="engagement-btn ${e.userDisliked?'active':''}" onclick="dislike('${id}')"><span>👎</span><span id="d${id}">${e.dislikes}</span></button></div><div class="comments-section"><h3 class="comments-header">Comments (${c.length})</h3><div class="comment-form"><textarea class="comment-input" id="ci${id}" placeholder="Add comment..."></textarea><button class="comment-submit" onclick="addComment('${id}')">Post</button></div><div class="comments-list" id="cl${id}">${renderComments(c)}</div></div>`}
 
-            // Pause auto-scroll on hover
-            carousel.addEventListener('mouseenter', () => {
-                clearInterval(autoScrollInterval);
-            });
+function renderComments(c){if(!c.length)return'<div class="no-comments">No comments yet</div>';return c.map(cm=>`<div class="comment"><div class="comment-header"><span class="comment-author">${cm.author}</span><span class="comment-date">${utils.date(cm.date)}</span></div><p class="comment-text">${utils.esc(cm.text)}</p></div>`).join('')}
 
-            carousel.addEventListener('mouseleave', () => {
-                autoScrollInterval = setInterval(() => {
-                    if (currentPosition <= maxPosition) {
-                        currentPosition = 0;
-                    } else {
-                        currentPosition -= cardWidth;
-                    }
-                    carousel.style.transform = `translateX(${currentPosition}px)`;
-                }, 4000);
-            });
+async function like(id){const e=await engagement.toggleLike(id);document.getElementById('l'+id).textContent=e.likes;document.getElementById('d'+id).textContent=e.dislikes;document.querySelector(`button[onclick="like('${id}')"]`).classList.toggle('active',e.userLiked);document.querySelector(`button[onclick="dislike('${id}')"]`).classList.toggle('active',e.userDisliked)}
 
-            // Responsive carousel updates
-            window.addEventListener('resize', () => {
-                currentPosition = 0;
-                carousel.style.transform = `translateX(0px)`;
-            });
-        }
+async function dislike(id){const e=await engagement.toggleDislike(id);document.getElementById('l'+id).textContent=e.likes;document.getElementById('d'+id).textContent=e.dislikes;document.querySelector(`button[onclick="like('${id}')"]`).classList.toggle('active',e.userLiked);document.querySelector(`button[onclick="dislike('${id}')"]`).classList.toggle('active',e.userDisliked)}
 
-        // Scroll animations
-        const observerOptions = {
-            threshold: 0.1,
-            rootMargin: '0px 0px -100px 0px'
-        };
+async function addComment(id){const input=document.getElementById('ci'+id);const text=input.value.trim();if(!text){utils.toast('Enter a comment','error');return}await comments.add(id,text);input.value='';const c=comments.get(id);document.getElementById('cl'+id).innerHTML=renderComments(c);document.querySelector('.comments-header').textContent='Comments ('+c.length+')';utils.toast('Comment added!')}
 
-        const observer = new IntersectionObserver((entries) => {
-            entries.forEach(entry => {
-                if (entry.isIntersecting) {
-                    entry.target.style.opacity = '1';
-                    entry.target.style.transform = 'translateY(0)';
-                }
-            });
-        }, observerOptions);
+function close(){document.getElementById('videoModal').classList.remove('active');document.body.style.overflow='auto';document.getElementById('videoPlayerWrapper').innerHTML=''}
 
-        document.querySelectorAll('.feature-card, .trust-card, .credential-item').forEach(el => {
-            el.style.opacity = '0';
-            el.style.transform = 'translateY(30px)';
-            el.style.transition = 'all 0.6s ease';
-            observer.observe(el);
-        });
+window.addEventListener('scroll',()=>{const prog=(window.scrollY/(document.documentElement.scrollHeight-window.innerHeight))*100;document.getElementById('progress-bar').style.width=prog+'%'});
 
-        // Smooth Scroll
-        function scrollToEnroll() {
-            const pricingSection = document.getElementById('pricing');
-            if (pricingSection) {
-                pricingSection.scrollIntoView({ behavior: 'smooth' });
-            }
-        }
-    </script>
+document.getElementById('mobileMenuBtn').addEventListener('click',function(){const nav=document.getElementById('navLinks');nav.classList.toggle('active');this.textContent=nav.classList.contains('active')?'✕':'☰'});
+
+document.getElementById('closeModal').addEventListener('click',close);
+document.getElementById('videoModal').addEventListener('click',e=>{if(e.target.id==='videoModal')close()});
+document.addEventListener('keydown',e=>{if(e.key==='Escape'&&document.getElementById('videoModal').classList.contains('active'))close()});
+
+window.openVideo=openVideo;
+window.like=like;
+window.dislike=dislike;
+window.addComment=addComment;
+
+render();
+</script>
 </body>
 </html>
