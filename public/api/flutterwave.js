@@ -44,7 +44,7 @@ export default async function handler(req, res) {
     // 💰 5️⃣ Only handle successful ₦10,000 payments
     if (
       (status === "successful" || status === "charge.completed") &&
-      amount === 10000 &&
+      amount === 10500 &&
       currency === "NGN"
     ) {
       console.log(
