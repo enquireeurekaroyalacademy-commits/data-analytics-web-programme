@@ -887,6 +887,9 @@ button:hover {
         </div>
     </section>
 
+
+
+
     <!-- Story Section -->
     <section class="story-section" id="story">
         <div class="story-container">
@@ -970,6 +973,246 @@ button:hover {
             </div>
         </div>
     </section>
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cohort 1 Date Card</title>
+    <style>
+        :root {
+            --primary-blue: #0B5CFF;
+            --navy-dark: #0e1525;
+            --navy-medium: #1a2236;
+            --accent-purple: #6366f1;
+            --text-light: #ffffff;
+            --text-gray: #a0aec0;
+            --bg-light: #f7fafc;
+            --success-green: #10b981;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            margin: 0;
+            padding: 40px 20px;
+            background: var(--bg-light);
+        }
+
+        /* Programme Date Section */
+        .programme-date-section {
+            padding: 80px 2rem;
+            background: var(--bg-light);
+        }
+
+        .date-announcement {
+            max-width: 1000px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 16px;
+            box-shadow: 0 8px 24px rgba(0,0,0,0.08);
+            overflow: hidden;
+        }
+
+        .date-header {
+            background: linear-gradient(135deg, var(--primary-blue) 0%, var(--accent-purple) 100%);
+            padding: 3rem 2rem;
+            text-align: center;
+            position: relative;
+        }
+
+        .cohort-label {
+            display: inline-block;
+            background: white;
+            color: var(--primary-blue);
+            padding: 0.5rem 1.5rem;
+            border-radius: 50px;
+            font-size: 0.9rem;
+            font-weight: 700;
+            margin-bottom: 1.5rem;
+            letter-spacing: 1px;
+        }
+
+        .date-header h2 {
+            color: white;
+            font-size: 2rem;
+            margin-bottom: 1rem;
+            font-weight: 600;
+        }
+
+        .main-date-display {
+            font-size: 4rem;
+            font-weight: 700;
+            color: white;
+            margin: 1.5rem 0;
+            line-height: 1.1;
+            letter-spacing: -1px;
+        }
+
+        .time-display {
+            font-size: 2.5rem;
+            color: rgba(255, 255, 255, 0.95);
+            font-weight: 600;
+            margin-top: 1rem;
+        }
+
+        .date-body {
+            padding: 3rem 2rem;
+        }
+
+        .info-boxes {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .info-box {
+            background: var(--bg-light);
+            padding: 1.5rem;
+            border-radius: 12px;
+            border-left: 4px solid var(--primary-blue);
+        }
+
+        .info-box-icon {
+            font-size: 1.5rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .info-box h4 {
+            color: var(--navy-dark);
+            font-size: 1.1rem;
+            margin-bottom: 0.5rem;
+            font-weight: 600;
+        }
+
+        .info-box p {
+            color: #666;
+            font-size: 0.95rem;
+            line-height: 1.6;
+            margin: 0;
+        }
+
+        .schedule-note {
+            background: rgba(11, 92, 255, 0.05);
+            border: 2px solid rgba(11, 92, 255, 0.2);
+            padding: 1rem 1.5rem;
+            border-radius: 10px;
+            margin-bottom: 2rem;
+            text-align: center;
+        }
+
+        .schedule-note p {
+            color: var(--navy-dark);
+            font-size: 0.95rem;
+            margin: 0;
+            font-weight: 500;
+        }
+
+        .price-warning {
+            background: linear-gradient(135deg, var(--primary-blue) 0%, var(--accent-purple) 100%);
+            padding: 2rem;
+            border-radius: 12px;
+            text-align: center;
+            color: white;
+        }
+
+        .price-warning h3 {
+            font-size: 1.5rem;
+            margin-bottom: 1rem;
+            font-weight: 700;
+        }
+
+        .price-warning p {
+            font-size: 1.1rem;
+            line-height: 1.7;
+            margin: 0;
+        }
+
+        .price-warning .highlight {
+            display: block;
+            font-size: 1.3rem;
+            font-weight: 700;
+            margin-top: 1rem;
+            background: rgba(255, 255, 255, 0.2);
+            padding: 0.8rem;
+            border-radius: 8px;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .main-date-display {
+                font-size: 2.5rem;
+            }
+
+            .time-display {
+                font-size: 1.8rem;
+            }
+
+            .date-header {
+                padding: 2rem 1.5rem;
+            }
+
+            .date-body {
+                padding: 2rem 1.5rem;
+            }
+
+            .info-boxes {
+                grid-template-columns: 1fr;
+                gap: 1rem;
+            }
+
+            .price-warning h3 {
+                font-size: 1.2rem;
+            }
+
+            .price-warning p {
+                font-size: 1rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- PROGRAMME DATE SECTION - Copy from here -->
+    <section class="programme-date-section">
+        <div class="date-announcement">
+            <div class="date-header">
+                <div class="cohort-label">COHORT 1</div>
+                <h2>Programme Starts</h2>
+                <div class="main-date-display">15TH MARCH 2025</div>
+                <div class="time-display">9PM WAT</div>
+            </div>
+
+            <div class="date-body">
+                <div class="info-boxes">
+                    <div class="info-box">
+                        <div class="info-box-icon">📅</div>
+                        <h4>Live Classes Twice Weekly</h4>
+                        <p>Interactive sessions with Q&A. All classes recorded and available for replay</p>
+                    </div>
+
+                    <div class="info-box">
+                        <div class="info-box-icon">🎥</div>
+                        <h4>Recordings Available</h4>
+                        <p>Can't make it live? Watch recordings uploaded within 24 hours</p>
+                    </div>
+                </div>
+
+                <div class="schedule-note">
+                    <p>⏰ Classes are mostly held in evenings West African Time (7PM / 8PM / 9PM)</p>
+                </div>
+
+                <div class="price-warning">
+                    <h3>⚠️ IMPORTANT PRICING UPDATE</h3>
+                    <p>Any payment made after 15th March 2025 will be charged at ₦15,000</p>
+                    <span class="highlight">Early payments are encouraged! Lock in ₦10,500 now</span>
+                </div>
+            </div>
+        </div>
+    </section>
+    <!-- END PROGRAMME DATE SECTION - Copy to here -->
+
 
     <!-- Testimonial Section -->
     <section class="testimonial-section" id="testimonial">
@@ -2175,6 +2418,356 @@ button:hover {
 </div>
 
 
+   <style>
+        :root {
+            --primary-blue: #0B5CFF;
+            --navy-dark: #0e1525;
+            --navy-medium: #1a2236;
+            --accent-purple: #6366f1;
+            --text-light: #ffffff;
+            --text-gray: #a0aec0;
+            --bg-light: #f7fafc;
+            --success-green: #10b981;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            margin: 0;
+            padding: 40px 20px;
+            background: var(--bg-light);
+        }
+
+        /* Programme Date Section - Ready to plug into main code */
+        .programme-date-section {
+            padding: 80px 2rem;
+            background: white;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .date-card-container {
+            max-width: 1000px;
+            margin: 0 auto;
+            position: relative;
+        }
+
+        .date-card {
+            background: linear-gradient(135deg, var(--navy-dark) 0%, var(--navy-medium) 100%);
+            border-radius: 20px;
+            padding: 3rem;
+            position: relative;
+            overflow: hidden;
+            box-shadow: 0 16px 40px rgba(0,0,0,0.2);
+            animation: cardPulse 3s ease-in-out infinite;
+        }
+
+        @keyframes cardPulse {
+            0%, 100% {
+                box-shadow: 0 16px 40px rgba(0,0,0,0.2);
+            }
+            50% {
+                box-shadow: 0 20px 50px rgba(11, 92, 255, 0.4);
+            }
+        }
+
+        .date-card::before {
+            content: '';
+            position: absolute;
+            top: -100px;
+            right: -100px;
+            width: 400px;
+            height: 400px;
+            background: radial-gradient(circle, rgba(11, 92, 255, 0.3) 0%, transparent 70%);
+            border-radius: 50%;
+            animation: float 6s ease-in-out infinite;
+        }
+
+        .date-card::after {
+            content: '';
+            position: absolute;
+            bottom: -150px;
+            left: -100px;
+            width: 500px;
+            height: 500px;
+            background: radial-gradient(circle, rgba(99, 102, 241, 0.2) 0%, transparent 70%);
+            border-radius: 50%;
+            animation: float 8s ease-in-out infinite reverse;
+        }
+
+        @keyframes float {
+            0%, 100% {
+                transform: translateY(0) translateX(0);
+            }
+            50% {
+                transform: translateY(-20px) translateX(20px);
+            }
+        }
+
+        .date-content {
+            position: relative;
+            z-index: 2;
+            text-align: center;
+        }
+
+        .cohort-badge {
+            display: inline-block;
+            background: var(--success-green);
+            color: white;
+            padding: 0.5rem 1.5rem;
+            border-radius: 50px;
+            font-size: 0.9rem;
+            font-weight: 600;
+            margin-bottom: 2rem;
+            animation: pulse 2s ease-in-out infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% {
+                transform: scale(1);
+                opacity: 1;
+            }
+            50% {
+                transform: scale(1.05);
+                opacity: 0.9;
+            }
+        }
+
+        .main-date {
+            font-size: 3.5rem;
+            font-weight: 700;
+            color: var(--text-light);
+            margin-bottom: 1rem;
+            line-height: 1.2;
+            animation: slideInUp 0.8s ease;
+        }
+
+        .date-highlight {
+            color: var(--primary-blue);
+            display: block;
+            font-size: 4rem;
+            text-shadow: 0 0 30px rgba(11, 92, 255, 0.5);
+            animation: glow 2s ease-in-out infinite;
+        }
+
+        @keyframes glow {
+            0%, 100% {
+                text-shadow: 0 0 30px rgba(11, 92, 255, 0.5);
+            }
+            50% {
+                text-shadow: 0 0 40px rgba(11, 92, 255, 0.8), 0 0 60px rgba(11, 92, 255, 0.4);
+            }
+        }
+
+        @keyframes slideInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .time-detail {
+            font-size: 2rem;
+            color: var(--text-gray);
+            margin-bottom: 2.5rem;
+            animation: slideInUp 1s ease;
+        }
+
+        .info-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
+            margin-top: 3rem;
+            animation: slideInUp 1.2s ease;
+        }
+
+        .info-item {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            padding: 1.5rem;
+            border-radius: 12px;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            transition: all 0.3s ease;
+        }
+
+        .info-item:hover {
+            background: rgba(255, 255, 255, 0.15);
+            transform: translateY(-5px);
+            box-shadow: 0 8px 20px rgba(0,0,0,0.2);
+        }
+
+        .info-icon {
+            font-size: 2rem;
+            margin-bottom: 0.8rem;
+        }
+
+        .info-item h4 {
+            color: var(--text-light);
+            font-size: 1.1rem;
+            margin-bottom: 0.5rem;
+            font-weight: 600;
+        }
+
+        .info-item p {
+            color: var(--text-gray);
+            font-size: 0.95rem;
+            line-height: 1.6;
+            margin: 0;
+        }
+
+        .pricing-alert {
+            background: linear-gradient(135deg, rgba(255, 59, 48, 0.2), rgba(255, 149, 0, 0.2));
+            border: 2px solid rgba(255, 59, 48, 0.4);
+            padding: 1.5rem;
+            border-radius: 12px;
+            margin-top: 2.5rem;
+            text-align: center;
+            animation: slideInUp 1.4s ease;
+        }
+
+        .pricing-alert h4 {
+            color: #ff3b30;
+            font-size: 1.3rem;
+            margin-bottom: 0.5rem;
+            font-weight: 700;
+        }
+
+        .pricing-alert p {
+            color: var(--text-light);
+            font-size: 1.05rem;
+            margin: 0;
+            line-height: 1.6;
+        }
+
+        .pricing-alert strong {
+            color: var(--text-light);
+            font-size: 1.2rem;
+        }
+
+        .time-zone-note {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: rgba(11, 92, 255, 0.2);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(11, 92, 255, 0.4);
+            padding: 0.8rem 1.2rem;
+            border-radius: 8px;
+            font-size: 0.85rem;
+            color: var(--text-light);
+            animation: fadeIn 1.6s ease;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+            }
+            to {
+                opacity: 1;
+            }
+        }
+
+        .time-zone-note strong {
+            display: block;
+            margin-bottom: 0.3rem;
+            color: var(--primary-blue);
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .date-card {
+                padding: 2rem 1.5rem;
+            }
+
+            .main-date {
+                font-size: 2.2rem;
+            }
+
+            .date-highlight {
+                font-size: 2.8rem;
+            }
+
+            .time-detail {
+                font-size: 1.5rem;
+            }
+
+            .info-grid {
+                grid-template-columns: 1fr;
+                gap: 1rem;
+            }
+
+            .time-zone-note {
+                position: static;
+                margin-bottom: 2rem;
+                text-align: center;
+            }
+
+            .pricing-alert h4 {
+                font-size: 1.1rem;
+            }
+
+            .pricing-alert p {
+                font-size: 0.95rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- PROGRAMME DATE SECTION - Copy everything from here -->
+    <section class="programme-date-section">
+        <div class="date-card-container">
+            <div class="date-card">
+                <div class="time-zone-note">
+                    <strong>⏰ Class Times</strong>
+                    Evenings WAT<br>
+                    (7PM / 8PM / 9PM)
+                </div>
+                
+                <div class="date-content">
+                    <div class="cohort-badge">🔥 COHORT 1 - LIMITED SPOTS</div>
+                    
+                    <h2 class="main-date">
+                        Programme Starts<br>
+                        <span class="date-highlight">15TH MARCH 2025</span>
+                    </h2>
+                    
+                    <p class="time-detail">📍 9PM WAT</p>
+                    
+                    <div class="info-grid">
+                        <div class="info-item">
+                            <div class="info-icon">📅</div>
+                            <h4>Live Classes</h4>
+                            <p>Twice weekly with full recordings available for replay anytime</p>
+                        </div>
+                        
+                        <div class="info-item">
+                            <div class="info-icon">🎥</div>
+                            <h4>Never Miss a Class</h4>
+                            <p>All sessions recorded and uploaded within 24 hours</p>
+                        </div>
+                        
+                        <div class="info-item">
+                            <div class="info-icon">🌍</div>
+                            <h4>Evening Schedule</h4>
+                            <p>Perfect for students and working professionals across West Africa</p>
+                        </div>
+                    </div>
+                    
+                    <div class="pricing-alert">
+                        <h4>⚠️ PRICE INCREASE ALERT</h4>
+                        <p>
+                            Any payment made <strong>AFTER 15th March 2025</strong> will be charged at <strong>₦15,000</strong><br>
+                            <span style="color: var(--success-green); font-weight: 600;">Early payments are strongly encouraged! Secure ₦10,500 rate now.</span>
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
 
     <!-- FAQ Section -->
     <section class="faq-section" id="faq">
@@ -2491,7 +3084,7 @@ button:hover {
         const observerOptions = {
             threshold: 0.1,
             rootMargin: '0px 0px -100px 0px'
-        };
+        }; 
 
         const observer = new IntersectionObserver((entries) => {
             entries.forEach(entry => {
