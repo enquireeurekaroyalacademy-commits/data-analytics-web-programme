@@ -1,624 +1,1078 @@
-<!DOCTYPE html> 
-<html lang="en"> 
-<head> 
-    <meta charset="UTF-8"> 
-    <meta name="viewport" content="width=device-width, initial-scale=1.0"> 
-    <title>Data Analytics Training - Christiana Churchill</title> 
-    <link rel="icon" type="image/png" href="/global-education.png"> 
-    <link rel="preconnect" href="https://fonts.googleapis.com"> 
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin> 
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet"> 
-    <style> 
-        * { 
-            margin: 0; 
-            padding: 0; 
-            box-sizing: border-box; 
-        } 
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Enrol Now - Data Analytics Training</title>
+<link rel="icon" type="image/png" href="/global-education.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
+<style>
+* {
+margin: 0;
+padding: 0;
+box-sizing: border-box;
+}
+:root {
+--primary-blue: #0B5CFF;
+--navy-dark: #0e1525;
+--navy-medium: #1a2236;
+--accent-purple: #6366f1;
+--text-light: #ffffff;
+--text-gray: #a0aec0;
+--bg-light: #f7fafc;
+--success-green: #10b981;
+}
+body {
+font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+line-height: 1.6;
+color: #333;
+overflow-x: hidden;
+}
+#progress-bar {
+position: fixed;
+top: 0;
+left: 0;
+height: 4px;
+background: linear-gradient(90deg, var(--primary-blue), var(--accent-purple));
+width: 0%;
+z-index: 9999;
+transition: width 0.1s ease;
+}
+nav {
+position: fixed;
+top: 0;
+width: 100%;
+background: var(--navy-dark);
+padding: 1rem 0;
+z-index: 1000;
+box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+}
+.nav-container {
+max-width: 1400px;
+margin: 0 auto;
+padding: 0 2rem;
+display: flex;
+justify-content: space-between;
+align-items: center;
+}
+.logo {
+font-size: 1.8rem;
+font-weight: 700;
+color: var(--text-light);
+text-decoration: none;
+}
+.nav-links {
+display: flex;
+gap: 2rem;
+align-items: center;
+list-style: none;
+}
+.nav-links a {
+color: var(--text-light);
+text-decoration: none;
+font-weight: 500;
+transition: color 0.3s;
+}
+.nav-links a:hover {
+color: var(--primary-blue);
+}
+.cta-nav {
+background: var(--primary-blue);
+padding: 0.7rem 1.5rem;
+border-radius: 8px;
+border: none;
+color: white;
+font-weight: 600;
+cursor: pointer;
+transition: all 0.3s;
+text-decoration: none;
+}
+.cta-nav:hover {
+background: #0948d4;
+transform: translateY(-2px);
+box-shadow: 0 4px 12px rgba(11, 92, 255, 0.4);
+}
+.mobile-menu-btn {
+display: none;
+background: none;
+border: none;
+color: white;
+font-size: 1.5rem;
+cursor: pointer;
+}
+.hero {
+background: linear-gradient(135deg, var(--navy-dark) 0%, var(--navy-medium) 100%);
+padding: 140px 2rem 100px;
+text-align: center;
+position: relative;
+overflow: hidden;
+}
+.hero::before {
+content: '';
+position: absolute;
+top: -50%;
+right: -20%;
+width: 800px;
+height: 800px;
+background: radial-gradient(circle, rgba(11, 92, 255, 0.15) 0%, transparent 70%);
+border-radius: 50%;
+}
+.hero-content {
+max-width: 900px;
+margin: 0 auto;
+position: relative;
+z-index: 1;
+}
+.banner-tag {
+display: inline-block;
+background: linear-gradient(90deg, rgba(11, 92, 255, 0.2), rgba(99, 102, 241, 0.2));
+border: 1px solid rgba(11, 92, 255, 0.3);
+padding: 0.5rem 1.5rem;
+border-radius: 50px;
+color: var(--text-light);
+font-size: 0.9rem;
+margin-bottom: 2rem;
+animation: fadeInUp 0.6s ease;
+}
+h1 {
+font-size: 3.5rem;
+color: var(--text-light);
+margin-bottom: 1.5rem;
+line-height: 1.2;
+animation: fadeInUp 0.8s ease;
+}
+.hero p {
+font-size: 1.3rem;
+color: var(--text-gray);
+margin-bottom: 2.5rem;
+max-width: 700px;
+margin-left: auto;
+margin-right: auto;
+animation: fadeInUp 1s ease;
+}
+.hero-buttons {
+display: flex;
+gap: 1.5rem;
+justify-content: center;
+flex-wrap: wrap;
+animation: fadeInUp 1.2s ease;
+}
+.btn-primary {
+background: var(--primary-blue);
+color: white;
+padding: 1rem 2.5rem;
+border: none;
+border-radius: 8px;
+font-size: 1.1rem;
+font-weight: 600;
+cursor: pointer;
+transition: all 0.3s;
+text-decoration: none;
+display: inline-block;
+}
+.btn-primary:hover {
+background: #0948d4;
+transform: translateY(-3px);
+box-shadow: 0 8px 20px rgba(11, 92, 255, 0.4);
+}
+.btn-secondary {
+background: transparent;
+color: white;
+padding: 1rem 2.5rem;
+border: 2px solid white;
+border-radius: 8px;
+font-size: 1.1rem;
+font-weight: 600;
+cursor: pointer;
+transition: all 0.3s;
+text-decoration: none;
+display: inline-block;
+}
+.btn-secondary:hover {
+background: white;
+color: var(--navy-dark);
+transform: translateY(-3px);
+}
+.payment-section {
+background: linear-gradient(135deg, #1E40AF 0%, #3B82F6 100%);
+padding: 100px 2rem;
+display: flex;
+justify-content: center;
+align-items: center;
+min-height: 100vh;
+}
+.payment-wrapper {
+backdrop-filter: blur(18px);
+background: rgba(255, 255, 255, 0.15);
+padding: 3rem 2rem;
+border-radius: 20px;
+max-width: 550px;
+width: 100%;
+box-shadow: 0 25px 60px rgba(0, 0, 0, 0.35);
+border: 1px solid rgba(255, 255, 255, 0.2);
+animation: floatIn 0.6s ease;
+}
+@keyframes floatIn {
+0% { transform: translateY(30px); opacity: 0; }
+100% { transform: translateY(0); opacity: 1; }
+}
+.payment-wrapper h1 {
+font-size: 2rem;
+font-weight: 800;
+text-align: center;
+margin-bottom: 0.5rem;
+background: linear-gradient(90deg, #FFFFFF, #E0E7FF);
+-webkit-background-clip: text;
+-webkit-text-fill-color: transparent;
+color: white;
+}
+.payment-wrapper p.subtext {
+text-align: center;
+font-size: 1rem;
+color: #E0E7FF;
+margin-bottom: 2rem;
+line-height: 1.6;
+}
+.input-field {
+margin-bottom: 1.5rem;
+}
+.input-field label {
+display: block;
+color: white;
+font-weight: 600;
+margin-bottom: 0.5rem;
+font-size: 0.95rem;
+}
+.input-field input[type="email"],
+.input-field input[type="text"],
+.input-field select {
+width: 100%;
+padding: 1rem;
+font-size: 1rem;
+border: 1px solid rgba(255, 255, 255, 0.25);
+background: rgba(255, 255, 255, 0.08);
+color: white;
+border-radius: 12px;
+outline: none;
+transition: all 0.3s ease;
+font-family: inherit;
+}
+.input-field input::placeholder {
+color: rgba(255, 255, 255, 0.6);
+}
+.input-field input:focus,
+.input-field select:focus {
+border-color: #60A5FA;
+background: rgba(255, 255, 255, 0.15);
+}
+.input-field select {
+cursor: pointer;
+}
+.input-field select option {
+background: #1E40AF;
+color: white;
+padding: 0.5rem;
+}
+.referral-section {
+background: rgba(255, 255, 255, 0.05);
+padding: 1.5rem;
+border-radius: 16px;
+border: 1px solid rgba(255, 255, 255, 0.1);
+margin-bottom: 1.5rem;
+}
+.referral-section h3 {
+color: white;
+font-size: 1.1rem;
+margin-bottom: 1rem;
+font-weight: 600;
+}
+.referral-info {
+background: rgba(16, 185, 129, 0.1);
+border-left: 3px solid #10b981;
+padding: 1rem;
+border-radius: 8px;
+margin-bottom: 1rem;
+}
+.referral-info p {
+color: #E0E7FF;
+font-size: 0.9rem;
+line-height: 1.6;
+margin: 0;
+}
+.radio-group {
+display: flex;
+flex-direction: column;
+gap: 1rem;
+margin-bottom: 1rem;
+}
+.radio-option {
+display: flex;
+align-items: center;
+gap: 0.75rem;
+padding: 1rem;
+background: rgba(255, 255, 255, 0.05);
+border-radius: 12px;
+border: 2px solid transparent;
+cursor: pointer;
+transition: all 0.3s ease;
+}
+.radio-option:hover {
+background: rgba(255, 255, 255, 0.1);
+border-color: rgba(255, 255, 255, 0.2);
+}
+.radio-option.selected {
+background: rgba(16, 185, 129, 0.15);
+border-color: #10b981;
+}
+.radio-option input[type="radio"] {
+width: 20px;
+height: 20px;
+cursor: pointer;
+accent-color: #10b981;
+}
+.radio-option label {
+color: white;
+font-size: 1rem;
+cursor: pointer;
+margin: 0;
+flex: 1;
+}
+#referrerDropdownField {
+display: none;
+margin-top: 1rem;
+animation: slideDown 0.3s ease;
+}
+@keyframes slideDown {
+from {
+opacity: 0;
+transform: translateY(-10px);
+}
+to {
+opacity: 1;
+transform: translateY(0);
+}
+}
+.payment-wrapper button {
+background: linear-gradient(90deg, #2563EB 0%, #1E40AF 100%);
+color: white;
+border: none;
+width: 100%;
+padding: 1.2rem;
+font-size: 1.1rem;
+font-weight: 600;
+border-radius: 12px;
+cursor: pointer;
+transition: all 0.3s ease;
+position: relative;
+overflow: hidden;
+}
+.payment-wrapper button:hover:not(:disabled) {
+transform: translateY(-2px);
+box-shadow: 0 10px 25px rgba(37, 99, 235, 0.35);
+}
+.payment-wrapper button:disabled {
+opacity: 0.6;
+cursor: not-allowed;
+}
+.spinner {
+display: inline-block;
+width: 16px;
+height: 16px;
+border: 3px solid rgba(255, 255, 255, 0.3);
+border-radius: 50%;
+border-top-color: white;
+animation: spin 0.8s linear infinite;
+margin-left: 10px;
+vertical-align: middle;
+}
+@keyframes spin {
+to { transform: rotate(360deg); }
+}
+.notice-box {
+background: rgba(255, 255, 255, 0.05);
+border: 1px solid rgba(255, 255, 255, 0.1);
+border-radius: 12px;
+padding: 1rem;
+margin-top: 1.5rem;
+font-size: 0.9rem;
+color: #E0E7FF;
+line-height: 1.5;
+}
+.notice-box strong {
+color: white;
+display: block;
+margin-bottom: 0.3rem;
+font-weight: 600;
+}
+.mail-link {
+color: #93C5FD;
+text-decoration: underline;
+transition: color 0.2s ease;
+}
+.mail-link:hover {
+color: #BFDBFE;
+}
+.error-message {
+background: rgba(239, 68, 68, 0.2);
+border: 1px solid #ef4444;
+color: #fecaca;
+padding: 1rem;
+border-radius: 12px;
+margin-bottom: 1rem;
+display: none;
+}
+.error-message.show {
+display: block;
+animation: shake 0.5s ease;
+}
+@keyframes shake {
+0%, 100% { transform: translateX(0); }
+25% { transform: translateX(-10px); }
+75% { transform: translateX(10px); }
+}
+.modal {
+display: none;
+position: fixed;
+z-index: 10000;
+left: 0;
+top: 0;
+width: 100%;
+height: 100%;
+background-color: rgba(0, 0, 0, 0.8);
+animation: fadeIn 0.3s ease;
+}
+@keyframes fadeIn {
+from { opacity: 0; }
+to { opacity: 1; }
+}
+.modal-content {
+background: linear-gradient(135deg, #1E40AF 0%, #3B82F6 100%);
+margin: 10% auto;
+padding: 2.5rem;
+border-radius: 20px;
+max-width: 500px;
+box-shadow: 0 25px 60px rgba(0, 0, 0, 0.5);
+border: 1px solid rgba(255, 255, 255, 0.2);
+animation: slideDown2 0.4s ease;
+}
+@keyframes slideDown2 {
+from {
+transform: translateY(-50px);
+opacity: 0;
+}
+to {
+transform: translateY(0);
+opacity: 1;
+}
+}
+.modal-content h2 {
+color: white;
+font-size: 1.8rem;
+margin-bottom: 1.5rem;
+text-align: center;
+}
+.modal-content p {
+color: #E0E7FF;
+font-size: 1rem;
+line-height: 1.7;
+margin-bottom: 2rem;
+text-align: center;
+}
+.modal-buttons {
+display: flex;
+gap: 1rem;
+justify-content: center;
+flex-wrap: wrap;
+}
+.modal-btn {
+padding: 0.9rem 2rem;
+border: none;
+border-radius: 12px;
+font-size: 1rem;
+font-weight: 600;
+cursor: pointer;
+transition: all 0.3s ease;
+}
+.modal-btn-confirm {
+background: #ef4444;
+color: white;
+}
+.modal-btn-confirm:hover {
+background: #dc2626;
+transform: translateY(-2px);
+box-shadow: 0 4px 12px rgba(239, 68, 68, 0.4);
+}
+.modal-btn-cancel {
+background: rgba(255, 255, 255, 0.2);
+color: white;
+}
+.modal-btn-cancel:hover {
+background: rgba(255, 255, 255, 0.3);
+transform: translateY(-2px);
+}
+footer {
+background: var(--navy-dark);
+color: white;
+padding: 60px 2rem 30px;
+text-align: center;
+}
+.footer-content {
+max-width: 800px;
+margin: 0 auto;
+}
+.footer-content p {
+color: var(--text-gray);
+margin-bottom: 1rem;
+}
+.footer-bottom {
+margin-top: 3rem;
+padding-top: 2rem;
+border-top: 1px solid rgba(255,255,255,0.1);
+color: var(--text-gray);
+}
+@keyframes fadeInUp {
+from {
+opacity: 0;
+transform: translateY(30px);
+}
+to {
+opacity: 1;
+transform: translateY(0);
+}
+}
+@media (max-width: 768px) {
+.logo {
+font-size: 1.3rem;
+}
+h1 {
+font-size: 2.5rem;
+}
+.hero p {
+font-size: 1.1rem;
+}
+.hero-buttons {
+flex-direction: column;
+}
+.mobile-menu-btn {
+display: block;
+}
+.nav-links {
+display: none;
+position: fixed;
+top: 70px;
+right: 0;
+background: rgba(14, 21, 37, 0.98);
+backdrop-filter: blur(20px);
+width: 100%;
+padding: 2rem;
+flex-direction: column;
+gap: 1.5rem;
+box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+}
+.nav-links.active {
+display: flex;
+}
+.nav-links li {
+width: 100%;
+text-align: center;
+}
+.cta-nav {
+width: 100%;
+}
+.modal-content {
+margin: 20% auto;
+padding: 2rem 1.5rem;
+}
+.modal-buttons {
+flex-direction: column;
+}
+.modal-btn {
+width: 100%;
+}
+.payment-wrapper {
+padding: 2rem 1.5rem;
+}
+}
+</style>
+</head>
+<body>
+<div id="progress-bar"></div>
+
+<nav>
+<div class="nav-container">
+<a href="https://data-analytics-by-christiana.web.app/" class="logo">Learn Tech Skills That Pay</a>
+<ul class="nav-links">
+<li><a href="https://data-analytics-by-christiana.web.app/">Home</a></li>
+<li><a href="https://data-analytics-by-christiana.web.app/about/">About</a></li>
+<li><a href="https://data-analytics-by-christiana.web.app/contact/">Contact Us</a></li>
+<li><a href="https://data-analytics-by-christiana.web.app/access/">Dashboard</a></li>
+<li><button class="cta-nav" onclick="scrollToEnroll()">Enrol Now</button></li>
+</ul>
+<button class="mobile-menu-btn">☰</button>
+</div>
+</nav>
+
+<section class="hero" id="hero">
+<div class="hero-content">
+<div class="banner-tag">💸 Build the income streams that create lasting wealth</div>
+<h1>Turn Data Into Income</h1>
+<p>13-week programme that teaches you to analyse data, build dashboards, and land jobs that pay</p>
+<div class="hero-buttons">
+<a href="#enroll" class="btn-primary" onclick="event.preventDefault(); scrollToEnroll();">Enrol Now - ₦10,500</a>
+<a href="https://data-analytics-by-christiana.web.app/about/" class="btn-secondary">Learn More</a>
+</div>
+</div>
+</section>
+
+<section class="payment-section" id="enroll">
+<div class="payment-wrapper">
+<h1>Enrol Now – ₦10,500</h1>
+<p class="subtext">Gain full access to your programme dashboard instantly after payment. Your journey begins immediately.</p>
+
+<div class="error-message" id="errorMessage"></div>
+
+<div class="input-field">
+<label for="customerName">Your Full Name *</label>
+<input type="text" id="customerName" placeholder="Enter your full name" required autocomplete="name" />
+</div>
+
+<div class="input-field">
+<label for="email">Your Email Address *</label>
+<input type="email" id="email" placeholder="Enter your email address" required autocomplete="email" />
+</div>
+
+<!-- Referral Section -->
+<div class="referral-section">
+<h3>🎁 Referral Information</h3>
+<div class="referral-info">
+<p><strong>Important:</strong> If someone referred you to this programme (friend, social media, WhatsApp, etc.), please select them below so they can receive their commission. They only get paid if you select them!</p>
+</div>
+
+<div class="radio-group">
+<div class="radio-option" data-value="yes">
+<input type="radio" id="hasReferrer" name="referralChoice" value="yes">
+<label for="hasReferrer">Yes, someone referred me</label>
+</div>
+<div class="radio-option" data-value="no">
+<input type="radio" id="noReferrer" name="referralChoice" value="no">
+<label for="noReferrer">No, I found this on my own</label>
+</div>
+</div>
+
+<div id="referrerDropdownField">
+<div class="input-field">
+<label for="referrerSelect">Who referred you? *</label>
+<select id="referrerSelect">
+<option value="">Loading partners...</option>
+</select>
+</div>
+</div>
+</div>
+
+<button id="payBtn">Proceed to Secure Payment</button>
+
+<div class="notice-box">
+<strong>Important:</strong>
+• You'll receive your Course Access ID in your email after successful payment.<br/>
+• Check your spam folder if you don't see it in 5 minutes.<br/>
+• Didn't receive an email? <a href="https://data-analytics-by-christiana.web.app/contact/" class="mail-link">Contact Support</a>.
+</div>
+</div>
+</section>
+
+<!-- Confirmation Modal -->
+<div id="confirmModal" class="modal">
+<div class="modal-content">
+<h2>⚠️ Are You Sure?</h2>
+<p>If someone referred you to this programme (whether on social media, WhatsApp, in person, or any other way) and you don't select them, <strong>they will not receive their commission</strong>.</p>
+<p>Please take a moment to think if anyone shared this opportunity with you.</p>
+<div class="modal-buttons">
+<button class="modal-btn modal-btn-cancel" id="goBackBtn">Go Back & Check</button>
+<button class="modal-btn modal-btn-confirm" id="confirmNoReferrer">I'm Sure - No Referrer</button>
+</div>
+</div>
+</div>
+
+<footer>
+<div class="footer-content">
+<h3 style="font-size: 1.8rem; margin-bottom: 1rem;">Christiana Churchill</h3>
+<p style="line-height: 1.8; font-size: 1.05rem;">Empowering Nigerians with in-demand tech skills to build careers that pay in dollars. One student at a time.</p>
+<p style="margin-top: 2rem;">Data Analytics Training Programme</p>
+<p>Transforming careers across Africa</p>
+</div>
+<div class="footer-bottom">
+<p>&copy; 2025 Christiana Churchill. All rights reserved.</p>
+<p style="margin-top: 0.5rem;">Making tech accessible to everyone</p>
+</div>
+</footer>
+
+<script src="https://checkout.flutterwave.com/v3.js"></script>
+<script>
+// ==================== CONFIGURATION ====================
+// ⚠️ REPLACE WITH YOUR GOOGLE APPS SCRIPT WEB APP URL
+const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbxAWvguQxslzeOuNcyBFwHN61D5cuA-aj6GWb2COjIWNKZYcw-d4XEeeFeKoBgQXH2F/exec';
+
+// ==================== GLOBAL STATE ====================
+let partnersData = [];
+let isProcessingPayment = false;
+
+// ==================== DOM ELEMENTS ====================
+const elements = {
+  customerName: document.getElementById('customerName'),
+  email: document.getElementById('email'),
+  hasReferrer: document.getElementById('hasReferrer'),
+  noReferrer: document.getElementById('noReferrer'),
+  referrerDropdownField: document.getElementById('referrerDropdownField'),
+  referrerSelect: document.getElementById('referrerSelect'),
+  payBtn: document.getElementById('payBtn'),
+  confirmModal: document.getElementById('confirmModal'),
+  goBackBtn: document.getElementById('goBackBtn'),
+  confirmNoReferrerBtn: document.getElementById('confirmNoReferrer'),
+  errorMessage: document.getElementById('errorMessage'),
+  radioOptions: document.querySelectorAll('.radio-option')
+};
+
+// ==================== UTILITY FUNCTIONS ====================
+function showError(message) {
+  elements.errorMessage.textContent = message;
+  elements.errorMessage.classList.add('show');
+  setTimeout(() => {
+    elements.errorMessage.classList.remove('show');
+  }, 5000);
+}
+
+function validateEmail(email) {
+  const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+  return re.test(String(email).toLowerCase());
+}
+
+function setButtonState(loading) {
+  if (loading) {
+    elements.payBtn.disabled = true;
+    elements.payBtn.innerHTML = 'Processing... <span class="spinner"></span>';
+  } else {
+    elements.payBtn.disabled = false;
+    elements.payBtn.innerHTML = 'Proceed to Secure Payment';
+  }
+}
+
+// ==================== FETCH PARTNERS ====================
+async function fetchPartners() {
+  try {
+    console.log('🔄 Fetching partners from Google Sheet...');
+    
+    const response = await fetch(APPS_SCRIPT_URL);
+    
+    if (!response.ok) {
+      throw new Error(`HTTP error! status: ${response.status}`);
+    }
+    
+    const data = await response.json();
+    
+    if (data.success && Array.isArray(data.partners)) {
+      partnersData = data.partners;
+      populateDropdown();
+      console.log(`✅ Successfully loaded ${partnersData.length} partners`);
+    } else {
+      throw new Error(data.error || 'Invalid response format');
+    }
+  } catch (error) {
+    console.error('❌ Error fetching partners:', error);
+    elements.referrerSelect.innerHTML = '<option value="">Error loading partners - Please refresh</option>';
+    showError('Could not load referral partners. Please refresh the page.');
+  }
+}
+
+// ==================== POPULATE DROPDOWN ====================
+function populateDropdown() {
+  elements.referrerSelect.innerHTML = '<option value="">-- Select who referred you --</option>';
   
-        :root { 
-            --primary-blue: #0B5CFF; 
-            --navy-dark: #0e1525; 
-            --navy-medium: #1a2236; 
-            --accent-purple: #6366f1; 
-            --text-light: #ffffff; 
-            --text-gray: #a0aec0; 
-            --bg-light: #f7fafc; 
-            --success-green: #10b981; 
-        } 
- 
-        body { 
-            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif; 
-            line-height: 1.6; 
-            color: #333; 
-            overflow-x: hidden; 
-        } 
- 
-        #progress-bar { 
-            position: fixed; 
-            top: 0; 
-            left: 0; 
-            height: 4px; 
-            background: linear-gradient(90deg, var(--primary-blue), var(--accent-purple)); 
-            width: 0%; 
-            z-index: 9999; 
-            transition: width 0.1s ease; 
-        } 
- 
-        nav { 
-            position: fixed; 
-            top: 0; 
-            width: 100%; 
-            background: var(--navy-dark); 
-            padding: 1rem 0; 
-            z-index: 1000; 
-            box-shadow: 0 2px 10px rgba(0,0,0,0.1); 
-        } 
- 
-        .nav-container { 
-            max-width: 1400px; 
-            margin: 0 auto; 
-            padding: 0 2rem; 
-            display: flex; 
-            justify-content: space-between; 
-            align-items: center; 
-        } 
- 
-        .logo { 
-            font-size: 1.8rem; 
-            font-weight: 700; 
-            color: var(--text-light); 
-            text-decoration: none; 
-        } 
- 
-        .nav-links { 
-            display: flex; 
-            gap: 2rem; 
-            align-items: center; 
-            list-style: none; 
-        } 
- 
-        .nav-links a { 
-            color: var(--text-light); 
-            text-decoration: none; 
-            font-weight: 500; 
-            transition: color 0.3s; 
-        } 
- 
-        .nav-links a:hover { 
-            color: var(--primary-blue); 
-        } 
- 
-        .cta-nav { 
-            background: var(--primary-blue); 
-            padding: 0.7rem 1.5rem; 
-            border-radius: 8px; 
-            border: none; 
-            color: white; 
-            font-weight: 600; 
-            cursor: pointer; 
-            transition: all 0.3s; 
-            text-decoration: none; 
-        } 
- 
-        .cta-nav:hover { 
-            background: #0948d4; 
-            transform: translateY(-2px); 
-            box-shadow: 0 4px 12px rgba(11, 92, 255, 0.4); 
-        } 
- 
-        .mobile-menu-btn { 
-            display: none; 
-            background: none; 
-            border: none; 
-            color: white; 
-            font-size: 1.5rem; 
-            cursor: pointer; 
-        } 
- 
-        .hero { 
-            background: linear-gradient(135deg, var(--navy-dark) 0%, var(--navy-medium) 100%); 
-            padding: 140px 2rem 100px; 
-            text-align: center; 
-            position: relative; 
-            overflow: hidden; 
-        } 
- 
-        .hero::before { 
-            content: ''; 
-            position: absolute; 
-            top: -50%; 
-            right: -20%; 
-            width: 800px; 
-            height: 800px; 
-            background: radial-gradient(circle, rgba(11, 92, 255, 0.15) 0%, transparent 70%); 
-            border-radius: 50%; 
-        } 
- 
-        .hero-content { 
-            max-width: 900px; 
-            margin: 0 auto; 
-            position: relative; 
-            z-index: 1; 
-        } 
- 
-        .banner-tag { 
-            display: inline-block; 
-            background: linear-gradient(90deg, rgba(11, 92, 255, 0.2), rgba(99, 102, 241, 0.2)); 
-            border: 1px solid rgba(11, 92, 255, 0.3); 
-            padding: 0.5rem 1.5rem; 
-            border-radius: 50px; 
-            color: var(--text-light); 
-            font-size: 0.9rem; 
-            margin-bottom: 2rem; 
-            animation: fadeInUp 0.6s ease; 
-        } 
- 
-        h1 { 
-            font-size: 3.5rem; 
-            color: var(--text-light); 
-            margin-bottom: 1.5rem; 
-            line-height: 1.2; 
-            animation: fadeInUp 0.8s ease; 
-        } 
- 
-        .hero p { 
-            font-size: 1.3rem; 
-            color: var(--text-gray); 
-            margin-bottom: 2.5rem; 
-            max-width: 700px; 
-            margin-left: auto; 
-            margin-right: auto; 
-            animation: fadeInUp 1s ease; 
-        } 
- 
-        .hero-buttons { 
-            display: flex; 
-            gap: 1.5rem; 
-            justify-content: center; 
-            flex-wrap: wrap; 
-            animation: fadeInUp 1.2s ease; 
-        } 
- 
-        .btn-primary { 
-            background: var(--primary-blue); 
-            color: white; 
-            padding: 1rem 2.5rem; 
-            border: none; 
-            border-radius: 8px; 
-            font-size: 1.1rem; 
-            font-weight: 600; 
-            cursor: pointer; 
-            transition: all 0.3s; 
-            text-decoration: none; 
-            display: inline-block; 
-        } 
- 
-        .btn-primary:hover { 
-            background: #0948d4; 
-            transform: translateY(-3px); 
-            box-shadow: 0 8px 20px rgba(11, 92, 255, 0.4); 
-        } 
- 
-        .btn-secondary { 
-            background: transparent; 
-            color: white; 
-            padding: 1rem 2.5rem; 
-            border: 2px solid white; 
-            border-radius: 8px; 
-            font-size: 1.1rem; 
-            font-weight: 600; 
-            cursor: pointer; 
-            transition: all 0.3s; 
-            text-decoration: none; 
-            display: inline-block; 
-        } 
- 
-        .btn-secondary:hover { 
-            background: white; 
-            color: var(--navy-dark); 
-            transform: translateY(-3px); 
-        } 
- 
-        .payment-section { 
-            background: linear-gradient(135deg, #1E40AF 0%, #3B82F6 100%); 
-            padding: 100px 2rem; 
-            display: flex; 
-            justify-content: center; 
-            align-items: center; 
-            min-height: 100vh; 
-        } 
- 
-        .payment-wrapper { 
-            backdrop-filter: blur(18px); 
-            background: rgba(255, 255, 255, 0.15); 
-            padding: 3rem 2rem; 
-            border-radius: 20px; 
-            max-width: 520px; 
-            width: 100%; 
-            box-shadow: 0 25px 60px rgba(0, 0, 0, 0.35); 
-            border: 1px solid rgba(255, 255, 255, 0.2); 
-            animation: floatIn 0.6s ease; 
-        } 
- 
-        @keyframes floatIn { 
-            0% { transform: translateY(30px); opacity: 0; } 
-            100% { transform: translateY(0); opacity: 1; } 
-        } 
- 
-        .payment-wrapper h1 { 
-            font-size: 2rem; 
-            font-weight: 800; 
-            text-align: center; 
-            margin-bottom: 0.5rem; 
-            background: linear-gradient(90deg, #FFFFFF, #E0E7FF); 
-            -webkit-background-clip: text; 
-            -webkit-text-fill-color: transparent; 
-            color: white; 
-        } 
- 
-        .payment-wrapper p.subtext { 
-            text-align: center; 
-            font-size: 1rem; 
-            color: #E0E7FF; 
-            margin-bottom: 2rem; 
-            line-height: 1.6; 
-        } 
- 
-        .input-field { 
-            margin-bottom: 1.5rem; 
-        } 
- 
-        .input-field input[type="email"],
-        .input-field input[type="text"] { 
-            width: 100%; 
-            padding: 1rem; 
-            font-size: 1rem; 
-            border: 1px solid rgba(255, 255, 255, 0.25); 
-            background: rgba(255, 255, 255, 0.08); 
-            color: white; 
-            border-radius: 20px; 
-            outline: none; 
-            transition: all 0.3s ease; 
-        } 
- 
-        .input-field input[type="email"]::placeholder,
-        .input-field input[type="text"]::placeholder { 
-            color: rgba(255, 255, 255, 0.6); 
-        } 
- 
-        .input-field input[type="email"]:focus,
-        .input-field input[type="text"]:focus { 
-            border-color: #60A5FA; 
-            background: rgba(255, 255, 255, 0.15); 
-        } 
- 
-        .payment-wrapper button { 
-            background: linear-gradient(90deg, #2563EB 0%, #1E40AF 100%); 
-            color: white; 
-            border: none; 
-            width: 100%; 
-            padding: 1rem; 
-            font-size: 1.1rem; 
-            font-weight: 600; 
-            border-radius: 20px; 
-            cursor: pointer; 
-            transition: all 0.3s ease; 
-        } 
- 
-        .payment-wrapper button:hover { 
-            transform: translateY(-2px); 
-            box-shadow: 0 10px 25px rgba(37, 99, 235, 0.35); 
-        } 
- 
-        .notice-box { 
-            background: rgba(255, 255, 255, 0.05); 
-            border: 1px solid rgba(255, 255, 255, 0.1); 
-            border-radius: 20px; 
-            padding: 1rem; 
-            margin-top: 1.5rem; 
-            font-size: 0.9rem; 
-            color: #E0E7FF; 
-            line-height: 1.5; 
-        } 
- 
-        .notice-box strong { 
-            color: white; 
-            display: block; 
-            margin-bottom: 0.3rem; 
-            font-weight: 600; 
-        } 
- 
-        .mail-link { 
-            color: #93C5FD; 
-            text-decoration: underline; 
-            transition: color 0.2s ease; 
-        } 
- 
-        .mail-link:hover { 
-            color: #BFDBFE; 
-        } 
- 
-        footer { 
-            background: var(--navy-dark); 
-            color: white; 
-            padding: 60px 2rem 30px; 
-            text-align: center; 
-        } 
- 
-        .footer-content { 
-            max-width: 800px; 
-            margin: 0 auto; 
-        } 
- 
-        .footer-content p { 
-            color: var(--text-gray); 
-            margin-bottom: 1rem; 
-        } 
- 
-        .footer-bottom { 
-            margin-top: 3rem; 
-            padding-top: 2rem; 
-            border-top: 1px solid rgba(255,255,255,0.1); 
-            color: var(--text-gray); 
-        } 
- 
-        @keyframes fadeInUp { 
-            from { 
-                opacity: 0; 
-                transform: translateY(30px); 
-            } 
-            to { 
-                opacity: 1; 
-                transform: translateY(0); 
-            } 
-        } 
- 
-        @media (max-width: 768px) { 
-            .logo { 
-                font-size: 1.3rem; 
-            } 
- 
-            h1 { 
-                font-size: 2.5rem; 
-            } 
- 
-            .hero p { 
-                font-size: 1.1rem; 
-            } 
- 
-            .hero-buttons { 
-                flex-direction: column; 
-            } 
- 
-            .mobile-menu-btn { 
-                display: block; 
-            } 
- 
-            .nav-links { 
-                display: none; 
-                position: fixed; 
-                top: 70px; 
-                right: 0; 
-                background: rgba(14, 21, 37, 0.98); 
-                backdrop-filter: blur(20px); 
-                width: 100%; 
-                padding: 2rem; 
-                flex-direction: column; 
-                gap: 1.5rem; 
-                box-shadow: 0 10px 30px rgba(0,0,0,0.3); 
-            } 
-             
-            .nav-links.active { 
-                display: flex; 
-            } 
- 
-            .nav-links li { 
-                width: 100%; 
-                text-align: center; 
-            } 
- 
-            .cta-nav { 
-                width: 100%; 
-            } 
-        } 
-    </style> 
-</head> 
-<body> 
-    <div id="progress-bar"></div> 
- 
-    <nav> 
-        <div class="nav-container"> 
-            <a href="https://data-analytics-by-christiana.web.app/" class="logo">Learn Tech Skills That Pay</a> 
-            <ul class="nav-links"> 
-                <li><a href="https://data-analytics-by-christiana.web.app/">Home</a></li> 
-                <li><a href="https://data-analytics-by-christiana.web.app/about/">About</a></li> 
-                <li><a href="https://data-analytics-by-christiana.web.app/contact/">Contact Us</a></li> 
-                <li><a href="https://data-analytics-by-christiana.web.app/access/">Dashboard</a></li> 
-                <li><button class="cta-nav" onclick="scrollToEnroll()">Enrol Now</button></li> 
-            </ul> 
-            <button class="mobile-menu-btn">☰</button> 
-        </div> 
-    </nav> 
- 
-    <section class="hero" id="hero"> 
-        <div class="hero-content"> 
-            <div class="banner-tag">💸 Build the income streams that create lasting wealth</div> 
-            <h1>Turn Data Into Income</h1> 
-            <p>13-week programme that teaches you to analyse data, build dashboards, and land jobs that pay</p> 
-            <div class="hero-buttons"> 
-                <a href="https://data-analytics-web-programme.vercel.app/pay" class="btn-primary">Enrol Now - ₦10,500</a> 
-                <a href="https://data-analytics-by-christiana.web.app/about/" class="btn-secondary">Learn More</a> 
-            </div> 
-        </div> 
-    </section> 
- 
-    <!-- ✅ UPDATED PAYMENT SECTION WITH NAME FIELD -->
-    <section class="payment-section" id="enroll"> 
-        <div class="payment-wrapper"> 
-            <h1>Enrol Now – ₦10,500</h1> 
-            <p class="subtext">Gain full access to your programme dashboard instantly after payment. Your journey begins immediately.</p> 
-             
-            <!-- ✅ NEW: Name Input Field -->
-            <div class="input-field"> 
-                <input type="text" id="customerName" placeholder="Enter your full name" required /> 
-            </div>
-            
-            <!-- ✅ EXISTING: Email Input Field -->
-            <div class="input-field"> 
-                <input type="email" id="email" placeholder="Enter your email address" required /> 
-            </div> 
-             
-            <button id="payBtn">Proceed to Secure Payment</button> 
- 
-            <div class="notice-box"> 
-                <strong>Important:</strong> 
-                • You'll receive your Course Access ID in your email after successful payment.<br/> 
-                • Check your spam folder if you don't see it in 5 minutes.<br/> 
-                • Didn't receive an email? <a href="https://data-analytics-by-christiana.web.app/contact/" class="mail-link">Contact Support</a>. 
-            </div> 
-        </div> 
-    </section> 
- 
-    <footer> 
-        <div class="footer-content"> 
-            <h3 style="font-size: 1.8rem; margin-bottom: 1rem;">Christiana Churchill</h3> 
-            <p style="line-height: 1.8; font-size: 1.05rem;">Empowering Nigerians with in-demand tech skills to build careers that pay in dollars. One student at a time.</p> 
-            <p style="margin-top: 2rem;">Data Analytics Training Programme</p> 
-            <p>Transforming careers across Africa</p> 
-        </div> 
- 
-        <div class="footer-bottom"> 
-            <p>&copy; 2025 Christiana Churchill. All rights reserved.</p> 
-            <p style="margin-top: 0.5rem;">Making tech accessible to everyone</p> 
-        </div> 
-    </footer> 
- 
-    <script src="https://checkout.flutterwave.com/v3.js"></script> 
-     
-    <script> 
-        // Progress Bar 
-        window.addEventListener('scroll', () => { 
-            const windowHeight = window.innerHeight; 
-            const documentHeight = document.documentElement.scrollHeight - windowHeight; 
-            const scrolled = window.scrollY; 
-            const progress = (scrolled / documentHeight) * 100; 
-            document.getElementById('progress-bar').style.width = progress + '%'; 
-        }); 
- 
-        // ✅ UPDATED: Payment Button Handler with Name Field
-        document.getElementById('payBtn').addEventListener('click', function () {
-            // Get and clean input values
-            const email = document.getElementById('email').value.trim();
-            const customerName = document.getElementById('customerName').value.trim();
-            
-            // Validate name
-            if (!customerName) {
-                alert('Please enter your full name before paying.');
-                return;
-            }
-            
-            // Validate email exists
-            if (!email) {
-                alert('Please enter your email before paying.');
-                return;
-            }
-            
-            // Validate email format
-            const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-            if (!emailRegex.test(email)) {
-                alert('Please enter a valid email address (e.g., example@email.com)');
-                return;
-            }
-            
-            // Log for debugging
-            console.log('Starting payment with:', { 
-                name: customerName, 
-                email: email 
-            });
-            
-            // Initialize Flutterwave payment
-            FlutterwaveCheckout({
-                public_key: "FLWPUBK-e687f241832020ee2cbd2e38d5845efd-X",
-                tx_ref: "TX-" + Date.now(),
-                amount: 10500,
-                currency: "NGN",
-                payment_options: "card, banktransfer, ussd",
-                customer: {
-                    email: email,
-                    name: customerName
-                },
-                customizations: {
-                    title: "Data Analytics Training Programme",
-                    description: "13-Week Intensive Programme",
-                    logo: "https://data-analytics-by-christiana.web.app/global-education.png"
-                },
-                callback: function (response) {
-                    console.log("Payment completed. Full Response:", response);
-                    
-                    // Extract data from response
-                    const status = response.status || 'unknown';
-                    const amount = response.amount || 10000;
-                    const txRef = response.tx_ref || '';
-                    const transactionId = response.transaction_id || '';
-                    
-                    // Use OUR collected data (not Flutterwave's test data)
-                    const finalEmail = email;
-                    const finalName = customerName;
-                    
-                    console.log('Redirecting with:', {
-                        status: status,
-                        amount: amount,
-                        name: finalName,
-                        email: finalEmail,
-                        tx_ref: txRef,
-                        transaction_id: transactionId
-                    });
-                    
-                    // Build thank you URL with all parameters
-                    const thankYouUrl = `/thankyou/?` +
-                        `status=${encodeURIComponent(status)}` +
-                        `&amount=${encodeURIComponent(amount)}` +
-                        `&name=${encodeURIComponent(finalName)}` +
-                        `&email=${encodeURIComponent(finalEmail)}` +
-                        `&tx_ref=${encodeURIComponent(txRef)}` +
-                        `&transaction_id=${encodeURIComponent(transactionId)}`;
-                    
-                    window.location.href = thankYouUrl;
-                },
-                onclose: function() {
-                    console.log("Payment window closed by user.");
-                }
-            });
-        });
- 
-        function scrollToEnroll() { 
-            const enrollSection = document.getElementById('enroll'); 
-            if (enrollSection) { 
-                enrollSection.scrollIntoView({ behavior: 'smooth' }); 
-            } 
-        } 
- 
-        const mobileMenuBtn = document.querySelector('.mobile-menu-btn'); 
-        const navLinks = document.querySelector('.nav-links'); 
- 
-        mobileMenuBtn.addEventListener('click', function() { 
-            navLinks.classList.toggle('active'); 
-            this.textContent = navLinks.classList.contains('active') ? '✕' : '☰'; 
-        }); 
- 
-        document.addEventListener('click', function(e) { 
-            if (!e.target.closest('.nav-container')) { 
-                navLinks.classList.remove('active'); 
-                mobileMenuBtn.textContent = '☰'; 
-            } 
-        }); 
- 
-        document.querySelectorAll('.nav-links a').forEach(link => { 
-            link.addEventListener('click', () => { 
-                navLinks.classList.remove('active'); 
-                mobileMenuBtn.textContent = '☰'; 
-            }); 
-        }); 
-    </script> 
-</body> 
+  if (partnersData.length === 0) {
+    elements.referrerSelect.innerHTML = '<option value="">No partners available yet</option>';
+    return;
+  }
+  
+  partnersData.forEach((partner, index) => {
+    const option = document.createElement('option');
+    option.value = index;
+    option.textContent = partner.name;
+    elements.referrerSelect.appendChild(option);
+  });
+}
+
+// ==================== RADIO BUTTON HANDLING ====================
+elements.radioOptions.forEach(option => {
+  option.addEventListener('click', function() {
+    const radio = this.querySelector('input[type="radio"]');
+    radio.checked = true;
+    
+    elements.radioOptions.forEach(opt => opt.classList.remove('selected'));
+    this.classList.add('selected');
+    
+    if (radio.id === 'hasReferrer') {
+      elements.referrerDropdownField.style.display = 'block';
+      elements.referrerSelect.required = true;
+    } else {
+      elements.referrerDropdownField.style.display = 'none';
+      elements.referrerSelect.required = false;
+      elements.referrerSelect.value = '';
+    }
+  });
+});
+
+elements.hasReferrer.addEventListener('change', function() {
+  if (this.checked) {
+    elements.referrerDropdownField.style.display = 'block';
+    elements.referrerSelect.required = true;
+  }
+});
+
+elements.noReferrer.addEventListener('change', function() {
+  if (this.checked) {
+    elements.referrerDropdownField.style.display = 'none';
+    elements.referrerSelect.required = false;
+    elements.referrerSelect.value = '';
+  }
+});
+
+// ==================== MODAL CONTROLS ====================
+elements.goBackBtn.addEventListener('click', function() {
+  elements.confirmModal.style.display = 'none';
+  elements.hasReferrer.checked = false;
+  elements.noReferrer.checked = false;
+  elements.radioOptions.forEach(opt => opt.classList.remove('selected'));
+});
+
+elements.confirmNoReferrerBtn.addEventListener('click', function() {
+  elements.confirmModal.style.display = 'none';
+  proceedToPayment();
+});
+
+// Close modal on outside click
+elements.confirmModal.addEventListener('click', function(e) {
+  if (e.target === elements.confirmModal) {
+    elements.confirmModal.style.display = 'none';
+  }
+});
+
+// ==================== VALIDATION ====================
+function validateForm() {
+  const name = elements.customerName.value.trim();
+  const email = elements.email.value.trim();
+  
+  if (!name) {
+    showError('Please enter your full name.');
+    elements.customerName.focus();
+    return false;
+  }
+  
+  if (name.length < 3) {
+    showError('Please enter your full name (at least 3 characters).');
+    elements.customerName.focus();
+    return false;
+  }
+  
+  if (!email) {
+    showError('Please enter your email address.');
+    elements.email.focus();
+    return false;
+  }
+  
+  if (!validateEmail(email)) {
+    showError('Please enter a valid email address.');
+    elements.email.focus();
+    return false;
+  }
+  
+  const hasReferrerChoice = document.querySelector('input[name="referralChoice"]:checked');
+  if (!hasReferrerChoice) {
+    showError('Please select whether someone referred you or not.');
+    return false;
+  }
+  
+  if (elements.hasReferrer.checked && !elements.referrerSelect.value) {
+    showError('Please select who referred you from the dropdown.');
+    elements.referrerSelect.focus();
+    return false;
+  }
+  
+  return true;
+}
+
+// ==================== PAYMENT BUTTON HANDLER ====================
+elements.payBtn.addEventListener('click', function() {
+  if (isProcessingPayment) {
+    return;
+  }
+  
+  if (!validateForm()) {
+    return;
+  }
+  
+  // If they selected "No referrer", show confirmation modal
+  if (elements.noReferrer.checked) {
+    elements.confirmModal.style.display = 'block';
+    return;
+  }
+  
+  // Otherwise proceed directly
+  proceedToPayment();
+});
+
+// ==================== PROCEED TO PAYMENT ====================
+function proceedToPayment() {
+  if (isProcessingPayment) {
+    return;
+  }
+  
+  isProcessingPayment = true;
+  setButtonState(true);
+  
+  const email = elements.email.value.trim();
+  const customerName = elements.customerName.value.trim();
+  
+  let referrerName = null;
+  let referrerEmail = null;
+  
+  // Get referrer data if selected
+  if (elements.hasReferrer.checked && elements.referrerSelect.value) {
+    try {
+      const partnerIndex = parseInt(elements.referrerSelect.value);
+      if (partnersData[partnerIndex]) {
+        const partner = partnersData[partnerIndex];
+        referrerName = partner.name;
+        referrerEmail = partner.email;
+        console.log('✅ Referrer selected:', referrerName, referrerEmail);
+      }
+    } catch (error) {
+      console.error('❌ Error getting referrer data:', error);
+    }
+  }
+  
+  // Save referrer data to sessionStorage BEFORE opening Flutterwave
+  if (referrerName && referrerEmail) {
+    sessionStorage.setItem('referrer_name', referrerName);
+    sessionStorage.setItem('referrer_email', referrerEmail);
+    console.log('💾 Referrer data saved to sessionStorage');
+  } else {
+    sessionStorage.removeItem('referrer_name');
+    sessionStorage.removeItem('referrer_email');
+    console.log('💾 No referrer - cleared sessionStorage');
+  }
+  
+  // Initialize Flutterwave payment
+  try {
+    FlutterwaveCheckout({
+      public_key: "FLWPUBK-e687f241832020ee2cbd2e38d5845efd-X",
+      tx_ref: "TX-" + Date.now(),
+      amount: 10500,
+      currency: "NGN",
+      payment_options: "card, banktransfer, ussd",
+      customer: {
+        email: email,
+        name: customerName
+      },
+      customizations: {
+        title: "Data Analytics Training Programme",
+        description: "13-Week Intensive Programme",
+        logo: "https://data-analytics-by-christiana.web.app/global-education.png"
+      },
+      callback: function (response) {
+        console.log("✅ Payment completed. Response:", response);
+        
+        const status = response.status || 'unknown';
+        const amount = response.amount || 10500;
+        const txRef = response.tx_ref || '';
+        const transactionId = response.transaction_id || '';
+        
+        const thankYouUrl = `/thankyou/?` +
+          `status=${encodeURIComponent(status)}` +
+          `&amount=${encodeURIComponent(amount)}` +
+          `&name=${encodeURIComponent(customerName)}` +
+          `&email=${encodeURIComponent(email)}` +
+          `&tx_ref=${encodeURIComponent(txRef)}` +
+          `&transaction_id=${encodeURIComponent(transactionId)}`;
+        
+        window.location.href = thankYouUrl;
+      },
+      onclose: function() {
+        console.log("⚠️ Payment window closed by user");
+        isProcessingPayment = false;
+        setButtonState(false);
+      }
+    });
+  } catch (error) {
+    console.error('❌ Error initializing Flutterwave:', error);
+    showError('Payment system error. Please refresh the page and try again.');
+    isProcessingPayment = false;
+    setButtonState(false);
+  }
+}
+
+// ==================== PROGRESS BAR ====================
+window.addEventListener('scroll', () => {
+  const windowHeight = window.innerHeight;
+  const documentHeight = document.documentElement.scrollHeight - windowHeight;
+  const scrolled = window.scrollY;
+  const progress = (scrolled / documentHeight) * 100;
+  document.getElementById('progress-bar').style.width = progress + '%';
+});
+
+// ==================== MOBILE MENU ====================
+const mobileMenuBtn = document.querySelector('.mobile-menu-btn');
+const navLinks = document.querySelector('.nav-links');
+
+mobileMenuBtn.addEventListener('click', function() {
+  navLinks.classList.toggle('active');
+  this.textContent = navLinks.classList.contains('active') ? '✕' : '☰';
+});
+
+document.addEventListener('click', function(e) {
+  if (!e.target.closest('.nav-container')) {
+    navLinks.classList.remove('active');
+    mobileMenuBtn.textContent = '☰';
+  }
+});
+
+document.querySelectorAll('.nav-links a').forEach(link => {
+  link.addEventListener('click', () => {
+    navLinks.classList.remove('active');
+    mobileMenuBtn.textContent = '☰';
+  });
+});
+
+function scrollToEnroll() {
+  const enrollSection = document.getElementById('enroll');
+  if (enrollSection) {
+    enrollSection.scrollIntoView({ behavior: 'smooth' });
+  }
+}
+
+// ==================== INITIALIZE ON PAGE LOAD ====================
+document.addEventListener('DOMContentLoaded', function() {
+  console.log('🚀 Payment page loaded');
+  console.log('📍 Apps Script URL:', APPS_SCRIPT_URL);
+  
+  // Check if Apps Script URL is configured
+  if (APPS_SCRIPT_URL === 'YOUR_APPS_SCRIPT_WEB_APP_URL_HERE') {
+    console.error('⚠️ WARNING: Apps Script URL not configured!');
+    showError('Configuration error. Please contact support.');
+    elements.referrerSelect.innerHTML = '<option value="">Configuration error</option>';
+  } else {
+    // Fetch partners from Google Sheet
+    fetchPartners();
+  }
+  
+  // Auto-fill from URL parameters if present (for testing)
+  const urlParams = new URLSearchParams(window.location.search);
+  const urlEmail = urlParams.get('email');
+  const urlName = urlParams.get('name');
+  
+  if (urlEmail) elements.email.value = urlEmail;
+  if (urlName) elements.customerName.value = urlName;
+});
+</script>
+</body>
 </html>
