@@ -40,10 +40,6 @@ const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
 console.log('✅ Firebase initialized successfully');
 
-// ==================== DON'T INITIALIZE EMAILJS GLOBALLY ====================
-// We'll initialize it separately for each email send
-console.log('📧 EmailJS will be initialized per-send');
-
 // ==================== UTILITY FUNCTIONS ====================
 
 /**
@@ -104,11 +100,9 @@ async function generateCustomId() {
       let count = 1;
       
       if (!counterSnap.exists()) {
-        // First time - initialize counter
         transaction.set(counterRef, { count: 1 });
         count = 1;
       } else {
-        // Increment existing counter
         const current = counterSnap.data().count || 0;
         count = current + 1;
         transaction.update(counterRef, { count });
@@ -130,7 +124,6 @@ async function generateCustomId() {
 
 /**
  * Send email to student with course ID
- * SOLUTION: Re-initialize EmailJS before each send
  */
 async function sendStudentEmail(name, email, courseId, amount) {
   try {
@@ -140,7 +133,7 @@ async function sendStudentEmail(name, email, courseId, amount) {
       throw new Error('EmailJS not available');
     }
     
-    // RE-INITIALIZE with STUDENT credentials
+    // Re-initialize with STUDENT credentials
     console.log('🔧 Initializing EmailJS with STUDENT account');
     window.emailjs.init(STUDENT_EMAILJS_PUBLIC_KEY);
     
@@ -150,6 +143,8 @@ async function sendStudentEmail(name, email, courseId, amount) {
       course_id: courseId,
       amount: amount || "11,500"
     };
+    
+    console.log('📤 Sending with template:', STUDENT_EMAILJS_TEMPLATE);
     
     await window.emailjs.send(
       STUDENT_EMAILJS_SERVICE,
@@ -162,33 +157,37 @@ async function sendStudentEmail(name, email, courseId, amount) {
     
   } catch (error) {
     console.error('❌ Error sending student email:', error);
+    console.error('Error details:', error.text || error.message || error);
     return false;
   }
 }
 
 /**
  * Send email to referrer notifying them of commission
- * SOLUTION: Re-initialize EmailJS with REFERRER credentials
+ * CRITICAL: Must use correct template ID and recipient email
  */
 async function sendReferrerEmail(referrerName, referrerEmail, studentName, studentEmail, amount) {
   try {
-    console.log('📧 Sending email to referrer:', referrerEmail);
+    console.log('📧 Attempting to send referrer email...');
+    console.log('   Referrer Name:', referrerName);
+    console.log('   Referrer Email:', referrerEmail);
+    console.log('   Student Name:', studentName);
+    console.log('   Student Email:', studentEmail);
     
     if (!window.emailjs || typeof window.emailjs.send !== "function") {
       throw new Error('EmailJS not available');
     }
     
-    // Check if referrer EmailJS credentials are configured
-    if (REFERRER_EMAILJS_SERVICE === 'YOUR_NEW_SERVICE_ID') {
-      console.warn('⚠️ Referrer EmailJS not configured - skipping referrer email');
-      return false;
-    }
-    
-    // RE-INITIALIZE with REFERRER credentials
+    // Re-initialize with REFERRER credentials
     console.log('🔧 Initializing EmailJS with REFERRER account');
+    console.log('   Service ID:', REFERRER_EMAILJS_SERVICE);
+    console.log('   Template ID:', REFERRER_EMAILJS_TEMPLATE);
+    console.log('   Public Key:', REFERRER_EMAILJS_PUBLIC_KEY);
+    
     window.emailjs.init(REFERRER_EMAILJS_PUBLIC_KEY);
     
     const templateParams = {
+      to_email: referrerEmail,  // ← CRITICAL: Explicitly set recipient
       referrer_name: referrerName,
       student_name: studentName,
       student_email: studentEmail,
@@ -197,19 +196,25 @@ async function sendReferrerEmail(referrerName, referrerEmail, studentName, stude
       bank_details_link: BANK_DETAILS_LINK
     };
     
-    // Now send with the REFERRER account (no need to pass public key again)
-    await window.emailjs.send(
+    console.log('📤 Template parameters:', JSON.stringify(templateParams, null, 2));
+    
+    // Send email
+    const response = await window.emailjs.send(
       REFERRER_EMAILJS_SERVICE,
       REFERRER_EMAILJS_TEMPLATE,
       templateParams
     );
     
-    console.log('✅ Referrer email sent successfully to:', referrerEmail);
+    console.log('✅ Referrer email sent successfully!');
+    console.log('   Response:', response);
     return true;
     
   } catch (error) {
-    console.error('❌ Error sending referrer email:', error);
-    console.error('Error details:', error.text || error.message || error);
+    console.error('❌ REFERRER EMAIL FAILED!');
+    console.error('   Error:', error);
+    console.error('   Error text:', error.text);
+    console.error('   Error message:', error.message);
+    console.error('   Full error object:', JSON.stringify(error, null, 2));
     return false;
   }
 }
@@ -274,7 +279,6 @@ async function savePayment() {
     
     // Prepare payment data for Firestore
     const paymentData = {
-      // Basic payment info
       status: data.status,
       amount: data.amount,
       name: data.name,
@@ -300,7 +304,7 @@ async function savePayment() {
     // Update success message
     setMessage(`✅ Thank you, ${data.name || "dear user"}! Your payment was successful. Your Course ID is ${customId}`);
     
-    // Send email to student (will re-init with student credentials)
+    // Send email to student
     const studentEmailSent = await sendStudentEmail(
       data.name,
       data.email,
@@ -314,9 +318,12 @@ async function savePayment() {
       console.warn('⚠️ Student email failed - but payment was successful');
     }
     
-    // Send email to referrer (will re-init with referrer credentials)
+    // Send email to referrer
     if (referrerName && referrerEmail) {
-      console.log('🔄 Attempting to send referrer email...');
+      console.log('🔄 Preparing to send referrer email...');
+      
+      // Add a small delay to ensure EmailJS has reset
+      await new Promise(resolve => setTimeout(resolve, 1000));
       
       const referrerEmailSent = await sendReferrerEmail(
         referrerName,
@@ -327,9 +334,9 @@ async function savePayment() {
       );
       
       if (referrerEmailSent) {
-        console.log('✅ Referrer email sent');
+        console.log('✅ Referrer email sent successfully');
       } else {
-        console.warn('⚠️ Referrer email failed - but commission is recorded');
+        console.warn('⚠️ Referrer email failed - commission is still recorded in database');
       }
     }
     
@@ -338,7 +345,7 @@ async function savePayment() {
     sessionStorage.removeItem('referrer_email');
     console.log('🧹 SessionStorage cleared');
     
-    console.log('🎉 Payment processing completed successfully!');
+    console.log('🎉 Payment processing completed!');
     
   } catch (error) {
     console.error('❌ Fatal error in payment processing:', error);
@@ -353,9 +360,11 @@ async function savePayment() {
 
 console.log('📄 Thank you page script loaded');
 console.log('🔧 Configuration check:');
-console.log('  - Student EmailJS:', STUDENT_EMAILJS_SERVICE !== 'YOUR_SERVICE_ID' ? '✅' : '❌');
-console.log('  - Referrer EmailJS:', REFERRER_EMAILJS_SERVICE !== 'YOUR_NEW_SERVICE_ID' ? '✅' : '❌');
-console.log('  - Bank Details Link:', BANK_DETAILS_LINK !== 'YOUR_BANK_DETAILS_FORM_LINK' ? '✅' : '❌');
+console.log('  - Student EmailJS Service:', STUDENT_EMAILJS_SERVICE);
+console.log('  - Student EmailJS Template:', STUDENT_EMAILJS_TEMPLATE);
+console.log('  - Referrer EmailJS Service:', REFERRER_EMAILJS_SERVICE);
+console.log('  - Referrer EmailJS Template:', REFERRER_EMAILJS_TEMPLATE);
+console.log('  - Bank Details Link:', BANK_DETAILS_LINK);
 
 // Run payment processing when DOM is ready
 window.addEventListener("DOMContentLoaded", () => {
