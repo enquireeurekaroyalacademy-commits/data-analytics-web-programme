@@ -27,12 +27,11 @@ const STUDENT_EMAILJS_TEMPLATE = 'template_ysdp0h5';
 const STUDENT_EMAILJS_PUBLIC_KEY = 'B6RAC2pe1ODQ1uR37';
 
 // Referrer Email Configuration (Your NEW EmailJS account)
-// ⚠️ REPLACE THESE WITH YOUR NEW EMAILJS ACCOUNT CREDENTIALS
 const REFERRER_EMAILJS_SERVICE = 'service_31owzoe';
 const REFERRER_EMAILJS_TEMPLATE = 'template_dgyhzsu';
 const REFERRER_EMAILJS_PUBLIC_KEY = 'nbEhnQS3ZDZUHRO40';
 
-// Bank Details Form Link (You said you handled this - replace if needed)
+// Bank Details Form Link
 const BANK_DETAILS_LINK = 'https://forms.gle/ukvpbZSEyb7Lax1P8';
 
 // ==================== INITIALIZE FIREBASE ====================
@@ -41,13 +40,9 @@ const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
 console.log('✅ Firebase initialized successfully');
 
-// ==================== INITIALIZE EMAILJS ====================
-if (window.emailjs && typeof window.emailjs.init === "function") {
-  window.emailjs.init(STUDENT_EMAILJS_PUBLIC_KEY);
-  console.log('📧 EmailJS initialized');
-} else {
-  console.error('❌ EmailJS not loaded');
-}
+// ==================== DON'T INITIALIZE EMAILJS GLOBALLY ====================
+// We'll initialize it separately for each email send
+console.log('📧 EmailJS will be initialized per-send');
 
 // ==================== UTILITY FUNCTIONS ====================
 
@@ -135,6 +130,7 @@ async function generateCustomId() {
 
 /**
  * Send email to student with course ID
+ * SOLUTION: Re-initialize EmailJS before each send
  */
 async function sendStudentEmail(name, email, courseId, amount) {
   try {
@@ -143,6 +139,10 @@ async function sendStudentEmail(name, email, courseId, amount) {
     if (!window.emailjs || typeof window.emailjs.send !== "function") {
       throw new Error('EmailJS not available');
     }
+    
+    // RE-INITIALIZE with STUDENT credentials
+    console.log('🔧 Initializing EmailJS with STUDENT account');
+    window.emailjs.init(STUDENT_EMAILJS_PUBLIC_KEY);
     
     const templateParams = {
       name: name || "Student",
@@ -168,6 +168,7 @@ async function sendStudentEmail(name, email, courseId, amount) {
 
 /**
  * Send email to referrer notifying them of commission
+ * SOLUTION: Re-initialize EmailJS with REFERRER credentials
  */
 async function sendReferrerEmail(referrerName, referrerEmail, studentName, studentEmail, amount) {
   try {
@@ -183,6 +184,10 @@ async function sendReferrerEmail(referrerName, referrerEmail, studentName, stude
       return false;
     }
     
+    // RE-INITIALIZE with REFERRER credentials
+    console.log('🔧 Initializing EmailJS with REFERRER account');
+    window.emailjs.init(REFERRER_EMAILJS_PUBLIC_KEY);
+    
     const templateParams = {
       referrer_name: referrerName,
       student_name: studentName,
@@ -192,11 +197,11 @@ async function sendReferrerEmail(referrerName, referrerEmail, studentName, stude
       bank_details_link: BANK_DETAILS_LINK
     };
     
+    // Now send with the REFERRER account (no need to pass public key again)
     await window.emailjs.send(
       REFERRER_EMAILJS_SERVICE,
       REFERRER_EMAILJS_TEMPLATE,
-      templateParams,
-      REFERRER_EMAILJS_PUBLIC_KEY
+      templateParams
     );
     
     console.log('✅ Referrer email sent successfully to:', referrerEmail);
@@ -204,6 +209,7 @@ async function sendReferrerEmail(referrerName, referrerEmail, studentName, stude
     
   } catch (error) {
     console.error('❌ Error sending referrer email:', error);
+    console.error('Error details:', error.text || error.message || error);
     return false;
   }
 }
@@ -294,7 +300,7 @@ async function savePayment() {
     // Update success message
     setMessage(`✅ Thank you, ${data.name || "dear user"}! Your payment was successful. Your Course ID is ${customId}`);
     
-    // Send email to student
+    // Send email to student (will re-init with student credentials)
     const studentEmailSent = await sendStudentEmail(
       data.name,
       data.email,
@@ -308,8 +314,10 @@ async function savePayment() {
       console.warn('⚠️ Student email failed - but payment was successful');
     }
     
-    // Send email to referrer (if exists)
+    // Send email to referrer (will re-init with referrer credentials)
     if (referrerName && referrerEmail) {
+      console.log('🔄 Attempting to send referrer email...');
+      
       const referrerEmailSent = await sendReferrerEmail(
         referrerName,
         referrerEmail,
