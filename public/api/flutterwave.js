@@ -44,7 +44,7 @@ export default async function handler(req, res) {
     // 💰 5️⃣ Only handle successful ₦10,000 payments
     if (
       (status === "successful" || status === "charge.completed") &&
-      amount === 10500 &&
+      amount === 11500 &&
       currency === "NGN"
     ) {
       console.log(
@@ -59,7 +59,7 @@ export default async function handler(req, res) {
 
       return res.status(200).json({ message: "Payment verified" });
     } else {
-      console.log("⚠️ Ignored event — not successful ₦10,000 NGN payment", {
+      console.log("⚠️ Ignored event — not successful ₦11,500 NGN payment", {
         status,
         amount,
         currency,
