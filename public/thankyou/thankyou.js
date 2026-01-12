@@ -148,7 +148,7 @@ async function sendStudentEmail(name, email, courseId, amount) {
       name: name || "Student",
       email: email || "",
       course_id: courseId,
-      amount: amount || "10,500"
+      amount: amount || "11,500"
     };
     
     await window.emailjs.send(
@@ -187,7 +187,7 @@ async function sendReferrerEmail(referrerName, referrerEmail, studentName, stude
       referrer_name: referrerName,
       student_name: studentName,
       student_email: studentEmail,
-      amount: amount || "10,500",
+      amount: amount || "11,500",
       payment_date: formatDate(),
       bank_details_link: BANK_DETAILS_LINK
     };
