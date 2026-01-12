@@ -620,7 +620,7 @@ padding: 2rem 1.5rem;
 <h1>Turn Data Into Income</h1>
 <p>13-week programme that teaches you to analyse data, build dashboards, and land jobs that pay</p>
 <div class="hero-buttons">
-<a href="#enroll" class="btn-primary" onclick="event.preventDefault(); scrollToEnroll();">Enrol Now - ₦10,500</a>
+<a href="#enroll" class="btn-primary" onclick="event.preventDefault(); scrollToEnroll();">Enrol Now - ₦11,500</a>
 <a href="https://data-analytics-by-christiana.web.app/about/" class="btn-secondary">Learn More</a>
 </div>
 </div>
@@ -628,7 +628,7 @@ padding: 2rem 1.5rem;
 
 <section class="payment-section" id="enroll">
 <div class="payment-wrapper">
-<h1>Enrol Now – ₦10,500</h1>
+<h1>Enrol Now – ₦11,500</h1>
 <p class="subtext">Gain full access to your programme dashboard instantly after payment. Your journey begins immediately.</p>
 
 <div class="error-message" id="errorMessage"></div>
@@ -967,7 +967,7 @@ function proceedToPayment() {
     FlutterwaveCheckout({
       public_key: "FLWPUBK-e687f241832020ee2cbd2e38d5845efd-X",
       tx_ref: "TX-" + Date.now(),
-      amount: 10500,
+      amount: 11500,
       currency: "NGN",
       payment_options: "card, banktransfer, ussd",
       customer: {
@@ -983,7 +983,7 @@ function proceedToPayment() {
         console.log("✅ Payment completed. Response:", response);
         
         const status = response.status || 'unknown';
-        const amount = response.amount || 10500;
+        const amount = response.amount || 11500;
         const txRef = response.tx_ref || '';
         const transactionId = response.transaction_id || '';
         
