@@ -22,7 +22,7 @@ module.exports = async (req, res) => {
     const email = event?.data?.customer?.email || event?.customer?.email;
 
     if (status === "successful" || status === "charge.completed") {
-      if (amount !== 10000) {
+      if (amount !== 11500) {
         await db.collection("payments_attempts").doc(tx_ref || Date.now().toString()).set({
           email: email || null,
           amount,
