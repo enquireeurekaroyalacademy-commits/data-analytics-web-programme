@@ -23,7 +23,7 @@ exports.flutterwaveWebhook = functions.https.onRequest(async (req, res) => {
     const email = event?.data?.customer?.email || event?.customer?.email || event?.data?.customer_email;
 
     if (status === "successful" || status === "charge.completed") {
-      if (amount !== 10000) {
+      if (amount !== 11500) {
         console.log("Amount mismatch:", amount);
         // store attempted payment for records (optional)
         await admin.firestore().collection("payments_attempts").doc(tx_ref || Date.now().toString()).set({
